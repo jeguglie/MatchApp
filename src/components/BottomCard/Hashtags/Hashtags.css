@@ -1,0 +1,45 @@
+.male {
+    transition: all .2s ease-in-out!important;
+    transform: scale(1)!important;
+    background-color: rgb(117, 117, 117)!important;
+    border-radius: 10px!important;
+    color: white!important;
+    padding: 7px!important;
+    margin-bottom: 10px!important;
+    min-width: 10%!important;
+}
+
+.female {
+    transition: all .2s ease-in-out!important;
+    transform: scale(1)!important;
+    background-color: rgb(117, 117, 117)!important;
+    border-radius: 10px!important;
+    color: white!important;
+    padding: 7px!important;
+    margin-bottom: 10px!important;
+    min-width: 10%!important;
+}
+
+.Hashtags {
+
+    display: flex!important;
+    justify-content: space-between!important;
+    flex-wrap: wrap!important;
+    margin-bottom: -10px!important;
+    margin-top: 10px!important;
+    font-family: 'Open Sans', sans-serif!important;
+}
+
+.Hashtags strong {
+    color: white;
+}
+
+#More {
+    cursor: pointer!important;
+    background-color: rgb(187, 187, 187)!important;
+}
+
+#More:hover {
+    transform: scale(1.1)!important;
+    transition: all .2s ease-in-out!important;
+}

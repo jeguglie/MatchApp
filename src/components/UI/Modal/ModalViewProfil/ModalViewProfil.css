@@ -1,0 +1,9 @@
+.ModalViewProfil:not(.Backdrop) {
+    position: fixed!important;
+    z-index: 500!important;
+    top: 10%!important;
+    box-sizing: border-box!important;
+    transition: all 0.2s ease-out!important;
+    border-radius: 10px!important;
+    padding-bottom: 1em!important;
+}

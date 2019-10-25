@@ -1,0 +1,48 @@
+.SignalUserConfirmation {
+    display: inline-block;
+}
+
+.SignalUserConfirmation .h1Text {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 1.5em;
+}
+
+.SignalUserConfirmation button {
+    background-color: #8b8b8b;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.2em;
+    padding: 0.5em;
+    width: 100px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.SignalUserConfirmation button:hover {
+    background-color: rgba(237, 100, 150, 1);
+}
+.divider{
+    width:20px;
+    height:auto;
+    display:inline-block;
+}
+
+.divider-height{
+    height:40px;
+    display:inline-block;
+}
+
+
+.button {
+    background-color: #8b8b8b;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.5em;
+    padding: 0.5em;
+    width: 100px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}

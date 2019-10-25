@@ -1,0 +1,18 @@
+
+.navbar-item img {
+    max-height: 2.75rem !important;
+}
+
+.navbar-item {
+    padding: 1.75rem 1.75rem !important;
+}
+
+.navbar-burger {
+    padding: 3rem 2rem !important;
+    height: 0 !important;
+    width: 0 !important;
+}
+
+.navbar.is-danger, a.navbar-item:hover {
+    border-bottom-left-radius: 40px;
+}
