@@ -1,0 +1,23 @@
+.ImgSliderIcons span {
+    height: 12px!important;
+    width: 12px!important;
+    background-color: #bbb!important;
+    border-radius: 50%!important;
+    display: inline-flex!important;
+}
+
+.ImgSliderIcons span:not(:first-child){
+    margin-left: 7px!important;
+}
+
+.ImgSliderIcons {
+    display: block!important;
+    align-items: center!important;
+    margin-right: 35px!important;
+    margin-left: 35px!important;
+    margin-bottom: 0.5em!important;
+}
+
+#active {
+    background-color: rgb(102, 102, 102)!important;
+}

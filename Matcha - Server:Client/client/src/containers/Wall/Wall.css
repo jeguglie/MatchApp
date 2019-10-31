@@ -1,0 +1,11 @@
+.Layout {
+    margin-top: 2em!important;
+    display: flex!important;
+    flex-wrap: wrap!important;
+    text-align: center!important;
+    justify-content: center!important;
+}
+
+.BlurBackground > :not(.ModalViewProfil) {
+    filter: blur(3px)!important;
+}

@@ -1,0 +1,9 @@
+.BlurBackdrop {
+    width: 100%!important;
+    height: 100%!important;
+    position: fixed!important;
+    z-index: 100!important;
+    left: 0!important;
+    top: 0!important;
+    background-color: rgba(0, 0, 0, 0.5)!important;
+}

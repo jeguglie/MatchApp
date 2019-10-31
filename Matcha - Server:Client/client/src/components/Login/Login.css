@@ -1,0 +1,165 @@
+.divider{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: block;
+}
+
+.login-modal {
+    box-shadow: 12px 12px 16px rgba(0, 0, 0, 0.02);
+    border: none;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    background-color: #fc3372;
+    width: 500px !important;
+    margin-top : 3em;
+    padding: 3em;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+.loginButton .button {
+    background-color: white;
+    color: #fc3372;
+    border-radius: 20px;
+}
+
+.loginButton .button:hover, .loginButton .button:active, .loginButton .button:focus {
+    box-shadow: -1px 5px 5px -2px rgba(0,0,0,0.2);
+    background-color: white;
+    color: #fc3372;
+    border-radius: 20px;
+
+}
+
+.loginForm input::placeholder{
+    color: white !important;
+    opacity: 0.5 !important;
+}
+
+.loginForm .icon {
+    color: white !important;
+}
+
+
+.loginForm input, .loginForm input:-webkit-autofill {
+    border-radius: 20px !important;
+    background-color: transparent !important;
+    border: 2px solid rgba(255,255,255,0.8) !important;
+    color: white !important;
+}
+
+.loginForm input{
+    color: white !important;
+}
+
+.loginIcon svg {
+    font-size: 5em;
+    color: white;
+}
+
+.loginNoAccount  a {
+color: white;
+    font-weight: bold;
+}
+
+.loginNoAccount {
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 500;
+}
+
+.loginEmailTrue .icon .users {
+    color: #68ff60 !important;
+    opacity: 1 !important;
+}
+
+.loginWarnings {
+    display: flex;
+    flex-direction: column;
+}
+
+.loginWarnings span {
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 4px;
+    border-radius: 10px;
+    padding: 10px;
+    font-weight: 500;
+    font-family: "Open Sans", sans-serif;
+    color: white;
+
+}
+
+@media only screen and (min-width: 1200px){
+    .ui.container {
+        width: 500px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding-left: 7em !important;
+        padding-right: 7em !important;
+    }
+}
+
+@media only screen and (max-width: 767px){
+    .ui.container {
+        width: 600px !important;
+        margin-left: 1em !important;
+        margin-right: 1em !important;
+        padding-left: 3em !important;
+        padding-right: 3em !important;
+    }
+}
+
+@media only screen and (max-width: 991px) and (min-width: 768px){
+    .ui.container {
+        width: 500px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding-left: 5em !important;
+        padding-right: 5em !important;
+    }
+}
+
+@media only screen and (max-width: 1199.98px) and (min-width: 992px){
+    .ui.container {
+        width: 500px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding-left: 5em !important;
+        padding-right: 5em !important;
+    }
+}
+
+.shape {
+    top: -510px;
+    border-radius: 31% 69% 32% 68% / 36% 44% 56% 64%;
+    width: 1551px;
+    height: 523px;
+    position: absolute;
+    background-image: linear-gradient(-82deg, #ffffff 0%, #4c4c4c 100%);
+    right: -48px;
+    z-index: -1;
+    mix-blend-mode: darken;
+    transform: rotate(-155deg);
+    box-shadow: 11px 3px 5px 5px rgba(0, 0, 0,0.5);
+}
+
+.loginForgot {
+    margin-top: -10px;
+}
+
+.createAccounth1 {
+    color: white;
+    font-weight: 200;
+    margin-bottom: 40px;
+    margin-top: -30px;
+}
+
+.loginh1 {
+    color: white;
+    font-weight: 200;
+    margin-bottom: 40px;
+    margin-top: -30px;
+}
