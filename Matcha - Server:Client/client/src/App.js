@@ -15,7 +15,7 @@ class App extends Component {
     render() {
         return (
             <Aux>
-                <MenuBar />
+                {/*<MenuBar />*/}
             <div className="App">
                 <div className="App-content">
                     <Switch>
