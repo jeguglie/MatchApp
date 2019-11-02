@@ -59,17 +59,15 @@ async function signup(req, res) {
 async function login(req, res) {
     const { password, email } = req.body;
     if (!email || !password) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         return res.status(400).json({
-            text: "Requête invalide"
+            text: "Invalid request"
         });
     }
     try {
-        // On check si l'utilisateur existe en base
         const findUser = await User.findOne({email});
             if (!findUser) {
             return res.status(200).json({
-                text: ["User does not exist."]
+                text: ["User don't exist"]
             });
         }
         if (!findUser.authenticate(password))
@@ -83,7 +81,7 @@ async function login(req, res) {
             text: ["Authentification reussie"]
         });
     } catch (error) {
-        return res.status(500).json({
+        return res.status(200).json({
             error
         });
     }
@@ -107,36 +105,36 @@ async function checkMail(req, res) {
         });
     }
 }
-
-async function getEditProfilValues(req, res) {
-    const {email} = req.body;
-    const findProfil = Profil.findOne({email}, req.body, function(err, doc){
-            if (err) {
-                return res.status(500).json({
-                    error: err
-                });
-            }
-            else
-                return res.status(200).json({
-                    findProfil
-                })
-    });
-}
-
-async function updateProfilValues(req, res) {
-    await Profil.findOneAndUpdate(req.body.email, req.body, function(err, doc) {
-        if (err) {
-            return res.status(500).json({
-                wanings: ["Error save"]
-            });
-        }
-        else
-            return res.status(200).json({
-                warnings: [],
-                save: true
-            });
-    });
-}
+//
+// async function getEditProfilValues(req, res) {
+//     const {email} = req.body;
+//     const findProfil = Profil.findOne({email}, req.body, function(err, doc){
+//             if (err) {
+//                 return res.status(500).json({
+//                     error: err
+//                 });
+//             }
+//             else
+//                 return res.status(200).json({
+//                     findProfil
+//                 })
+//     });
+// }
+//
+// async function updateProfilValues(req, res) {
+//     await Profil.findOneAndUpdate(req.body.email, req.body, function(err, doc) {
+//         if (err) {
+//             return res.status(500).json({
+//                 wanings: ["Error save"]
+//             });
+//         }
+//         else
+//             return res.status(200).json({
+//                 warnings: [],
+//                 save: true
+//             });
+//     });
+// }
 
 
 

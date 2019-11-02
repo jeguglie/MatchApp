@@ -13,7 +13,7 @@ import {
     Icon
 } from 'semantic-ui-react';
 import API from "../../utils/API";
- import './EditProfil.css';
+// import './EditProfil.css';
 
 const ProgressBar = () => <Progress percent={60}
                                     className="ProgressBarProfile"
