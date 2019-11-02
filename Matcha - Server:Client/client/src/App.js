@@ -19,7 +19,7 @@ class App extends Component {
             <div className="App">
                 <div className="App-content">
                     <Switch>
-                        <PrivateRoute exact path="/profil" component={Profil} />
+                        <Route exact path="/profil" component={Profil} />
                         <PrivateRoute exact path="/" component={Wall} />
                         <PrivateRoute exact path="/dashboard" component={Dashboard} />
                         <PrivateRouteLoginRegister exact path="/signup" component={Signup} />

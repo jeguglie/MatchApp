@@ -13,53 +13,61 @@ import {
     Icon
 } from 'semantic-ui-react';
 import API from "../../utils/API";
-// import './EditProfil.css';
+ import './EditProfil.css';
 
 const ProgressBar = () => <Progress percent={60}
                                     className="ProgressBarProfile"
                                     progress
                                     size="large"/>
-
+const DEFAULT_SATE = {
+        email: localStorage.getItem('email'),
+        birthday: "",
+        firstName: "",
+        lastName: "",
+        gender: "",
+        interested: "",
+        bio: "",
+        country: "",
+        messages : {
+            save: false,
+            warnings: []
+        }
+}
 class EditProfil extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            email: localStorage.getItem('email'),
-            birthday: "",
-            firstName: "",
-            lastName: "",
-            gender: "",
-            interested: "",
-            bio: "",
-            country: ""
-        };
-        this.messages = {
-            save: false,
-            warnings: []
-        }
+        this.state = {...DEFAULT_SATE}
     }
 
     componentDidMount() {
-        try {
-                const { data } = API.getEditProfilValues(this.state.email);
-                if (data && data.message === true)
-                    this.setState({message: data.message});
+        try
+        {
+            const { data } = async() =>  await API.getEditProfilValues(this.state.email);
+            if (data && data.message === true)
+                this.messages.setState({warnings: data.message});
+            console.log(data);
 
-            } catch (error) {
+        } catch (error) {
                 console.error(error);
             }
         }
-    handleSave = () => {
-        const data = API.updateEditProfilValues(this.state);
-        if (data && data.warnings[0])
-            this.state.setState({warnings: data.warnings});
-        else
-            this.messages.setState({save: true});
+    handleSave = async() => {
+        try {
+            const data = await API.updateEditProfilValues(this.state);
+            console.log(data);
+            if (data && data.warnings.length)
+                this.setState({warnings: data.warnings});
+            else
+                this.messages.setState({save: true});
+        } catch (error) {
+            console.error(error);
+        }
     };
 
-    handleChange = (event) => {
-        this.state.setState({[event.target.id]: event.target.value})
+    handleChange = async(event) => {
+        console.log(event.target.value);
+        this.setState({[event.target.id]: event.target.value})
     };
 
     render() {
@@ -79,9 +87,9 @@ class EditProfil extends React.Component {
                                size='medium' circular bordered/>
                     </Grid.Row>
                     <Grid.Row>
-                        <Icon size='big' circular inverted color='white' name='facebook'/>
-                        <Icon size='big' circular inverted color='white' name='instagram'/>
-                        <Icon size='big' circular inverted color='white' name='upload'/>
+                        <Icon size='big' circular inverted name='facebook'/>
+                        <Icon size='big' circular inverted name='instagram'/>
+                        <Icon size='big' circular inverted name='upload'/>
                     </Grid.Row>
                 </Grid>
                 <Grid columns={1} doubling>
@@ -98,18 +106,18 @@ class EditProfil extends React.Component {
                                             value={this.state.firstName}
                                             onChange={this.handleChange} />
                             </Form.Group>
-                            <Form.Group widths='equal'>
-                                <Form.Select
-                                    fluid
-                                    label='Gender'
-                                    id="gender"
-                                />
-                                <Form.Select
-                                    fluid
-                                    label='Country'
-                                    id="country"
-                                />
-                            </Form.Group>
+                            {/*<Form.Group widths='equal'>*/}
+                            {/*    <Form.Select*/}
+                            {/*        fluid*/}
+                            {/*        label='Gender'*/}
+                            {/*        id="gender"*/}
+                            {/*    />*/}
+                            {/*    <Form.Select*/}
+                            {/*        fluid*/}
+                            {/*        label='Country'*/}
+                            {/*        id="country"*/}
+                            {/*    />*/}
+                            {/*</Form.Group>*/}
                             <Form.Group widths='equal'>
                                 <Form.Input
                                     fluid
@@ -118,10 +126,10 @@ class EditProfil extends React.Component {
                                     value={this.state.email}
                                     onChange={this.handleChange}
                                 />
-                                <Form.Select fluid
-                                             label='Interested By'
-                                             color="white"
-                                             id="interested"/>
+                                {/*<Form.Select fluid*/}
+                                {/*             label='Interested By'*/}
+                                {/*             color="white"*/}
+                                {/*             id="interested"/>*/}
                             </Form.Group>
                             <Form.Field
                                 label='Bio'

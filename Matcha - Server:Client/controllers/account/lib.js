@@ -26,7 +26,7 @@ async function signup(req, res) {
         country: "",
         interested:  "",
         birthday: "",
-        interests: [
+        interests: []
     }
     // On check en base si l'utilisateur existe déjà
     try {
@@ -110,7 +110,7 @@ async function checkMail(req, res) {
 
 async function getEditProfilValues(req, res) {
     const {email} = req.body;
-    const findProfil = Profil.findOne(email, req.body, function(err, doc){
+    const findProfil = Profil.findOne({email}, req.body, function(err, doc){
             if (err) {
                 return res.status(500).json({
                     error: err
@@ -124,7 +124,7 @@ async function getEditProfilValues(req, res) {
 }
 
 async function updateProfilValues(req, res) {
-    await Profil.findOneAndUpdate(req.body.email, req.body, function(err) {
+    await Profil.findOneAndUpdate(req.body.email, req.body, function(err, doc) {
         if (err) {
             return res.status(500).json({
                 wanings: ["Error save"]
@@ -132,11 +132,12 @@ async function updateProfilValues(req, res) {
         }
         else
             return res.status(200).json({
-                wanings: [],
+                warnings: [],
                 save: true
             });
     });
 }
+
 
 
 //On exporte nos deux fonctions

@@ -5,5 +5,5 @@ module.exports = function (app) {
     app.post('/signup',account.signup);
     app.post('/checkMail', account.checkMail);
     app.post('/getProfilValues', account.getEditProfilValues);
-    app.post('/updateProfilValues', account.updateProfilValues);
+    app.post('/updateProfil', account.updateProfilValues);
 }
