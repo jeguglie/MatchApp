@@ -1,0 +1,22 @@
+.CardsBuilder {
+    height: 100%!important;
+    width: 300px!important;
+    box-shadow: 10px 10px 25px 4px rgba(0,0,0,0.14)!important;
+    border-radius: 10px!important;
+    margin-bottom: 4em!important;
+    background-color: white!important;
+}
+
+.Card{
+    height: 100%!important;
+    display: flex!important;
+    flex-wrap: wrap!important;
+    text-align: center!important;
+    justify-content: center!important;
+}
+
+.Interests .h1Text  {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 1.5em;
+}

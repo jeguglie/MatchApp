@@ -1,0 +1,62 @@
+.UserCoverPic {
+    position: relative!important;
+    transition: all ease-in-out .2s!important;
+    transform: scale(1)!important;
+    width: 170px!important;
+    overflow: hidden!important;
+    cursor: pointer!important;
+    line-height: 0;
+}
+
+.UserCoverPic img {
+    width: 100%!important;
+    height: 100%!important;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+
+.UserCoverPic:hover .ViewProfilOverlay {
+    opacity: 0.5!important;
+}
+
+.ViewProfilOverlay {
+    position: absolute!important;
+    top: 0!important;
+    bottom: 0!important;
+    left: 0!important;
+    right: 0!important;
+    height: 100%!important;
+    width: 100%!important;
+    opacity: 0!important;
+    transition: .2s ease!important;
+    background-color: #000000!important;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.UserCoverPic .Overlay {
+    color: white!important;
+    position: absolute!important;
+    text-align: center!important;
+    width: 100%!important;
+    vertical-align: center!important;
+    top: 50%!important;
+    font-family: "Open Sans", sans-serif!important;
+    font-weight: normal;
+    font-size: 1.2em!important;
+}
+
+.UserCoverBottom {
+    background-color: white;
+}
+
+.UserCoverCard {
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-top: 1em;
+    margin-bottom: 2.5em;
+    box-shadow: 12px 12px 15px 0px rgba(0,0,0, 0.06);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
