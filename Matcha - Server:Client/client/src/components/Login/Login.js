@@ -1,7 +1,6 @@
 import React from "react";
 import API from "../../utils/API";
-import styles from './Login.module.css';
-import './LoginMediaQueries.css';
+import './Login.scss';
 import classNames from 'classnames';
 import Warnings from "../Warnings/Warnings";
 import Divider from "../../components/Divider/Divider";
@@ -38,6 +37,7 @@ export class Login extends React.Component {
         this.setState({loading: true});
         try {
             const { data } = await API.login(email, password);
+            console.log(data);
             if (data) {
                 if (data.token) {
                     localStorage.setItem("token", data.token);
@@ -75,20 +75,20 @@ export class Login extends React.Component {
         const loading = this.state.loading;
         const warnings = this.state.warnings;
         return (
-            <Container className={styles.loginModal}>
+            <Container className="loginModal">
                              <Image className="img-fluid"
                                     src="/img/MatchApp-Logo.png"
                                     alt="Responsive image"
                                     size="medium"
                                     centered />
-                            <div className={styles.loginWarnings}>
+                            <div className="loginWarnings">
                                     <Warnings data={warnings}/>
                             </div>
-                            <div className={styles.shape}></div>
+                            <div className="shape"></div>
                             <Divider />
-                            <h1 className={styles.loginh1}>User Login</h1>
-                                <Form className={ classNames([styles.loginForm])}>
-                                    <Form.Field className={correctEmail === true ? styles.inputUser : null}>
+                            <h1 className="loginh1">User Login</h1>
+                                <Form className="loginForm">
+                                    <Form.Field className={correctEmail === true ? "inputUser" : null}>
                                         <Input id="email"
                                                icon='users'
                                                iconPosition='left'
@@ -100,7 +100,7 @@ export class Login extends React.Component {
                                                required
                                         />
                                     </Form.Field>
-                                    <Form.Field className={styles.inputPassword}>
+                                    <Form.Field className="inputPassword">
                                         <Input icon='lock' iconPosition='left'
                                                id="password"
                                                onChange={this.handleChange}
@@ -112,15 +112,15 @@ export class Login extends React.Component {
                                     </Form.Field>
                                 </Form>
                                 <Divider />
-                                <Button className={styles.loginButton}
+                                <Button className="loginButton"
                                         loading={loading} size='huge'
                                         onClick={this.send}>
                                     Log in
                                 </Button>
                             <Divider />
-                            <div className={styles.loginNoAccount}>
+                            <div className="loginNoAccount">
                                 <p>No account ? <a href="/signup">Register</a></p>
-                                <p className={styles.loginForgot}>
+                                <p className="loginForgot">
                                     <a href="/signup"><strong>Forgot password ?</strong></a>
                                 </p>
                             </div>

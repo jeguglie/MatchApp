@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 
 import API from "../../utils/API";
 
-export class Dashboard extends React.Component {
+class Dashboard extends React.Component {
     disconnect = () => {
         API.logout();
         window.location = "/";
@@ -19,3 +19,5 @@ export class Dashboard extends React.Component {
         );
     }
 }
+
+export default Dashboard;

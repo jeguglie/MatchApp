@@ -13,7 +13,8 @@ import {
     Icon
 } from 'semantic-ui-react';
 import API from "../../utils/API";
-// import './EditProfil.css';
+import styles from './EditProfil.scss';
+import classnames from 'classnames';
 
 const ProgressBar = () => <Progress percent={60}
                                     className="ProgressBarProfile"
@@ -72,10 +73,10 @@ class EditProfil extends React.Component {
 
     render() {
         return (
-            <div className="ui middle EditProfil">
+            <div className={classnames("ui middle", styles.EditProfil)}>
                 <Grid columns={2} doubling>
                     <Grid.Column>
-                        <h1 className="CompleteTitle">Complete Your Profile</h1>
+                        <h1 className={styles.CompleteTitle}>Complete Your Profile</h1>
                     </Grid.Column>
                     <Grid.Column>
                         <ProgressBar/>
@@ -94,7 +95,7 @@ class EditProfil extends React.Component {
                 </Grid>
                 <Grid columns={1} doubling>
                     <Grid.Column>
-                        <Form>
+                        <Form  className={styles.formEdit}>
                             <Form.Group widths='equal'>
                                 <Form.Input fluid label='Last Name'
                                             color="white"
@@ -149,7 +150,7 @@ class EditProfil extends React.Component {
                             placeholder='Enter tags'
                         />
                     </Grid.Row>
-                    <Grid.Row className="SubmitButton" centered>
+                    <Grid.Row className={styles.SubmitButton} centered>
                         <Button size="big" onClick={this.handleSave}>Submit</Button>
                     </Grid.Row>
                 </Grid>

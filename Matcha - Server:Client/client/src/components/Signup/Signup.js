@@ -3,8 +3,10 @@ import API from "../../utils/API";
 import {Button, Container, Form, Image, Input} from "semantic-ui-react";
 import Warnings from "../Warnings/Warnings";
 import classnames from "classnames";
+import styles from "./Signup.module.css";
+import Divider from "semantic-ui-react/dist/commonjs/elements/Divider";
 
-export class Signup extends React.Component {
+class Signup extends React.Component {
     state = {
         email: "",
         password: "",
@@ -55,20 +57,20 @@ export class Signup extends React.Component {
         const loading = this.state.loading;
         const warnings = this.state.warnings;
         return (
-            <Container className="login-modal">
-                <div className="shape"></div>
-                <Image className="img-fluid WelcomeLogo"
+            <Container className={styles.loginModal}>
+                <div className={styles.shape}></div>
+                <Image className="img-fluid"
                        src="/img/MatchApp-Logo.png"
                        alt="Responsive image"
                        size="medium"
                        centered/>
-                <div className="loginWarnings">
+                <div className={styles.loginWarnings}>
                     <Warnings data={warnings} />
                 </div>
-                <div className="divider"></div>
-                <h1 className="createAccounth1">Create an account</h1>
-                <div className={classnames("loginForm", correctEmail === true ? "loginEmailTrue" : "")}>
-                    <Form>
+                <Divider />
+                <h1 className={styles.loginh1}>Create an account</h1>
+                <div className={classnames(styles.loginForm, correctEmail === true ? styles.loginEmailTrue : null)}>
+                    <Form className={styles.loginForm}>
                         <Form.Field>
                             <Input id="email"
                                    icon='users'
@@ -105,12 +107,12 @@ export class Signup extends React.Component {
                         </Form.Field>
                     </Form>
                 </div>
-                <div className="divider"></div>
-                <div className="loginButton">
+                <Divider />
+                <div className={styles.loginButton}>
                     <Button loading={loading} size='huge' onClick={this.send}>Register</Button>
                 </div>
-                <div className="divider"></div>
-                <div className="loginNoAccount">
+                <Divider />
+                <div className={styles.loginNoAccount}>
                     <p>
                         Have an account ? <a href="/login">Log in</a>
                     </p>
@@ -119,3 +121,5 @@ export class Signup extends React.Component {
         );
     }
 }
+
+export default Signup;

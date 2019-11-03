@@ -1,0 +1,147 @@
+.EditProfil {
+  padding: 5em;
+  margin-left: 5em;
+  margin-right: 5em;
+  margin-top: 5em;
+  background-color: #f93874;
+  border-radius: 20px;
+}
+
+.CompleteTitle {
+  color: white;
+  font-size: 2.8em;
+  text-shadow: 5px 2px 10px rgba(0,0,0,0.3);
+}
+
+.ui.progress .bar{
+  background: #4f384f;
+}
+
+.progress {
+  color: white !important;
+}
+
+.ui.progress {
+  background: white !important;
+}
+
+
+.TopEditProfilLeft {
+  margin-top: -5px;
+
+  .TopEditProfilLeft, .TopEditProfilRight {
+    float:left;
+    display:inline;
+    width: 49%;
+    vertical-align: middle;
+  }
+}
+
+.EditProfilBasicsInfos {
+  display: inline-block;
+  width: 49%;
+}
+
+.formEdit {
+  .ui.form .field >label {
+    color: rgba(255, 255, 255, 0.87);
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 500;
+    font-size: 1em;
+  }
+
+}
+
+.EditProfilTitle {
+  font-weight: 200;
+  font-family: 'Open Sans', sans-serif;
+  color: rgba(113, 26, 54, 1);
+}
+
+.SubmitButton .button {
+  background-color: white;
+  color: #fc3372;
+  border-radius: 20px;
+}
+.SubmitButton .button:hover, .SubmitButton .button:active, .SubmitButton .button:focus {
+  box-shadow: -1px 5px 5px -2px rgba(0,0,0,0.2);
+  background-color: white;
+  color: #fc3372;
+  border-radius: 20px;
+
+}
+
+
+i.inverted.bordered.icon, i.inverted.circular.icon {
+  background-color: #ffffff!important;
+  color: #525252!important;
+}
+
+
+.ui.form input, .ui.form .selection {
+  border: 2px solid white !important;
+  border-radius: 15px !important;
+  color: #dadada !important;
+  box-shadow: 3px 4px 3px rgba(0,0,0,0.08) !important;
+}
+
+textarea, i {
+  box-shadow: 3px 4px 3px rgba(0,0,0,0.08) !important;
+}
+
+.ui.form input::placeholder {
+  color: #b1b1b1 !important;
+}
+
+.ui.dropdown:not(.button)>.default.text, textarea::placeholder {
+  color: #b1b1b1 !important;
+}
+
+textarea {
+  border-radius: 15px !important;
+}
+
+@media only screen and (max-width: 991px) and (min-width: 768px){
+
+}
+
+@media only screen and (max-width: 1199.98px) and (min-width: 992px){
+
+}
+
+
+@media only screen and (max-width: 767px){
+  .TopEditProfil {
+    display: flex;
+    flex-direction: column;
+  }
+  .TopEditProfilLeft, .TopEditProfilRight {
+    flex-direction: column;
+    display: flex;
+    width: auto;
+  }
+  .TopEditProfilLeft {
+    margin-bottom: 15px;
+  }
+}
+
+@media only screen and (min-width: 1200px){
+  .EditProfil {
+    padding: 5em;
+    margin: auto;
+    margin-top: 5em;
+    background-color: #f93874;
+    border-radius: 20px;
+    width: 900px;
+  }
+}
+@media only screen and (min-width: 1500px){
+  .EditProfil {
+    padding: 5em;
+    margin: auto;
+    margin-top: 5em;
+    background-color: #f93874;
+    border-radius: 20px;
+    width: 800px;
+  }
+}

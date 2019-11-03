@@ -65,24 +65,25 @@ async function login(req, res) {
     }
     try {
         const findUser = await User.findOne({email});
-            if (!findUser) {
+        if (!findUser) {
             return res.status(200).json({
-                text: ["User don't exist"]
+                text: ["User doesn't exist"]
             });
         }
-        if (!findUser.authenticate(password))
+        if (!findUser.authenticate(password)) {
             return res.status(200).json({
-                text: ["Mot de passe incorrect"]
+                text: ["Incorrect password"]
             });
-        localStorage.setItem('email', email);
+        }
         return res.status(200).json({
             token: findUser.getToken(),
             newUser: findUser.newUser,
             text: ["Authentification reussie"]
         });
-    } catch (error) {
-        return res.status(200).json({
-            error
+    }
+    catch (error) {
+        return res.status(500).json({
+            error: req.body
         });
     }
 }
@@ -143,5 +144,5 @@ async function checkMail(req, res) {
 exports.login = login;
 exports.signup = signup;
 exports.checkMail = checkMail;
-exports.getEditProfilValues = getEditProfilValues;
-exports.updateProfilValues = updateProfilValues;
+// exports.getEditProfilValues = getEditProfilValues;
+// exports.updateProfilValues = updateProfilValues;
