@@ -18,20 +18,30 @@ const profilSchema = mongoose.Schema(
             type: String,
             trim: true
         },
+        interested: {
+            type: String,
+            trim: true,
+        },
+        bio: {
+            type: String,
+            trim: true,
+        },
         gender: {
             type: String,
             trim: true
         },
-        interested: {
-            type: String,
+        interests: {
+            type: Array,
             trim: true
         },
         country: {
             type: String,
             trim: true
+        },
+        birthday: {
+            type: Date
         }
     }
 );
 
 module.exports = mongoose.model("Profil", profilSchema);
-

@@ -2,16 +2,23 @@ import React from "react";
 import API from "../../utils/API";
 import {Button, Container, Form, Image, Input} from "semantic-ui-react";
 import Warnings from "../Warnings/Warnings";
-import classnames from "classnames";
-import styles from "./Signup.module.css";
-import Divider from "semantic-ui-react/dist/commonjs/elements/Divider";
+import Divider from "./../../components/Divider/Divider";
+
+const DEFAULT_STATE = {
+    email: "",
+    password: "",
+    cpassword: ""
+}
 
 class Signup extends React.Component {
-    state = {
-        email: "",
-        password: "",
-        cpassword: ""
-    };
+    constructor (props){
+        super(props);
+        this.state = {...DEFAULT_STATE};
+    }
+
+    componentDidMount() {
+    }
+
     send = async () => {
         const {email, password, cpassword} = this.state;
         if ((email || email.length === 0) || (!password || password.length === 0)
@@ -29,10 +36,12 @@ class Signup extends React.Component {
             this.setState({loading: true});
             try {
                 const {data} = await API.signup(email, password, cpassword);
+                console.log(data);
                 if (data) {
                     if (data.token) {
                         localStorage.setItem("token", data.token);
                         localStorage.setItem("newUser", data.newUser);
+                        localStorage.setItem("email", email);
                         window.location = "/";
                     } else {
                         this.setState({warnings: data.text});
@@ -43,8 +52,8 @@ class Signup extends React.Component {
                 console.error(error);
             }
             this.setState({loading: false});
-        };
-    }
+        }
+    };
     handleChange = (event) => {
         this.setState({
             [event.target.id]: event.target.value
@@ -57,21 +66,20 @@ class Signup extends React.Component {
         const loading = this.state.loading;
         const warnings = this.state.warnings;
         return (
-            <Container className={styles.loginModal}>
-                <div className={styles.shape}></div>
+            <Container className="loginModal">
+                <div className="shape"></div>
                 <Image className="img-fluid"
                        src="/img/MatchApp-Logo.png"
                        alt="Responsive image"
                        size="medium"
                        centered/>
-                <div className={styles.loginWarnings}>
+                <div className="loginWarnings">
                     <Warnings data={warnings} />
                 </div>
                 <Divider />
-                <h1 className={styles.loginh1}>Create an account</h1>
-                <div className={classnames(styles.loginForm, correctEmail === true ? styles.loginEmailTrue : null)}>
-                    <Form className={styles.loginForm}>
-                        <Form.Field>
+                <h1 className="loginh1">Create an account</h1>
+                    <Form className="loginForm">
+                        <Form.Field className={correctEmail === true ? "inputUser" : null}>
                             <Input id="email"
                                    icon='users'
                                    iconPosition='left'
@@ -84,7 +92,7 @@ class Signup extends React.Component {
                                    required
                             />
                         </Form.Field>
-                        <Form.Field>
+                        <Form.Field className="inputPassword">
                             <Input icon='lock'
                                    iconPosition='left'
                                    id="password"
@@ -95,7 +103,7 @@ class Signup extends React.Component {
                                    placeholder="Password"
                                    required/>
                         </Form.Field>
-                        <Form.Field>
+                        <Form.Field className="inputPassword">
                             <Input icon='lock' iconPosition='left'
                                    id="cpassword"
                                    onChange={this.handleChange}
@@ -106,13 +114,15 @@ class Signup extends React.Component {
                                    required/>
                         </Form.Field>
                     </Form>
-                </div>
                 <Divider />
-                <div className={styles.loginButton}>
-                    <Button loading={loading} size='huge' onClick={this.send}>Register</Button>
-                </div>
+                <Button className="loginButton"
+                        loading={loading}
+                        size='huge'
+                        onClick={this.send}>
+                    Register
+                </Button>
                 <Divider />
-                <div className={styles.loginNoAccount}>
+                <div className="loginNoAccount">
                     <p>
                         Have an account ? <a href="/login">Log in</a>
                     </p>

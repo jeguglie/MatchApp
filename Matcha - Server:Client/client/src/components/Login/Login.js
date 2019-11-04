@@ -1,7 +1,5 @@
 import React from "react";
 import API from "../../utils/API";
-import './Login.scss';
-import classNames from 'classnames';
 import Warnings from "../Warnings/Warnings";
 import Divider from "../../components/Divider/Divider";
 import { Input, Container, Image, Form, Button } from 'semantic-ui-react';
@@ -42,6 +40,7 @@ export class Login extends React.Component {
                 if (data.token) {
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("newUser", data.newUser);
+                    localStorage.setItem("email", email);
                     window.location = "/";
                 } else {
                     this.setState({warnings: data.text});

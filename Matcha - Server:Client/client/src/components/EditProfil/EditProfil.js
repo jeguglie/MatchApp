@@ -1,11 +1,8 @@
 import React from 'react';
 import {
     Button,
-    Checkbox,
     Form,
-    Input,
-    Radio,
-    Select,
+    Divider,
     TextArea,
     Grid,
     Progress,
@@ -13,54 +10,66 @@ import {
     Icon
 } from 'semantic-ui-react';
 import API from "../../utils/API";
-import styles from './EditProfil.scss';
 import classnames from 'classnames';
+import DividerC from "../Divider/Divider";
 
-const ProgressBar = () => <Progress percent={60}
-                                    className="ProgressBarProfile"
-                                    progress
-                                    size="large"/>
-const DEFAULT_SATE = {
-        email: localStorage.getItem('email'),
-        birthday: "",
+const ProgressBar = () => (
+    <Progress percent={60}
+              className="ProgressBarProfile"
+              progress
+              size="large"/>
+);
+const DEFAULT_STATE = {
+        email: "",
         firstName: "",
         lastName: "",
-        gender: "",
         interested: "",
         bio: "",
+        gender: "",
+        interests: [],
         country: "",
+        birthday: "",
         messages : {
             save: false,
             warnings: []
         }
-}
+};
 class EditProfil extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {...DEFAULT_SATE}
+        this.state = {...DEFAULT_STATE};
+        this.state.email = localStorage.getItem('email');
     }
 
-    componentDidMount() {
-        try
-        {
-            const { data } = async() =>  await API.getEditProfilValues(this.state.email);
-            if (data && data.message === true)
-                this.messages.setState({warnings: data.message});
+    async componentDidMount() {
+        try {
+            const { data } = await API.getEditProfilValues(this.state.email);
             console.log(data);
-
-        } catch (error) {
-                console.error(error);
+            if (data && data.message === true)
+                this.setState({warnings: data.message});
+            const newState = data.findProfil;
+            if (data.findProfil){
+                this.setState(prevState => ({
+                    copyState : {
+                        ...prevState.copyState,
+                        copyState: data.findProfil
+                    }
+                }));
+            console.log(this.state);
             }
+        } catch (error) {
+            console.error(error);
         }
+    }
     handleSave = async() => {
         try {
             const data = await API.updateEditProfilValues(this.state);
             console.log(data);
-            if (data && data.warnings.length)
+            if (Array.isArray(data.warnings) && data.warnings.length)
                 this.setState({warnings: data.warnings});
             else
-                this.messages.setState({save: true});
+                this.setState({save: true});
         } catch (error) {
             console.error(error);
         }
@@ -73,52 +82,64 @@ class EditProfil extends React.Component {
 
     render() {
         return (
-            <div className={classnames("ui middle", styles.EditProfil)}>
+            <div className={classnames("ui middle", "EditProfil")}>
                 <Grid columns={2} doubling>
                     <Grid.Column>
-                        <h1 className={styles.CompleteTitle}>Complete Your Profile</h1>
+                        <h1 className="CompleteTitle">Complete Your Profile</h1>
                     </Grid.Column>
                     <Grid.Column>
                         <ProgressBar/>
                     </Grid.Column>
                 </Grid>
+                <DividerC />
+                <Divider/>
+                <DividerC />
                 <Grid textAlign="center">
                     <Grid.Row>
-                        <Image centered src='https://react.semantic-ui.com/images/wireframe/white-image.png'
-                               size='medium' circular bordered/>
+                        <Image centered
+                               src='https://react.semantic-ui.com/images/wireframe/white-image.png'
+                               size='medium'
+                               circular bordered/>
                     </Grid.Row>
-                    <Grid.Row>
+                    <Grid.Row className="EditProfilIcons">
                         <Icon size='big' circular inverted name='facebook'/>
                         <Icon size='big' circular inverted name='instagram'/>
                         <Icon size='big' circular inverted name='upload'/>
                     </Grid.Row>
                 </Grid>
+                <DividerC />
+                <Divider/>
+                <DividerC />
                 <Grid columns={1} doubling>
                     <Grid.Column>
-                        <Form  className={styles.formEdit}>
+                        <Form  className="formEdit">
                             <Form.Group widths='equal'>
-                                <Form.Input fluid label='Last Name'
+                                <Form.Input fluid
+                                            label='Last Name'
                                             color="white"
                                             id="lastName"
                                             value={this.state.lastName}
                                             onChange={this.handleChange}
                                 />
-                                <Form.Input fluid label='First Name'
+                                <Form.Input fluid
+                                            label='First Name'
+                                            id="firstName"
                                             value={this.state.firstName}
-                                            onChange={this.handleChange} />
+                                            onChange={this.handleChange}
+                                />
                             </Form.Group>
-                            {/*<Form.Group widths='equal'>*/}
-                            {/*    <Form.Select*/}
-                            {/*        fluid*/}
-                            {/*        label='Gender'*/}
-                            {/*        id="gender"*/}
-                            {/*    />*/}
-                            {/*    <Form.Select*/}
-                            {/*        fluid*/}
-                            {/*        label='Country'*/}
-                            {/*        id="country"*/}
-                            {/*    />*/}
-                            {/*</Form.Group>*/}
+                            <Form.Group widths='equal'>
+                                {/*<Form.Select*/}
+                                {/*    fluid*/}
+                                {/*    label='Gender'*/}
+                                {/*    id="gender"*/}
+                                {/*/>*/}
+                                {/*<Form.Select*/}
+                                {/*    fluid*/}
+                                {/*    label='Country'*/}
+                                {/*    id="country"*/}
+                                {/*/>*/}
+                            </Form.Group>
                             <Form.Group widths='equal'>
                                 <Form.Input
                                     fluid
@@ -130,7 +151,8 @@ class EditProfil extends React.Component {
                                 {/*<Form.Select fluid*/}
                                 {/*             label='Interested By'*/}
                                 {/*             color="white"*/}
-                                {/*             id="interested"/>*/}
+                                {/*             id="interested"*/}
+                                {/*/>*/}
                             </Form.Group>
                             <Form.Field
                                 label='Bio'
@@ -142,16 +164,16 @@ class EditProfil extends React.Component {
                         </Form>
                     </Grid.Column>
                     <Grid.Row centered>
-                        <Input
-                            icon='tags'
-                            iconPosition='left'
-                            label={{tag: true, content: 'Add Tag'}}
-                            labelPosition='right'
-                            placeholder='Enter tags'
-                        />
+                        {/*<Input*/}
+                        {/*    icon='tags'*/}
+                        {/*    iconPosition='left'*/}
+                        {/*    label={{tag: true, content: 'Add Tag'}}*/}
+                        {/*    labelPosition='right'*/}
+                        {/*    placeholder='Enter tags'*/}
+                        {/*/>*/}
                     </Grid.Row>
-                    <Grid.Row className={styles.SubmitButton} centered>
-                        <Button size="big" onClick={this.handleSave}>Submit</Button>
+                    <Grid.Row centered>
+                        <Button className="loginButton" size="big" onClick={this.handleSave}>Submit</Button>
                     </Grid.Row>
                 </Grid>
             </div>

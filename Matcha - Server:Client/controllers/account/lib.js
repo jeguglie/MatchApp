@@ -6,12 +6,12 @@ async function signup(req, res) {
     const { password, email, cpassword } = req.body;
     if (!email || !password || !cpassword) {
         return res.status(200).json({
-            text: "Requête invalide"
+            text: ["Invalid request"]
         });
     }
     if (cpassword !== password){
         return res.status(200).json({
-            text: "Passwords does not match"
+            text: ["Passwords does not match"]
         });
     }
     const user = {
@@ -23,19 +23,19 @@ async function signup(req, res) {
         lastName: "",
         firstName: "",
         gender: "",
+        bio: "",
         country: "",
         interested:  "",
         birthday: "",
         interests: []
     }
-    // On check en base si l'utilisateur existe déjà
     try {
         const findUser = await User.findOne({
             email
         });
         if (findUser) {
             return res.status(400).json({
-                text: "User already exist"
+                text: ["User already exist"]
             });
         }
     } catch (error) {
@@ -44,12 +44,13 @@ async function signup(req, res) {
     try {
         // Sauvegarde de l'utilisateur en base
         const userData = new User(user);
-        const userProfil = new Profil(profil)
+        const userProfil = new Profil(profil);
         await userProfil.save();
         const userObject = await userData.save();
         return res.status(200).json({
-            text: "Success",
-            token: userObject.getToken()
+            text: ["Success"],
+            token: userObject.getToken(),
+            newUser: true
         });
     } catch (error) {
         return res.status(500).json({ error });
@@ -106,43 +107,43 @@ async function checkMail(req, res) {
         });
     }
 }
-//
-// async function getEditProfilValues(req, res) {
-//     const {email} = req.body;
-//     const findProfil = Profil.findOne({email}, req.body, function(err, doc){
-//             if (err) {
-//                 return res.status(500).json({
-//                     error: err
-//                 });
-//             }
-//             else
-//                 return res.status(200).json({
-//                     findProfil
-//                 })
-//     });
-// }
-//
-// async function updateProfilValues(req, res) {
-//     await Profil.findOneAndUpdate(req.body.email, req.body, function(err, doc) {
-//         if (err) {
-//             return res.status(500).json({
-//                 wanings: ["Error save"]
-//             });
-//         }
-//         else
-//             return res.status(200).json({
-//                 warnings: [],
-//                 save: true
-//             });
-//     });
-// }
 
+async function getEditProfilValues(req, res) {
+    try {
+        const findProfil = await Profil.findOne(req.email);
+        if (!findProfil) {
+            return res.status(500).json({
+                warnings: ["Not Found"]
+            });
+        } else
+            return res.status(200).json({
+                findProfil: findProfil
+            })
+    } catch (error) {
+        return res.status(500).json({
+            warnings: ["Catch error"]
+        });
+    }
+}
 
+async function updateEditProfilValues(req, res) {
+    await Profil.findOneAndUpdate(req.body.state.email, req.body.state, function(err, doc) {
+        if (err) {
+            return res.status(500).json({
+                wanings: ["Invalid request"]
+            });
+        }
+        else
+            return res.status(200).json({
+                warnings: ["Saved"],
+                save: true
+            });
+    });
+}
 
-//On exporte nos deux fonctions
 
 exports.login = login;
 exports.signup = signup;
 exports.checkMail = checkMail;
-// exports.getEditProfilValues = getEditProfilValues;
-// exports.updateProfilValues = updateProfilValues;
+exports.getEditProfilValues = getEditProfilValues;
+exports.updateEditProfilValues = updateEditProfilValues;

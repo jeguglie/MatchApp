@@ -1,6 +1,5 @@
 import React from 'react';
 import EditProfil from '../../components/EditProfil/EditProfil';
-import API from "../../utils/API";
 
 class Profil extends React.Component {
 

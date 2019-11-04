@@ -1,7 +1,6 @@
 import React from "react";
 import API from "../utils/API.js";
 import { Route, Redirect } from "react-router-dom";
-
 export const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
         {...rest}
@@ -33,3 +32,17 @@ export const PrivateRouteLoginRegister = ({ component: Component, ...rest }) => 
         }}
     />
 );
+
+export const PrivateRouteEditProfil = ({ component: Component, ...rest }) => (
+    <Route
+            {...rest}
+            render={(props) => {
+            if (localStorage.getItem('newUser')){
+                return <Component {...props.EditProfil} />;
+            }
+            else {
+                return <Redirect to="/login"/>;
+            }
+        }}
+    />
+)

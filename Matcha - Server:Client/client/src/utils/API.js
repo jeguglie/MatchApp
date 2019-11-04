@@ -18,7 +18,13 @@ export default {
         );
     },
     signup: function(email, password, cpassword) {
-        return axios.post(`${ burl}/user/signup`, {email, password, cpassword}, { headers: headers });
+        return axios.post(
+            `${ burl}/user/signup`,
+            {email, password, cpassword},
+            {
+                headers: headers
+            }
+        );
     },
 
     isAuth: function() {
@@ -40,7 +46,7 @@ export default {
     },
     updateEditProfilValues: function(state) {
         return axios.post(
-            `${burl}/user/updateProfil`,
+            `${burl}/user/updateEditProfilValues`,
             {
                 state,
             },
@@ -51,7 +57,7 @@ export default {
     },
     getEditProfilValues: function(email) {
         return axios.post(
-            `${burl}/user/getProfilValues`,
+            `${burl}/user/getEditProfilValues`,
             {
                 email,
             },
