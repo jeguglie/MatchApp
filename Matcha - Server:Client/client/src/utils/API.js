@@ -44,22 +44,23 @@ export default {
             }
         );
     },
-    updateEditProfilValues: function(state) {
+    updateEditProfilValues: function(state, id) {
         return axios.post(
             `${burl}/user/updateEditProfilValues`,
             {
                 state,
+                id
             },
             {
                 headers: headers
             }
         );
     },
-    getEditProfilValues: function(email) {
+    getEditProfilValues: function(id) {
         return axios.post(
             `${burl}/user/getEditProfilValues`,
             {
-                email,
+                id,
             },
             {
                 headers: headers

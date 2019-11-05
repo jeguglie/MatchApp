@@ -9,7 +9,7 @@ const path = require('path');
 const db = require('./config/keys').mongoURI;
 //Connexion à la base de donnée
 mongoose
-    .connect(db, {useNewUrlParser: true, useUnifiedTopology: true , useCreateIndex: true})
+    .connect(db, {useNewUrlParser: true, useUnifiedTopology: true , useCreateIndex: true, useFindAndModify: false})
     .then(() => {
         console.log("Connected to mongoDB");
     })

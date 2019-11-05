@@ -39,33 +39,24 @@ class EditProfil extends React.Component {
     constructor(props) {
         super(props);
         this.state = {...DEFAULT_STATE};
-        this.state.email = localStorage.getItem('email');
     }
 
     async componentDidMount() {
         try {
-            const { data } = await API.getEditProfilValues(this.state.email);
-            console.log(data);
-            if (data && data.message === true)
-                this.setState({warnings: data.message});
-            const newState = data.findProfil;
-            if (data.findProfil){
-                this.setState(prevState => ({
-                    copyState : {
-                        ...prevState.copyState,
-                        copyState: data.findProfil
-                    }
-                }));
-            console.log(this.state);
-            }
+                const {data} = await API.getEditProfilValues(localStorage.getItem('id'));
+                if (data && data.message === true)
+                    this.setState({warnings: data.message});
+                const newState = data.findProfil;
+                if (data.findProfil) {
+                    this.setState({...newState});
+                }
         } catch (error) {
             console.error(error);
         }
     }
     handleSave = async() => {
         try {
-            const data = await API.updateEditProfilValues(this.state);
-            console.log(data);
+            const data = await API.updateEditProfilValues(this.state, localStorage.getItem('id'));
             if (Array.isArray(data.warnings) && data.warnings.length)
                 this.setState({warnings: data.warnings});
             else

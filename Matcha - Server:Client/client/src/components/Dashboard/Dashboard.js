@@ -6,6 +6,7 @@ import API from "../../utils/API";
 class Dashboard extends React.Component {
     disconnect = () => {
         API.logout();
+        localStorage.clear();
         window.location = "/";
     };
     render() {

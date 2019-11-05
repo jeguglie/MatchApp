@@ -47,9 +47,11 @@ async function signup(req, res) {
         const userProfil = new Profil(profil);
         await userProfil.save();
         const userObject = await userData.save();
+        console.log(userObject);
         return res.status(200).json({
             text: ["Success"],
             token: userObject.getToken(),
+            _id: userObject._id,
             newUser: true
         });
     } catch (error) {
@@ -79,6 +81,7 @@ async function login(req, res) {
         return res.status(200).json({
             token: findUser.getToken(),
             newUser: findUser.newUser,
+            id: findUser._id,
             text: ["Authentification reussie"]
         });
     }
@@ -110,7 +113,10 @@ async function checkMail(req, res) {
 
 async function getEditProfilValues(req, res) {
     try {
-        const findProfil = await Profil.findOne(req.email);
+        let ObjectId = mongoose.Schema.Types.ObjectId;
+        const id = req.body.id;
+        const findProfil = await Profil.findById(ObjectId(id));
+        console.log(findProfil);
         if (!findProfil) {
             return res.status(500).json({
                 warnings: ["Not Found"]
@@ -120,6 +126,7 @@ async function getEditProfilValues(req, res) {
                 findProfil: findProfil
             })
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             warnings: ["Catch error"]
         });
@@ -127,18 +134,17 @@ async function getEditProfilValues(req, res) {
 }
 
 async function updateEditProfilValues(req, res) {
-    await Profil.findOneAndUpdate(req.body.state.email, req.body.state, function(err, doc) {
-        if (err) {
-            return res.status(500).json({
-                wanings: ["Invalid request"]
-            });
-        }
-        else
-            return res.status(200).json({
+    try {
+        await Profil.findOneAndUpdate(req.body, { $set: req.body.state}, {new: true});
+        return res.status(200).json({
                 warnings: ["Saved"],
                 save: true
             });
-    });
+       } catch (error) {
+            return res.status(500).json({
+            warnings: ["Catch error"]
+        });
+    }
 }
 
 

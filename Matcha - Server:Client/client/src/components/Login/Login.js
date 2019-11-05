@@ -40,7 +40,7 @@ export class Login extends React.Component {
                 if (data.token) {
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("newUser", data.newUser);
-                    localStorage.setItem("email", email);
+                    localStorage.setItem("id", data.id);
                     window.location = "/";
                 } else {
                     this.setState({warnings: data.text});

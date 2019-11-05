@@ -41,7 +41,7 @@ class Signup extends React.Component {
                     if (data.token) {
                         localStorage.setItem("token", data.token);
                         localStorage.setItem("newUser", data.newUser);
-                        localStorage.setItem("email", email);
+                        localStorage.setItem("id", data._id);
                         window.location = "/";
                     } else {
                         this.setState({warnings: data.text});

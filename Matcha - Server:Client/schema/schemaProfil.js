@@ -3,6 +3,9 @@ const config = require("../config/config");
 
 const profilSchema = mongoose.Schema(
     {
+        _id: {
+            type: String
+        },
         email: {
             type: String,
             lowercase: true,
