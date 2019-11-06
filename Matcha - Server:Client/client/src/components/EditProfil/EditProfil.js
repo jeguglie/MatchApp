@@ -12,7 +12,7 @@ import {
 import API from "../../utils/API";
 import classnames from 'classnames';
 import DividerC from "../Divider/Divider";
-
+const mongoose = require('mongoose');
 const ProgressBar = () => (
     <Progress percent={60}
               className="ProgressBarProfile"
@@ -43,7 +43,8 @@ class EditProfil extends React.Component {
 
     async componentDidMount() {
         try {
-                const {data} = await API.getEditProfilValues(localStorage.getItem('id'));
+            const ObjectId = mongoose.Types.ObjectId(localStorage.getItem('id'));
+                const {data} = await API.getEditProfilValues(ObjectId);
                 if (data && data.message === true)
                     this.setState({warnings: data.message});
                 const newState = data.findProfil;
@@ -56,7 +57,8 @@ class EditProfil extends React.Component {
     }
     handleSave = async() => {
         try {
-            const data = await API.updateEditProfilValues(this.state, localStorage.getItem('id'));
+            const ObjectId2 = mongoose.Types.ObjectId(localStorage.getItem('id'));
+            const data = await API.updateEditProfilValues(this.state, ObjectId2);
             if (Array.isArray(data.warnings) && data.warnings.length)
                 this.setState({warnings: data.warnings});
             else

@@ -5,9 +5,6 @@ const config = require("../config/config");
 
 const userSchema = mongoose.Schema(
     {
-        _id: {
-            type: String
-        },
         newUser: {
             type: Boolean,
             default: true

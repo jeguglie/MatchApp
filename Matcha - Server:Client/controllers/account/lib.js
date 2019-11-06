@@ -1,6 +1,7 @@
 const User = require("../../schema/schemaUser.js");
 const Profil = require("../../schema/schemaProfil.js");
 const passwordHash = require("password-hash");
+const mongoose = require('mongoose');
 
 async function signup(req, res) {
     const { password, email, cpassword } = req.body;
@@ -18,17 +19,6 @@ async function signup(req, res) {
         email,
         password: passwordHash.generate(password),
     };
-    const profil = {
-        email,
-        lastName: "",
-        firstName: "",
-        gender: "",
-        bio: "",
-        country: "",
-        interested:  "",
-        birthday: "",
-        interests: []
-    }
     try {
         const findUser = await User.findOne({
             email
@@ -39,15 +29,26 @@ async function signup(req, res) {
             });
         }
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ error });
     }
     try {
-        // Sauvegarde de l'utilisateur en base
         const userData = new User(user);
+        const profil = {
+            _id: userData._id,
+            email,
+            lastName: "",
+            firstName: "",
+            gender: "",
+            bio: "",
+            country: "",
+            interested:  "",
+            birthday: "",
+            interests: []
+        }
         const userProfil = new Profil(profil);
         await userProfil.save();
         const userObject = await userData.save();
-        console.log(userObject);
         return res.status(200).json({
             text: ["Success"],
             token: userObject.getToken(),
@@ -55,6 +56,7 @@ async function signup(req, res) {
             newUser: true
         });
     } catch (error) {
+        console.log("2 " + error);
         return res.status(500).json({ error });
     }
 }
@@ -112,11 +114,9 @@ async function checkMail(req, res) {
 }
 
 async function getEditProfilValues(req, res) {
+    console.log(req.body);
     try {
-        let ObjectId = mongoose.Schema.Types.ObjectId;
-        const id = req.body.id;
-        const findProfil = await Profil.findById(ObjectId(id));
-        console.log(findProfil);
+        const findProfil = await Profil.findById(req.body.id);
         if (!findProfil) {
             return res.status(500).json({
                 warnings: ["Not Found"]
@@ -128,14 +128,15 @@ async function getEditProfilValues(req, res) {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            warnings: ["Catch error"]
+            warnings: [""]
         });
     }
 }
 
 async function updateEditProfilValues(req, res) {
     try {
-        await Profil.findOneAndUpdate(req.body, { $set: req.body.state}, {new: true});
+        console.log(req.body);
+        await Profil.findByIdAndUpdate({_id: req.body.id}, req.body.state, {new: true});
         return res.status(200).json({
                 warnings: ["Saved"],
                 save: true
