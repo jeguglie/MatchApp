@@ -1,0 +1,22 @@
+.BasicsInformationsAnimate-enter {
+  opacity: 0;
+  right: 750px;
+  position: relative;
+}
+.BasicsInformationsAnimate-enter-active {
+  opacity: 1;
+  right: 0px;
+  position: relative;
+  transition: all ease-in-out 0.2s;
+}
+.BasicsInformationsAnimate-exit {
+  opacity: 1;
+  right: 0px;
+  position: relative;
+}
+.BasicsInformationsAnimate-exit-active {
+  opacity: 0;
+  right: 750px;
+  position: relative;
+  transition: all ease-in 0.2s;
+}

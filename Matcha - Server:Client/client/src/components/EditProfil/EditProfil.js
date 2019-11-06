@@ -1,176 +1,58 @@
 import React from 'react';
-import {
-    Button,
-    Form,
-    Divider,
-    TextArea,
-    Grid,
-    Progress,
-    Image,
-    Icon
-} from 'semantic-ui-react';
-import API from "../../utils/API";
-import classnames from 'classnames';
-import DividerC from "../Divider/Divider";
-const mongoose = require('mongoose');
-const ProgressBar = () => (
-    <Progress percent={60}
-              className="ProgressBarProfile"
-              progress
-              size="large"/>
-);
-const DEFAULT_STATE = {
-        email: "",
-        firstName: "",
-        lastName: "",
-        interested: "",
-        bio: "",
-        gender: "",
-        interests: [],
-        country: "",
-        birthday: "",
-        messages : {
-            save: false,
-            warnings: []
-        }
+import BasicsInformations from "./BasicInformations/BasicsInformations";
+import AddPhotos from "./AddPhotos/AddPhotos";
+import {CSSTransition} from 'react-transition-group';
+
+const DEFAULT_SATE = {
+    section: 1,
+    section1: true,
+    section2: false,
+    section3: false,
+    bool: false
 };
+
 class EditProfil extends React.Component {
-
-    constructor(props) {
+    constructor(props){
         super(props);
-        this.state = {...DEFAULT_STATE};
+        this.state = {...DEFAULT_SATE};
     }
 
-    async componentDidMount() {
-        try {
-            const ObjectId = mongoose.Types.ObjectId(localStorage.getItem('id'));
-                const {data} = await API.getEditProfilValues(ObjectId);
-                if (data && data.message === true)
-                    this.setState({warnings: data.message});
-                const newState = data.findProfil;
-                if (data.findProfil) {
-                    this.setState({...newState});
-                }
-        } catch (error) {
-            console.error(error);
-        }
+    componentDidMount() {
     }
-    handleSave = async() => {
-        try {
-            const ObjectId2 = mongoose.Types.ObjectId(localStorage.getItem('id'));
-            const data = await API.updateEditProfilValues(this.state, ObjectId2);
-            if (Array.isArray(data.warnings) && data.warnings.length)
-                this.setState({warnings: data.warnings});
-            else
-                this.setState({save: true});
-        } catch (error) {
-            console.error(error);
+
+    handleNext = () => {
+        this.setState({section: this.state.section + 1, bool: true});
+    };
+
+    handleSection2 = () => {
+        this.setState({section2: true, section1: false, section3: false});
+    };
+    handleSection1 = () => {
+        this.setState({section2: false, section1: true, section3: false});
+    };
+
+
+    handlePrev = () => this.setState({section: this.state.section - 1});
+    render(){
+        if (this.state.section === 1) {
+            if (this.state.section1 === false)
+                this.handleSection1();
+            return (
+                <CSSTransition in={this.state.section1} timeout={1000} classNames="BasicsInformationsAnimate">
+                    <BasicsInformations nextSection={this.handleNext}/>
+                </CSSTransition>
+            );
         }
-    };
-
-    handleChange = async(event) => {
-        console.log(event.target.value);
-        this.setState({[event.target.id]: event.target.value})
-    };
-
-    render() {
-        return (
-            <div className={classnames("ui middle", "EditProfil")}>
-                <Grid columns={2} doubling>
-                    <Grid.Column>
-                        <h1 className="CompleteTitle">Complete Your Profile</h1>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <ProgressBar/>
-                    </Grid.Column>
-                </Grid>
-                <DividerC />
-                <Divider/>
-                <DividerC />
-                <Grid textAlign="center">
-                    <Grid.Row>
-                        <Image centered
-                               src='https://react.semantic-ui.com/images/wireframe/white-image.png'
-                               size='medium'
-                               circular bordered/>
-                    </Grid.Row>
-                    <Grid.Row className="EditProfilIcons">
-                        <Icon size='big' circular inverted name='facebook'/>
-                        <Icon size='big' circular inverted name='instagram'/>
-                        <Icon size='big' circular inverted name='upload'/>
-                    </Grid.Row>
-                </Grid>
-                <DividerC />
-                <Divider/>
-                <DividerC />
-                <Grid columns={1} doubling>
-                    <Grid.Column>
-                        <Form  className="formEdit">
-                            <Form.Group widths='equal'>
-                                <Form.Input fluid
-                                            label='Last Name'
-                                            color="white"
-                                            id="lastName"
-                                            value={this.state.lastName}
-                                            onChange={this.handleChange}
-                                />
-                                <Form.Input fluid
-                                            label='First Name'
-                                            id="firstName"
-                                            value={this.state.firstName}
-                                            onChange={this.handleChange}
-                                />
-                            </Form.Group>
-                            <Form.Group widths='equal'>
-                                {/*<Form.Select*/}
-                                {/*    fluid*/}
-                                {/*    label='Gender'*/}
-                                {/*    id="gender"*/}
-                                {/*/>*/}
-                                {/*<Form.Select*/}
-                                {/*    fluid*/}
-                                {/*    label='Country'*/}
-                                {/*    id="country"*/}
-                                {/*/>*/}
-                            </Form.Group>
-                            <Form.Group widths='equal'>
-                                <Form.Input
-                                    fluid
-                                    label='Email'
-                                    id="email"
-                                    value={this.state.email}
-                                    onChange={this.handleChange}
-                                />
-                                {/*<Form.Select fluid*/}
-                                {/*             label='Interested By'*/}
-                                {/*             color="white"*/}
-                                {/*             id="interested"*/}
-                                {/*/>*/}
-                            </Form.Group>
-                            <Form.Field
-                                label='Bio'
-                                control={TextArea}
-                                id="bio"
-                                value={this.state.bio}
-                                onChange={this.handleChange}
-                            />
-                        </Form>
-                    </Grid.Column>
-                    <Grid.Row centered>
-                        {/*<Input*/}
-                        {/*    icon='tags'*/}
-                        {/*    iconPosition='left'*/}
-                        {/*    label={{tag: true, content: 'Add Tag'}}*/}
-                        {/*    labelPosition='right'*/}
-                        {/*    placeholder='Enter tags'*/}
-                        {/*/>*/}
-                    </Grid.Row>
-                    <Grid.Row centered>
-                        <Button className="loginButton" size="big" onClick={this.handleSave}>Submit</Button>
-                    </Grid.Row>
-                </Grid>
-            </div>
-        )
+        else if (this.state.section === 2) {
+            if (this.state.section2 === false)
+                this.handleSection2();
+            return (
+                <CSSTransition in={this.state.section2} timeout={1000} classNames="AddPhotosAnimate">
+                    <AddPhotos prevSection={this.handlePrev}/>
+                </CSSTransition>
+            );
+        }
     }
 }
+
 export default EditProfil;

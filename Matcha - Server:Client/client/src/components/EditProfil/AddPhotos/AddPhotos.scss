@@ -1,9 +1,41 @@
-.EditProfil {
+.AddPhotos {
   padding: 5em;
   margin-left: 5em;
   margin-right: 5em;
   background-color: #f93874;
   border-radius: 20px !important;
+  position: relative;
+}
+
+.AddPhotosAnimate-enter {
+  opacity: 0;
+  right: -750px;
+  position: relative;
+}
+.AddPhotosAnimate-enter-active {
+  opacity: 1;
+  right: 0px;
+  position: relative;
+  transition: all ease-in-out 0.2s;
+}
+.AddPhotosAnimate-exit {
+  opacity: 1;
+  right: 0px;
+  position: relative;
+}
+.AddPhotosAnimate-exit-active {
+  opacity: 0;
+  right: -750px;
+  position: relative;
+  transition: all ease-in 0.2s;
+}
+
+.ShadowImage {
+  box-shadow: 4px 4px 1px rgba(0,0,0,0.1) !important;
+}
+
+.ShadowIcon .icon{
+  box-shadow: 4px 4px 1px rgba(0,0,0,0.1) !important;
 }
 
 .CompleteTitle {
@@ -35,7 +67,7 @@
 }
 
 
- .ui.form .field>label {
+.ui.form .field>label {
   display: block;
   margin: 0 0 .28571429rem 0;
   color: rgba(255, 255, 255, 0.6) !important;
@@ -90,27 +122,22 @@
 }
 
 .EditProfilIcons {
-   & i.circular.inverted.icon {
-     background-color: #ffffff!important;
-     color: #4f374e!important;
-     margin: 15px;
-   }
+  & i.circular.inverted.icon {
+    transform: scale(1);
+    background-color: #ffffff!important;
+    color: #4f374e!important;
+    margin: 15px;
+    transition: all ease-in-out 0.2s;
+  }
+  & i.circular.inverted.icon:hover{
+  transform: scale(1.5);
+  }
 }
 
 .DropdownEdit {
   .ui.fluid.dropdown {
     margin-left: 0.5em !important;
     margin-right: 0.5em !important;
-  }
-}
-
-.EditProfilArrow {
-  transition: all ease-in-out 0.15s;
-  color: #ffffff !important;
-  font-size: 6em !important;
-  transform: scale(1) !important;
-  &:hover {
-    transform: scale(1.2) !important;
   }
 }
 
@@ -127,20 +154,20 @@
   .TopEditProfilLeft {
     margin-bottom: 15px;
   }
-  .EditProfil {
+  .AddPhotos {
     width: 340px;
     margin: auto;
   }
 }
 
 @media only screen and (min-width: 1200px){
-  .EditProfil {
+  .AddPhotos {
     width: 900px;
     margin: auto;
   }
 }
 @media only screen and (min-width: 1500px){
-  .EditProfil {
+  .AddPhotos {
     width: 800px;
     margin: auto;
   }

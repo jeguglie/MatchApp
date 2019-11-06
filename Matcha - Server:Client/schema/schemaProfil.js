@@ -40,6 +40,10 @@ const profilSchema = mongoose.Schema(
         },
         birthday: {
             type: Date
+        },
+        complete: {
+            type: Number,
+            default: 0
         }
     }
 );

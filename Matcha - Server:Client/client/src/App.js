@@ -5,25 +5,27 @@ import Signup from "./components/Signup/Signup.js";
 import { PrivateRoute, PrivateRouteLoginRegister, PrivateRouteEditProfil } from "./components/PrivateRoute.js";
 import Aux from './hoc/Aux';
 import './App.scss';
-import EditProfil from "./components/EditProfil/EditProfil";
+import Profil from "./containers/Profil/Profil";
+import {Image} from "semantic-ui-react";
+import Divider from "./components/Divider/Divider";
+const Login =  require( "./components/Login/Login");
+const Logo = require('./../src/img/MatchApp-Logo.png');
 
-
-const login =  require( "./components/Login/Login");
-const Login = login.Login;
 class App extends Component {
     render() {
         return (
             <Aux>
-            <div className="App">
-                <div className="App-content">
+                <div className="Menu">
+                    <Divider />
+                        <Image left src={Logo} size='medium' />
+                    <Divider />
+                </div>
                     <Switch>
-                        <PrivateRouteEditProfil exact path="/" component={EditProfil} />
+                        <PrivateRouteEditProfil exact path="/" component={Profil} />
                         <PrivateRoute exact path="/dashboard" component={Dashboard} />
                         <PrivateRouteLoginRegister exact path="/signup" component={Signup} />
                         <PrivateRouteLoginRegister exact path="/login" component={Login} />
                     </Switch>
-                </div>
-            </div>
             </Aux>
         );
     }

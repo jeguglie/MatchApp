@@ -38,7 +38,7 @@ export const PrivateRouteEditProfil = ({ component: Component, ...rest }) => (
             {...rest}
             render={(props) => {
             if (localStorage.getItem('newUser')){
-                return <Component {...props.EditProfil} />;
+                return <Component {...props.Profil} />;
             }
             else {
                 return <Redirect to="/login"/>;

@@ -15,6 +15,7 @@ body {
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 // Login - Signup
@@ -22,15 +23,21 @@ body {
 
 // EditProfil
 @import './components/EditProfil/EditProfil.scss';
+@import './components/EditProfil/AddPhotos/AddPhotos.scss';
+@import './components/EditProfil/BasicInformations/BasicInformationsAnimate.scss';
 
 // Layout
 @import './components/Layout/Layout.scss';
 
-
 // UI
 @import './components/Divider/Divider';
 
-
+// Menu
+.Menu {
+  margin-left: 5em;
+  margin-right: 5em;
+  left: 0;
+}
 
 @media only screen and (max-width: 767px){
   .ui.container {
