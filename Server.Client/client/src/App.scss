@@ -1,0 +1,90 @@
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  monospace;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #212541;
+  overflow: auto;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Login - Signup
+@import './components/Login/Login.scss';
+
+// EditProfil
+@import './components/EditProfil/EditProfil.scss';
+@import './components/EditProfil/AddPhotos/AddPhotos.scss';
+@import './components/EditProfil/BasicInformations/BasicInformationsAnimate.scss';
+
+// Layout
+@import './components/Layout/Layout.scss';
+
+// UI
+@import './components/Divider/Divider';
+
+// Menu
+.Menu {
+  margin-left: 5em;
+  margin-right: 5em;
+  left: 0;
+}
+
+// Upload
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@media only screen and (max-width: 767px){
+  .ui.container {
+    width: 600px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 7em !important;
+    padding-right: 7em !important;
+  }
+}
+
+@media only screen and (max-width: 991px) and (min-width: 768px){
+  .ui.container {
+    width: 500px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 5em !important;
+    padding-right: 5em !important;
+  }
+}
+
+@media only screen and (max-width: 1199.98px) and (min-width: 992px){
+  .ui.container {
+    width: 500px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 5em !important;
+    padding-right: 5em !important;
+  }
+}
+
+
+
+@media only screen and (min-width: 1200px){
+  .ui.container {
+    width: 500px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 7em !important;
+    padding-right: 7em !important;
+  }
+}
