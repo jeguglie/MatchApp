@@ -1,0 +1,9 @@
+.AddPhotosMinContainer {
+  & .column img {
+    width: 150px !important;
+    height: 150px !important;
+    background: white;
+    padding: 5px;
+    object-fit: contain;
+  }
+}

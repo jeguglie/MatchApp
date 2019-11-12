@@ -3,6 +3,9 @@ import {Grid, Progress, Image, Icon,} from 'semantic-ui-react';
 import classnames from 'classnames';
 import DividerC from "../../Divider/Divider";
 import FileUpload from "../../fileUpload/fileUpload";
+import Warnings from '../../../components/Warnings/Warnings';
+import AddPhotosMin from '../../../components/EditProfil/AddPhotos/AddPhotosMin/AddPhotosMin';
+import API from "../../../utils/API";
 
 const DEFAULT_STATE = {
     profileImg: [],
@@ -18,8 +21,8 @@ const DEFAULT_STATE = {
     birthday: "",
     messages : {
         save: false,
-        warnings: []
     },
+    warnings: [],
     complete : 0
 };
 
@@ -31,6 +34,9 @@ const ProgressBar = () => (
         progress
         size="large"/>
 );
+
+
+
 class AddPhotos extends React.Component {
     constructor(props) {
         super(props);
@@ -38,15 +44,38 @@ class AddPhotos extends React.Component {
         this.state.multerImage = "https://react.semantic-ui.com/images/wireframe/white-image.png";
     }
 
+    async componentDidMount() {
+        try {
+            const { data } = await API.getPhotos(localStorage.getItem('id'));
+            if (data.profileImg){
+                this.setState({profileImg: data.profileImg});
+                this.updateImages();
+            }
+        } catch(error){
+            console.log(error);
+        }
+    }
+
     updateImages = () => {
-        console.log(this.state);
-        this.setState({multerImage: "http://localhost:8800/" + this.state.profileImg[0][0]});
+        this.setState({multerImage: "http://localhost:8800/" + this.state.profileImg[0]});
     };
 
     setImages = (tab) => {
         this.setState({profileImg: tab});
-        this.updateImages();
+        if (this.state.multerImage === "https://react.semantic-ui.com/images/wireframe/white-image.png")
+            this.updateImages();
     };
+
+    setWarnings = (data) => {
+        this.setState({warnings: data});
+    };
+
+
+
+
+
+
+
     render() {
         return (
             <div className="container-fluid">
@@ -60,6 +89,7 @@ class AddPhotos extends React.Component {
                         </Grid.Column>
                     </Grid>
                     <Grid textAlign="center">
+                        <Warnings data={this.state.warnings}/>
                         <Grid.Row className="EditProfilIcons ShadowIcon">
                             {/*<Icon size='big' circular inverted name='facebook'/>*/}
                             {/*<Icon size='big' circular inverted name='instagram'/>*/}
@@ -69,10 +99,15 @@ class AddPhotos extends React.Component {
                                        centered
                                        src={this.state.multerImage}
                                        size='medium'
-                                       circular bordered
+                                       rounded bordered
                                 />
                         </Grid.Row>
-                        <FileUpload setImages={this.setImages}/>
+                        <FileUpload setImages={this.setImages} setWarnings={this.setWarnings}/>
+                    </Grid>
+                    <DividerC vertically={false}/>
+                    <DividerC vertically={false}/>
+                    <Grid textAlign="center">
+                        <AddPhotosMin data={this.state.profileImg} />
                     </Grid>
                     <DividerC vertically={false}/>
                     <DividerC vertically={false}/>

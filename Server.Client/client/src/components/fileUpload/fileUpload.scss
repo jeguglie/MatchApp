@@ -1,0 +1,17 @@
+.containerUpload {
+    & form button, & form input {
+    background-color: white !important;
+    color: #fc3372 !important;
+    border-radius: 20px !important;
+    font-size: 1.5em;
+    padding: 15px;
+    border: none !important;
+    &:hover, &:active, &:focus {
+      box-shadow: -1px 5px 5px -2px rgba(0,0,0,0.2) !important;
+      background-color: white !important;
+      color: #fc3372 !important;
+      border-radius: 20px !important;
+    }
+
+  }
+}

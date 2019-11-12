@@ -67,15 +67,16 @@ export default {
             }
         );
     },
-    uploadImage: function (imageFormObj) {
+    getPhotos: function(id) {
         return axios.post(
-            `${burl}/image/uploadmulter`,
+            `${burl}/user/getPhotos`,
             {
-                imageFormObj
+                id,
             },
             {
                 headers: headers
             }
         );
     }
+
 };
