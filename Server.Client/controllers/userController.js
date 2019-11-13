@@ -31,6 +31,6 @@ module.exports = function (app) {
     app.post('/checkMail', account.checkMail);
     app.post('/getEditProfilValues', account.getEditProfilValues);
     app.post('/updateEditProfilValues', account.updateEditProfilValues);
-    app.post('/user-profile', upload.single('profileImg'), addphotos.uploadPhoto);
+    app.post('/user-profile', upload.single('imagesFiles'), addphotos.uploadPhoto);
     app.post('/getPhotos', addphotos.getPhotos);
 };

@@ -9,7 +9,8 @@ import API from "../../../utils/API";
 
 const DEFAULT_STATE = {
     profileImg: [],
-    multerImage: "",
+    coverImage: "",
+    tmpProfileImg: [],
     email: "",
     firstName: "",
     lastName: "",
@@ -23,7 +24,7 @@ const DEFAULT_STATE = {
         save: false,
     },
     warnings: [],
-    complete : 0
+    savePhotos: 0
 };
 
 const ProgressBar = () => (
@@ -41,40 +42,26 @@ class AddPhotos extends React.Component {
     constructor(props) {
         super(props);
         this.state = ({...DEFAULT_STATE});
-        this.state.multerImage = "https://react.semantic-ui.com/images/wireframe/white-image.png";
+        this.state.coverImage = "https://react.semantic-ui.com/images/wireframe/white-image.png";
     }
 
     async componentDidMount() {
         try {
             const { data } = await API.getPhotos(localStorage.getItem('id'));
-            if (data.profileImg){
-                this.setState({profileImg: data.profileImg});
-                this.updateImages();
-            }
+            if (data.profileImg)
+                this.setState({profileImg: data.profileImg}, () => {
+                    this.updateImages();
+                });
         } catch(error){
             console.log(error);
         }
     }
 
-    updateImages = () => {
-        this.setState({multerImage: "http://localhost:8800/" + this.state.profileImg[0]});
-    };
-
-    setImages = (tab) => {
-        this.setState({profileImg: tab});
-        if (this.state.multerImage === "https://react.semantic-ui.com/images/wireframe/white-image.png")
-            this.updateImages();
-    };
-
-    setWarnings = (data) => {
-        this.setState({warnings: data});
-    };
-
-
-
-
-
-
+    updateImages = () => this.setState({coverImage: "http://localhost:8800/" + this.state.profileImg[0]});
+    setWarnings = (data) => this.setState({warnings: data});
+    showPreview = (imagePreviewTab) => this.setState({profileImg: this.state.profileImg.concat(imagePreviewTab)});
+    handleSave = () => this.setState({savePhotos: 1});
+    handleSaveFinished = () => this.setState({savePhotos: 0});
 
     render() {
         return (
@@ -90,27 +77,24 @@ class AddPhotos extends React.Component {
                     </Grid>
                     <Grid textAlign="center">
                         <Warnings data={this.state.warnings}/>
-                        <Grid.Row className="EditProfilIcons ShadowIcon">
-                            {/*<Icon size='big' circular inverted name='facebook'/>*/}
-                            {/*<Icon size='big' circular inverted name='instagram'/>*/}
-                        </Grid.Row>
                         <Grid.Row>
                                 <Image className="ShadowImage"
                                        centered
-                                       src={this.state.multerImage}
+                                       src={this.state.coverImage}
                                        size='medium'
                                        rounded bordered
                                 />
                         </Grid.Row>
-                        <FileUpload setImages={this.setImages} setWarnings={this.setWarnings}/>
+                        <FileUpload handleSaveFinished={this.handleSaveFinished}
+                                    savePhotos={this.state.savePhotos}
+                                    showPreview={this.showPreview}
+                                    setWarnings={this.setWarnings}/>
                     </Grid>
                     <DividerC vertically={false}/>
                     <DividerC vertically={false}/>
                     <Grid textAlign="center">
                         <AddPhotosMin data={this.state.profileImg} />
                     </Grid>
-                    <DividerC vertically={false}/>
-                    <DividerC vertically={false}/>
                     <Grid>
                         <Grid.Row centered>
                             <Icon className="EditProfilArrow"

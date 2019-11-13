@@ -18,7 +18,7 @@ async function uploadPhoto(req, res) {
                     warnings: ["Error find Profile"]
                 });
             const profileImgTab = out.profileImg;
-            if (profileImgTab.length > 5){
+            if (profileImgTab.length + 1 > 5){
                 return res.status(200).json({
                     warnings: ["Number limit of images is 5"]
                 })
@@ -33,7 +33,7 @@ async function uploadPhoto(req, res) {
                 }
                 return res.status(200).json({
                     warnings: ["Image successfully uploaded"],
-                    profileImgTab: profileImgTab
+                    save: true
                 })
             });
         });
