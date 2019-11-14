@@ -1,16 +1,17 @@
 import React from 'react';
-import {Grid, Progress, Image, Icon,} from 'semantic-ui-react';
+import {Grid, Progress, Image, Divider, Icon} from 'semantic-ui-react';
 import classnames from 'classnames';
 import DividerC from "../../Divider/Divider";
 import FileUpload from "../../fileUpload/fileUpload";
 import Warnings from '../../../components/Warnings/Warnings';
-import AddPhotosMin from '../../../components/EditProfil/AddPhotos/AddPhotosMin/AddPhotosMin';
+import loadPreview from '../../../components/EditProfil/AddPhotos/loadPreview/loadPreview';
 import API from "../../../utils/API";
 
 const DEFAULT_STATE = {
     profileImg: [],
     coverImage: "",
-    tmpProfileImg: [],
+    previewTab: [],
+    currentImageUpload: '',
     email: "",
     firstName: "",
     lastName: "",
@@ -24,7 +25,7 @@ const DEFAULT_STATE = {
         save: false,
     },
     warnings: [],
-    savePhotos: 0
+    savePhotos: 0,
 };
 
 const ProgressBar = () => (
@@ -56,14 +57,35 @@ class AddPhotos extends React.Component {
             console.log(error);
         }
     }
-
-    updateImages = () => this.setState({coverImage: "http://localhost:8800/" + this.state.profileImg[0]});
     setWarnings = (data) => this.setState({warnings: data});
-    showPreview = (imagePreviewTab) => this.setState({profileImg: this.state.profileImg.concat(imagePreviewTab)});
+
+    // Load preview tab for loadPreview Component
+    showPreview = (previewTab) => this.setState({previewTab: previewTab});
+
+    updateImages = () => this.setState({coverImage: "http://localhost:8800/" +
+            this.state.profileImg[0]});
     handleSave = () => this.setState({savePhotos: 1});
     handleSaveFinished = () => this.setState({savePhotos: 0});
+    handleImageUpload = (imageNumber) => {
+        if (imageNumber == -100)
+            this.setState({currentImageUpload: -100, activeLoader: false});
+        else
+            this.setState({currentImageUpload: imageNumber, activeLoader: true});
+    };
+
 
     render() {
+        const warningsPhotos = () => {
+            if (this.state.warnings.length > 0){
+                return (
+                    <div className="WarningsAddPhotos">
+                        <Warnings data={this.state.warnings}/>
+                    </div>
+                );
+            }
+            else
+                return null
+        };
         return (
             <div className="container-fluid">
                 <div className={classnames("ui middle", "AddPhotos")}>
@@ -75,25 +97,35 @@ class AddPhotos extends React.Component {
                             <ProgressBar />
                         </Grid.Column>
                     </Grid>
-                    <Grid textAlign="center">
-                        <Warnings data={this.state.warnings}/>
-                        <Grid.Row>
-                                <Image className="ShadowImage"
-                                       centered
-                                       src={this.state.coverImage}
-                                       size='medium'
-                                       rounded bordered
-                                />
-                        </Grid.Row>
-                        <FileUpload handleSaveFinished={this.handleSaveFinished}
-                                    savePhotos={this.state.savePhotos}
-                                    showPreview={this.showPreview}
-                                    setWarnings={this.setWarnings}/>
+                    <DividerC vertically={false}/>
+                    <Grid verticalAlign='middle' columns={2} doubling textAlign="center">
+                        <Grid.Column>
+                            <FileUpload
+                                handleSaveFinished={this.handleSaveFinished}
+                                savePhotos={this.state.savePhotos}
+                                showPreview={this.showPreview}
+                                setWarnings={this.setWarnings}
+                                handleImageUpload={this.handleImageUpload}
+                            />
+                        </Grid.Column>
+                        <Grid.Column>
+                            <Image className="ShadowImage"
+                                   src={this.state.coverImage}
+                                   size='medium'
+                                   centered
+                                   rounded bordered
+                            />
+                        </Grid.Column>
                     </Grid>
                     <DividerC vertically={false}/>
                     <DividerC vertically={false}/>
-                    <Grid textAlign="center">
-                        <AddPhotosMin data={this.state.profileImg} />
+                    <Grid textAlign="left">
+                       {warningsPhotos}
+                        <loadPreview
+                            data={this.state.previewTab}
+                            currentImageUpload={this.state.currentImageUpload}
+                            imageNumber={this.state.currentImageUpload}
+                            activeLoader={this.state.activeLoader} />
                     </Grid>
                     <Grid>
                         <Grid.Row centered>

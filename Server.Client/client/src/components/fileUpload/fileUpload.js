@@ -8,33 +8,35 @@ export default class FileUpload extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.state = {
             imagesFiles: [],
-            imagePreviewUrl: [],
+            previewTab: [],
             file: ''
         };
     }
 
     handleImageChange(e) {
+        // Preview of image
         let reader = new FileReader();
         let file = e.target.files[0];
         reader.onloadend = () => {
-            let tab = this.state.imagePreviewUrl;
+            let tab = this.state.previewTab;
             tab.push(reader.result);
-            this.setState({
-                file: file,
-                imagePreviewUrl: tab
-            },() => {this.props.showPreview(this.state.imagePreviewUrl);});
+            this.setState({file: file, previewTab: tab},() => {
+                this.props.showPreview(this.state.previewTab);
+            });
         };
         reader.readAsDataURL(file);
-        this.props.showPreview(this.state.imagePreviewUrl);
+        // Send preview tab to the Parent
+        this.props.showPreview(this.state.previewTab);
     }
 
     onFileChange(e) {
+        // Add file to queue in state
         let tab = this.state.imagesFiles;
-        tab.push(e.target.files[0]);
-        this.setState({ imagesFiles: tab}, this.handleImageChange(e));
+        this.setState({ imagesFiles: tab.push(e.target.files[0])}, this.handleImageChange(e));
     }
 
-    imagesFilesUpload = async (imagesFilesValue) => {
+    imagesFilesUpload = async (imagesFilesValue, key) => {
+        this.props.handleImageUpload(key);
         const file = Math.round((imagesFilesValue.size / 1024));
         if (file >= 4096)
             this.props.setWarnings(["File is too big. Max limit is 4Mb"]);
@@ -46,10 +48,11 @@ export default class FileUpload extends React.Component {
             if (data.warnings)
                 this.props.setWarnings(data.warnings);
         }
+        this.props.handleImageUpload(-100);
     };
     onSubmit = () => {
         if (this.state.imagesFiles.length > 0) {
-            this.state.imagesFiles.map(imagesFilesValue => this.imagesFilesUpload(imagesFilesValue));
+            this.state.imagesFiles.map((imagesFilesValue, key) => this.imagesFilesUpload(imagesFilesValue, key));
             this.setState({imagesFiles: []});
         }
     };
