@@ -17,10 +17,10 @@ export default {
             }
         );
     },
-    signup: function(email, password, cpassword) {
+    signup: function(email, username, password, cpassword) {
         return axios.post(
             `${ burl}/user/signup`,
-            {email, password, cpassword},
+            {email, username, password, cpassword},
             {
                 headers: headers
             }

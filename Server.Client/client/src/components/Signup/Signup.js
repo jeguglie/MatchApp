@@ -6,9 +6,10 @@ import Divider from "./../../components/Divider/Divider";
 
 const DEFAULT_STATE = {
     email: "",
+    username: "",
     password: "",
     cpassword: ""
-}
+};
 
 class Signup extends React.Component {
     constructor (props){
@@ -20,39 +21,42 @@ class Signup extends React.Component {
     }
 
     send = async () => {
-        const {email, password, cpassword} = this.state;
-        if ((email || email.length === 0) || (!password || password.length === 0)
-            || (!cpassword || cpassword.length === 0)) {
-            const warnings = [];
-            if (!email || email.length === 0) {
+        const warnings = [];
+        const {email, username, password, cpassword } = this.state;
+        if ((!email || !email.length === 0) || (!password || !password.length === 0) ||
+            (!cpassword || !cpassword.length === 0) || (!username || !username.length === 0)) {
+            console.log(this.state);
+            if (!email || email.length === 0)
                 warnings.push("Please fill email field");
-                if (!password || password.length === 0)
-                    warnings.push("Please fill password field");
-                if (cpassword !== password)
-                    warnings.push("Passwords does not match");
-                this.setState({warnings: warnings});
-                return;
-            }
-            this.setState({loading: true});
-            try {
-                const {data} = await API.signup(email, password, cpassword);
-                if (data) {
-                    if (data.token) {
-                        localStorage.setItem("token", data.token);
-                        localStorage.setItem("newUser", data.newUser);
-                        localStorage.setItem("id", data._id);
-                        window.location = "/";
-                    } else {
-                        this.setState({warnings: data.text});
-                        this.setState({send: true});
-                    }
-                }
-            } catch (error) {
-                console.error(error);
-            }
-            this.setState({loading: false});
+            if (!password || password.length === 0)
+                warnings.push("Please fill password field");
+            if (cpassword !== password)
+                warnings.push("Passwords does not match");
+            if (!username || username.length === 0)
+                warnings.push("Passwords does not match");
+            this.setState({warnings: warnings});
+            return;
         }
+        this.setState({loading: true});
+        try {
+            console.log(1);
+            const {data} = await API.signup(email, username, password, cpassword);
+            console.log(data);
+            if (data) {
+                if (data.token) {
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("newUser", data.newUser);
+                    localStorage.setItem("id", data._id);
+                    window.location = "/";
+                } else {
+                    this.setState({warnings: data.text});
+                    this.setState({send: true});
+                }
+            }
+        } catch (error) {console.error(error);}
+        this.setState({loading: false});
     };
+
     handleChange = (event) => {
         this.setState({
             [event.target.id]: event.target.value
@@ -87,6 +91,18 @@ class Signup extends React.Component {
                                    onChange={this.handleChange}
                                    size="huge"
                                    placeholder="Email"
+                                   autoComplete="off"
+                                   required
+                            />
+                        </Form.Field>
+                        <Form.Field>
+                            <Input id="username"
+                                   icon='users'
+                                   iconPosition='left'
+                                   autoFocus
+                                   onChange={this.handleChange}
+                                   size="huge"
+                                   placeholder="Choose a username"
                                    autoComplete="off"
                                    required
                             />

@@ -1,64 +1,71 @@
-const User = require("../../schema/schemaUser.js");
-const Profil = require("../../schema/schemaProfil.js");
 const passwordHash = require("password-hash");
-const mongoose = require('mongoose');
+const Pool = require('pg').Pool;
+const pool = new Pool({
+    user: 'jeguglie',
+    host: 'localhost',
+    database: 'api',
+    password: '06245547Jv345102.',
+    port: 5432,
+});
+
 
 async function signup(req, res) {
-    const { password, email, cpassword } = req.body;
-    if (!email || !password || !cpassword) {
+    const { password, email, username, cpassword } = req.body;
+    if (!email || !password || !cpassword)
         return res.status(200).json({
             text: ["Invalid request"]
         });
-    }
-    if (cpassword !== password){
+    if (cpassword !== password)
         return res.status(200).json({
             text: ["Passwords does not match"]
         });
-    }
-    const user = {
-        email,
-        password: passwordHash.generate(password),
-    };
+    const text = 'SELECT email, username FROM users WHERE email = $1 OR username = $2';
+    const values = [email, username];
     try {
-        const findUser = await User.findOne({
-            email
-        });
-        if (findUser) {
-            return res.status(400).json({
-                text: ["User already exist"]
-            });
-        }
+        const res = await pool.query(text, values);
+        console.log(res.rows[0])
     } catch (error) {
         console.log(error);
         return res.status(500).json({ error });
     }
-    try {
-        const userData = new User(user);
-        const profil = {
-            _id: userData._id,
-            email,
-            lastName: "",
-            firstName: "",
-            gender: "",
-            bio: "",
-            country: "",
-            interested:  "",
-            birthday: "",
-            interests: []
-        };
-        const userProfil = new Profil(profil);
-        await userProfil.save();
-        const userObject = await userData.save();
-        return res.status(200).json({
-            text: ["Success"],
-            token: userObject.getToken(),
-            _id: userObject._id,
-            newUser: true
-        });
-    } catch (error) {
-        console.log("2 " + error);
-        return res.status(500).json({ error });
+    if (!res.rows){
+        const text = 'INSERT INTO users(email, username, password) VALUES($1, $2, $3)';
+        const values = [email, username, passwordHash.generate(password)];
+        try {
+            const res = await pool.query(text, values);
+            console.log(5);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
     }
+    // try {
+    //     const userData = new User(user);
+    //     const profil = {
+    //         _id: userData._id,
+    //         email,
+    //         lastName: "",
+    //         firstName: "",
+    //         gender: "",
+    //         bio: "",
+    //         country: "",
+    //         interested:  "",
+    //         birthday: "",
+    //         interests: []
+    //     };
+    //     const userProfil = new Profil(profil);
+    //     await userProfil.save();
+    //     const userObject = await userData.save();
+    //     return res.status(200).json({
+    //         text: ["Success"],
+    //         token: userObject.getToken(),
+    //         _id: userObject._id,
+    //         newUser: true
+    //     });
+    // } catch (error) {
+    //     console.log("2 " + error);
+    //     return res.status(500).json({ error });
+    // }
 }
 
 async function login(req, res) {
@@ -149,8 +156,8 @@ async function updateEditProfilValues(req, res) {
 
 
 
-exports.login = login;
+// exports.login = login;
 exports.signup = signup;
-exports.checkMail = checkMail;
-exports.getEditProfilValues = getEditProfilValues;
-exports.updateEditProfilValues = updateEditProfilValues;
+// exports.checkMail = checkMail;
+// exports.getEditProfilValues = getEditProfilValues;
+// exports.updateEditProfilValues = updateEditProfilValues;
