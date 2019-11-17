@@ -1,6 +1,6 @@
 import React from "react";
 import API from "../../utils/API";
-import {Button, Container, Form, Image, Input} from "semantic-ui-react";
+import {Button, Container, Form, Image, Input, Grid} from "semantic-ui-react";
 import Warnings from "../Warnings/Warnings";
 import Divider from "./../../components/Divider/Divider";
 
@@ -25,7 +25,6 @@ class Signup extends React.Component {
         const {email, username, password, cpassword } = this.state;
         if ((!email || !email.length === 0) || (!password || !password.length === 0) ||
             (!cpassword || !cpassword.length === 0) || (!username || !username.length === 0)) {
-            console.log(this.state);
             if (!email || email.length === 0)
                 warnings.push("Please fill email field");
             if (!password || password.length === 0)
@@ -49,7 +48,7 @@ class Signup extends React.Component {
                     localStorage.setItem("id", data._id);
                     window.location = "/";
                 } else {
-                    this.setState({warnings: data.text});
+                    this.setState({warnings: data.warnings});
                     this.setState({send: true});
                 }
             }
@@ -65,79 +64,119 @@ class Signup extends React.Component {
 
 
     render() {
-        const correctEmail = this.state.correctEmail;
-        const loading = this.state.loading;
-        const warnings = this.state.warnings;
         return (
-            <Container className="loginModal">
-                <div className="shape"></div>
+            <Container className="signupModal">
+                <div className="shapeSignup"></div>
                 <Image className="img-fluid"
                        src="/img/MatchApp-Logo.png"
                        alt="Responsive image"
                        size="medium"
                        centered/>
-                <div className="loginWarnings">
-                    <Warnings data={warnings} />
+                <div className="signupWarnings">
+                    <Warnings data={this.state.warnings} />
                 </div>
                 <Divider />
-                <h1 className="loginh1">Create an account</h1>
-                    <Form className="loginForm">
-                        <Form.Field className={correctEmail === true ? "inputUser" : null}>
-                            <Input id="email"
-                                   icon='users'
-                                   iconPosition='left'
-                                   autoFocus
-                                   type="email"
-                                   onChange={this.handleChange}
-                                   size="huge"
-                                   placeholder="Email"
-                                   autoComplete="off"
-                                   required
-                            />
-                        </Form.Field>
-                        <Form.Field>
-                            <Input id="username"
-                                   icon='users'
-                                   iconPosition='left'
-                                   autoFocus
-                                   onChange={this.handleChange}
-                                   size="huge"
-                                   placeholder="Choose a username"
-                                   autoComplete="off"
-                                   required
-                            />
-                        </Form.Field>
-                        <Form.Field className="inputPassword">
-                            <Input icon='lock'
-                                   iconPosition='left'
-                                   id="password"
-                                   onChange={this.handleChange}
-                                   onClick={this.checkMail}
-                                   type="password"
-                                   size="huge"
-                                   placeholder="Password"
-                                   required/>
-                        </Form.Field>
-                        <Form.Field className="inputPassword">
-                            <Input icon='lock' iconPosition='left'
-                                   id="cpassword"
-                                   onChange={this.handleChange}
-                                   onClick={this.checkMail}
-                                   type="password"
-                                   size="huge"
-                                   placeholder="Confirm Password"
-                                   required/>
-                        </Form.Field>
+                <h1 className="signuph1">Create an account</h1>
+                    <Form className="signupForm">
+                        <Grid textAlign="center" columns={2} doubling>
+                            <Grid.Column>
+                                <Form.Field>
+                                    <Input id="firstName"
+                                           icon='users'
+                                           iconPosition='left'
+                                           autoFocus
+                                           onChange={this.handleChange}
+                                           size="huge"
+                                           placeholder="First Name"
+                                           autoComplete="off"
+                                           required
+                                    />
+                                </Form.Field>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Form.Field>
+                                    <Input id="lastName"
+                                           icon='users'
+                                           iconPosition='left'
+                                           autoFocus
+                                           onChange={this.handleChange}
+                                           size="huge"
+                                           placeholder="Last Name"
+                                           autoComplete="off"
+                                           required
+                                    />
+                                </Form.Field>
+                            </Grid.Column>
+                            <Divider/>
+                        </Grid>
+                        <Grid textAlign="center" columns={2} doubling>
+                            <Grid.Column>
+                                <Form.Field>
+                                    <Input id="email"
+                                           icon='users'
+                                           iconPosition='left'
+                                           autoFocus
+                                           type="email"
+                                           onChange={this.handleChange}
+                                           size="huge"
+                                           placeholder="Email"
+                                           autoComplete="off"
+                                           required
+                                    />
+                                </Form.Field>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Form.Field>
+                                    <Input id="username"
+                                           icon='users'
+                                           iconPosition='left'
+                                           autoFocus
+                                           onChange={this.handleChange}
+                                           size="huge"
+                                           placeholder="Choose a username"
+                                           autoComplete="off"
+                                           required
+                                    />
+                                </Form.Field>
+                            </Grid.Column>
+                        </Grid>
+                        <Grid columns={2} textAlign="center" doubling>
+                            <Grid.Column>
+                                 <Form.Field className="inputPassword">
+                                    <Input icon='lock'
+                                           iconPosition='left'
+                                           id="password"
+                                           onChange={this.handleChange}
+                                           onClick={this.checkMail}
+                                           type="password"
+                                           size="huge"
+                                           placeholder="Password"
+                                           required/>
+                                </Form.Field>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Form.Field className="inputPassword">
+                                    <Input icon='lock' iconPosition='left'
+                                           id="cpassword"
+                                           onChange={this.handleChange}
+                                           onClick={this.checkMail}
+                                           type="password"
+                                           size="huge"
+                                           placeholder="Confirm Password"
+                                           required/>
+                                </Form.Field>
+                            </Grid.Column>
+                        </Grid>
                     </Form>
                 <Divider />
-                <Button className="loginButton"
-                        loading={loading}
+                <Button className="signupButton"
+                        loading={this.state.loading}
                         size='huge'
                         onClick={this.send}>
                     Register
                 </Button>
                 <Divider />
-                <div className="loginNoAccount">
+                <div className="signupNoAccount">
                     <p>
                         Have an account ? <a href="/login">Log in</a>
                     </p>

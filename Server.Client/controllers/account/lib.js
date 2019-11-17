@@ -22,23 +22,33 @@ async function signup(req, res) {
     const text = 'SELECT email, username FROM users WHERE email = $1 OR username = $2';
     const values = [email, username];
     try {
-        const res = await pool.query(text, values);
-        console.log(res.rows[0])
+        const warnings = [];
+        const response = await pool.query(text, values);
+        if (response.rows && response.rows.length > 0 && response.rows[0].email === email)
+            warnings.push('Email already exist');
+        if (response.rows && response.rows.length > 0 && response.rows[0].username === username)
+            warnings.push('Username already exist');
+        if (warnings.length > 0)
+            return res.status(200).json({
+                warnings: warnings
+            })
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ error });
+        return res.status(500).json({
+            warnings: ['Catch error']
+        });
     }
+    // Create User
     if (!res.rows){
         const text = 'INSERT INTO users(email, username, password) VALUES($1, $2, $3)';
         const values = [email, username, passwordHash.generate(password)];
         try {
-            const res = await pool.query(text, values);
-            console.log(5);
+            await pool.query(text, values);
         } catch (error) {
-            console.log(error);
             return res.status(500).json({ error });
         }
     }
+
+    // Create Profil
     // try {
     //     const userData = new User(user);
     //     const profil = {

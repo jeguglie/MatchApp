@@ -14,11 +14,11 @@ class App extends Component {
     render() {
         return (
             <Aux>
-                <div className="Menu">
-                    <Divider />
-                        <Image left="true" src="/img/MatchApp-Logo.png" size='medium' />
-                    <Divider />
-                </div>
+                {/*<div className="Menu">*/}
+                {/*    <Divider />*/}
+                {/*        <Image left="true" src="/img/MatchApp-Logo.png" size='medium' />*/}
+                {/*    <Divider />*/}
+                {/*</div>*/}
                     <Switch>
                         <PrivateRouteEditProfil exact path="/" component={Profil} />
                         <PrivateRoute exact path="/dashboard" component={Dashboard} />

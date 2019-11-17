@@ -1,4 +1,4 @@
-.loginModal {
+.signupModal {
   box-shadow: 12px 12px 16px rgba(0, 0, 0, 0.02);
   border: none;
   text-align: center;
@@ -16,67 +16,69 @@
 
 
 /*INPUT*/
-.loginForm {
-
+.signupForm {
+  .ui.grid>.column:not(.row) {
+    padding: 0.3rem !important;
+  }
   input {
     color: white !important;
-    background-color: transparent !important;
+    background-color: white !important;
     border: 2px solid white !important;
     border-radius: 20px !important;
   }
   input::placeholder {
-    color: white !important;
+    color: #a2a2a2 !important;
     opacity: 0.7 !important;
   }
   i {
-    color: white !important;
+    color: #a2a2a2 !important;
   }
 }
 
 .inputUser i {
-  color: #00ee00 !important;
+  color: #a2a2a2 !important;
   opacity: 1 !important;
 }
 
 
 /*TEXT*/
-.loginNoAccount  a {
+.signupNoAccount  a {
   color: white;
   font-weight: bold;
 }
 
-.loginh1 {
+.signuph1 {
   color: white;
   font-weight: 200;
   margin-bottom: 40px;
   margin-top: -30px;
 }
-.loginWarnings {
+.signupWarnings {
   display: flex;
   flex-direction: column;
-    span {
-      background-color: rgba(255, 255, 255, 0.2);
-      margin: 4px;
-      border-radius: 10px;
-      padding: 10px;
-      font-weight: 500;
-      font-family: "Open Sans", sans-serif;
-      color: white;
+  span {
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 4px;
+    border-radius: 10px;
+    padding: 10px;
+    font-weight: 500;
+    font-family: "Open Sans", sans-serif;
+    color: white;
   }
 }
 
-.loginNoAccount {
+.signupNoAccount {
   color: white;
   font-family: 'Open Sans', sans-serif;
   font-weight: 500;
 }
 
 
-.loginForgot {
+.signupForgot {
   margin-top: -10px;
 }
 
-.loginButton {
+.signupButton {
 
   background-color: white !important;
   color: #fc3372 !important;
@@ -91,7 +93,7 @@
 }
 
 /*SHAPES*/
-.shape {
+.shapeSignup {
   top: -510px;
   border-radius: 31% 69% 32% 68% / 36% 44% 56% 64%;
   width: 1551px;
@@ -105,9 +107,10 @@
   box-shadow: 11px 3px 5px 5px rgba(0, 0, 0,0.5);
 }
 
+
 @media only screen and (max-width: 767px){
-  .ui.container .loginModal{
-    width: 600px !important;
+  .signupModal{
+    width: 400px !important;
     margin-left: auto !important;
     margin-right: auto !important;
     padding-left: 7em !important;
@@ -116,7 +119,7 @@
 }
 
 @media only screen and (max-width: 991px) and (min-width: 768px){
-  .ui.container .loginModal{
+  .signupModal{
     width: 500px !important;
     margin-left: auto !important;
     margin-right: auto !important;
@@ -126,7 +129,7 @@
 }
 
 @media only screen and (max-width: 1199.98px) and (min-width: 992px){
-  .ui.container .loginModal{
+  .signupModal{
     width: 500px !important;
     margin-left: auto !important;
     margin-right: auto !important;
@@ -138,8 +141,8 @@
 
 
 @media only screen and (min-width: 1200px){
-  .ui.container .loginModal{
-    width: 500px !important;
+  .ui.container .signupModal{
+    width: 900px !important;
     margin-left: auto !important;
     margin-right: auto !important;
     padding-left: 7em !important;

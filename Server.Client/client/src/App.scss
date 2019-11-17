@@ -19,6 +19,7 @@ body {
 
 // Login - Signup
 @import './components/Login/Login.scss';
+@import './components/Signup/SignupStyle.scss';
 
 // EditProfil
 @import './components/EditProfil/EditProfil.scss';
@@ -47,46 +48,4 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-
-@media only screen and (max-width: 767px){
-  .ui.container {
-    width: 600px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 7em !important;
-    padding-right: 7em !important;
-  }
-}
-
-@media only screen and (max-width: 991px) and (min-width: 768px){
-  .ui.container {
-    width: 500px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 5em !important;
-    padding-right: 5em !important;
-  }
-}
-
-@media only screen and (max-width: 1199.98px) and (min-width: 992px){
-  .ui.container {
-    width: 500px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 5em !important;
-    padding-right: 5em !important;
-  }
-}
-
-
-
-@media only screen and (min-width: 1200px){
-  .ui.container {
-    width: 500px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 7em !important;
-    padding-right: 7em !important;
-  }
 }

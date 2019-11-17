@@ -35,7 +35,6 @@ class Login extends React.Component {
         this.setState({loading: true});
         try {
             const { data } = await API.login(email, password);
-            console.log(data);
             if (data) {
                 if (data.token) {
                     localStorage.setItem("token", data.token);
@@ -43,7 +42,7 @@ class Login extends React.Component {
                     localStorage.setItem("id", data.id);
                     window.location = "/";
                 } else {
-                    this.setState({warnings: data.text});
+                    this.setState({warnings: data.warnings});
                     this.setState({send: true});
                 }
             }
@@ -72,7 +71,6 @@ class Login extends React.Component {
     render() {
         const correctEmail = this.state.correctEmail;
         const loading = this.state.loading;
-        const warnings = this.state.warnings;
         return (
             <Container className="loginModal">
                              <Image className="img-fluid"
@@ -81,7 +79,7 @@ class Login extends React.Component {
                                     size="medium"
                                     centered />
                             <div className="loginWarnings">
-                                    <Warnings data={warnings}/>
+                                    <Warnings data={this.state.warnings}/>
                             </div>
                             <div className="shape"></div>
                             <Divider />
