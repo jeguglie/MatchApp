@@ -26,11 +26,11 @@ const upload = multer({
 });
 
 module.exports = function (app) {
-    // app.post('/login', account.login);
+    app.post('/login', account.login);
     app.post('/signup',account.signup);
+    app.post('/getEditProfilValues', account.getEditProfilValues);
+    app.post('/updateEditProfilValues', account.updateEditProfilValues);
+    app.post('/user-profile', upload.single('file'), addphotos.uploadPhoto);
+    app.post('/getPhotos', addphotos.getPhotos);
     // app.post('/checkMail', account.checkMail);
-    // app.post('/getEditProfilValues', account.getEditProfilValues);
-    // app.post('/updateEditProfilValues', account.updateEditProfilValues);
-    // app.post('/user-profile', upload.single('imagesFiles'), addphotos.uploadPhoto);
-    // app.post('/getPhotos', addphotos.getPhotos);
 };

@@ -34,15 +34,13 @@
   border-radius: 15px !important;
 }
 
-
- .ui.form .field>label {
+.ui.form .field>label {
   display: block;
   margin: 0 0 .28571429rem 0;
   color: rgba(255, 255, 255, 0.6) !important;
   font-size: .92857143em;
   text-transform: none;
 }
-
 
 .formEdit {
   .field {
@@ -67,42 +65,6 @@
     box-shadow: 4px 4px 1px rgba(0,0,0,0.1) !important;
   }
 }
-.EditProfilTitle {
-  font-weight: 200;
-  font-family: 'Open Sans', sans-serif;
-  color: rgba(113, 26, 54, 1);
-}
-
-
-.SubmitButton {
-  &.button {
-    background-color: white;
-    color: #fc3372;
-    border-radius: 15px !important;
-  }
-  &.button:hover, &.button:active, &.button:focus {
-    box-shadow: -1px 5px 5px -2px rgba(0,0,0,0.2);
-    background-color: white;
-    color: #fc3372;
-    border-radius: 15px !important;
-
-  }
-}
-
-.EditProfilIcons {
-   & i.circular.inverted.icon {
-     background-color: #ffffff!important;
-     color: #4f374e!important;
-     margin: 15px;
-   }
-}
-
-.DropdownEdit {
-  .ui.fluid.dropdown {
-    margin-left: 0.5em !important;
-    margin-right: 0.5em !important;
-  }
-}
 
 .EditProfilArrow {
   transition: all ease-in-out 0.15s;
@@ -111,37 +73,5 @@
   transform: scale(1) !important;
   &:hover {
     transform: scale(1.2) !important;
-  }
-}
-
-@media only screen and (max-width: 767px){
-  .TopEditProfil {
-    display: flex;
-    flex-direction: column;
-  }
-  .TopEditProfilLeft, .TopEditProfilRight {
-    flex-direction: column;
-    display: flex;
-    width: auto;
-  }
-  .TopEditProfilLeft {
-    margin-bottom: 15px;
-  }
-  .EditProfil {
-    width: 340px;
-    margin: auto;
-  }
-}
-
-@media only screen and (min-width: 1200px){
-  .EditProfil {
-    width: 900px;
-    margin: auto;
-  }
-}
-@media only screen and (min-width: 1500px){
-  .EditProfil {
-    width: 800px;
-    margin: auto;
   }
 }

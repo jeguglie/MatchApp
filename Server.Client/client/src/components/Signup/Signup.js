@@ -1,10 +1,12 @@
 import React from "react";
 import API from "../../utils/API";
-import {Button, Container, Form, Image, Input, Grid} from "semantic-ui-react";
+import {Segment, Button, Container, Form, Image, Input, Grid, Divider, Rail} from "semantic-ui-react";
 import Warnings from "../Warnings/Warnings";
-import Divider from "./../../components/Divider/Divider";
+import DividerC from "./../../components/Divider/Divider";
 
 const DEFAULT_STATE = {
+    lastName: "",
+    firstName: "",
     email: "",
     username: "",
     password: "",
@@ -17,35 +19,39 @@ class Signup extends React.Component {
         this.state = {...DEFAULT_STATE};
     }
 
-    componentDidMount() {
-    }
-
     send = async () => {
         const warnings = [];
-        const {email, username, password, cpassword } = this.state;
-        if ((!email || !email.length === 0) || (!password || !password.length === 0) ||
-            (!cpassword || !cpassword.length === 0) || (!username || !username.length === 0)) {
+        this.setState({warnings: []});
+        const {lastName, firstName, email, username, password, cpassword } = this.state;
+        if ((!email || email.length === 0) ||
+            (!password || password.length === 0) ||
+            (!cpassword || cpassword.length === 0) ||
+            (!username || username.length === 0) ||
+            (!lastName || lastName.length === 0) ||
+            (!firstName || firstName.length === 0)) {
             if (!email || email.length === 0)
                 warnings.push("Please fill email field");
             if (!password || password.length === 0)
                 warnings.push("Please fill password field");
-            if (cpassword !== password)
+            if (cpassword.localeCompare(password) !== 0)
                 warnings.push("Passwords does not match");
             if (!username || username.length === 0)
-                warnings.push("Passwords does not match");
+                warnings.push("Please fill username field");
+            if (!firstName || firstName.length === 0)
+                warnings.push("Please fill First Name field");
+            if (!lastName || lastName.length === 0)
+                warnings.push("Please fill Last Name field");
             this.setState({warnings: warnings});
             return;
         }
         this.setState({loading: true});
         try {
-            console.log(1);
-            const {data} = await API.signup(email, username, password, cpassword);
-            console.log(data);
+            const {data} = await API.signup(lastName, firstName, email, username, password, cpassword);
             if (data) {
                 if (data.token) {
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("newUser", data.newUser);
-                    localStorage.setItem("id", data._id);
+                    localStorage.setItem("user_id", data.user_id);
                     window.location = "/";
                 } else {
                     this.setState({warnings: data.warnings});
@@ -67,6 +73,7 @@ class Signup extends React.Component {
         return (
             <Container className="signupModal">
                 <div className="shapeSignup"></div>
+                <DividerC />
                 <Image className="img-fluid"
                        src="/img/MatchApp-Logo.png"
                        alt="Responsive image"
@@ -75,112 +82,96 @@ class Signup extends React.Component {
                 <div className="signupWarnings">
                     <Warnings data={this.state.warnings} />
                 </div>
-                <Divider />
-                <h1 className="signuph1">Create an account</h1>
-                    <Form className="signupForm">
-                        <Grid textAlign="center" columns={2} doubling>
-                            <Grid.Column>
-                                <Form.Field>
-                                    <Input id="firstName"
-                                           icon='users'
-                                           iconPosition='left'
-                                           autoFocus
-                                           onChange={this.handleChange}
-                                           size="huge"
-                                           placeholder="First Name"
-                                           autoComplete="off"
-                                           required
-                                    />
-                                </Form.Field>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Form.Field>
-                                    <Input id="lastName"
-                                           icon='users'
-                                           iconPosition='left'
-                                           autoFocus
-                                           onChange={this.handleChange}
-                                           size="huge"
-                                           placeholder="Last Name"
-                                           autoComplete="off"
-                                           required
-                                    />
-                                </Form.Field>
-                            </Grid.Column>
-                            <Divider/>
-                        </Grid>
-                        <Grid textAlign="center" columns={2} doubling>
-                            <Grid.Column>
-                                <Form.Field>
-                                    <Input id="email"
-                                           icon='users'
-                                           iconPosition='left'
-                                           autoFocus
-                                           type="email"
-                                           onChange={this.handleChange}
-                                           size="huge"
-                                           placeholder="Email"
-                                           autoComplete="off"
-                                           required
-                                    />
-                                </Form.Field>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Form.Field>
-                                    <Input id="username"
-                                           icon='users'
-                                           iconPosition='left'
-                                           autoFocus
-                                           onChange={this.handleChange}
-                                           size="huge"
-                                           placeholder="Choose a username"
-                                           autoComplete="off"
-                                           required
-                                    />
-                                </Form.Field>
-                            </Grid.Column>
-                        </Grid>
-                        <Grid columns={2} textAlign="center" doubling>
-                            <Grid.Column>
-                                 <Form.Field className="inputPassword">
-                                    <Input icon='lock'
-                                           iconPosition='left'
-                                           id="password"
-                                           onChange={this.handleChange}
-                                           onClick={this.checkMail}
-                                           type="password"
-                                           size="huge"
-                                           placeholder="Password"
-                                           required/>
-                                </Form.Field>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Form.Field className="inputPassword">
-                                    <Input icon='lock' iconPosition='left'
-                                           id="cpassword"
-                                           onChange={this.handleChange}
-                                           onClick={this.checkMail}
-                                           type="password"
-                                           size="huge"
-                                           placeholder="Confirm Password"
-                                           required/>
-                                </Form.Field>
-                            </Grid.Column>
-                        </Grid>
+                <DividerC />
+                <Container textAlign='center'>
+                    <h1 className="signuph1">Create an account</h1>
+                </Container>
+                <DividerC />
+                <Form className="signupForm">
+                    <Form.Group widths='equal'>
+                            <Form.Input
+                                    id="firstName"
+                                   icon='user'
+                                   iconPosition='left'
+                                   autoFocus
+                                   onChange={this.handleChange}
+                                   size="huge"
+                                   placeholder="First Name"
+                                   autoComplete="off"
+                                   maxLength="13"
+                                   required
+                            />
+                            <Form.Input
+                                id="lastName"
+                                   icon='user'
+                                   iconPosition='left'
+                                   autoFocus
+                                   onChange={this.handleChange}
+                                   size="huge"
+                                   placeholder="Last Name"
+                                   autoComplete="off"
+                                   maxLength="13"
+                                   required
+                            />
+                    </Form.Group>
+                    <Form.Group widths='equal'>
+                        <Form.Input id="email"
+                                   icon='mail'
+                                   iconPosition='left'
+                                   autoFocus
+                                   type="email"
+                                   onChange={this.handleChange}
+                                   size="huge"
+                                   placeholder="Email"
+                                   autoComplete="off"
+                                   maxLength="30"
+                                   required
+                         />
+                        <Form.Input id="username"
+                               icon='user circle'
+                               iconPosition='left'
+                               autoFocus
+                               onChange={this.handleChange}
+                               size="huge"
+                               placeholder="Choose a username"
+                               autoComplete="off"
+                               required
+                               maxLength="23"
+                        />
+                    </Form.Group>
+                    <Form.Group widths='equal'>
+                        <Form.Input icon='lock'
+                               iconPosition='left'
+                               id="password"
+                               onChange={this.handleChange}
+                               type="password"
+                               size="huge"
+                               placeholder="Password"
+                               required/>
+                        <Form.Input icon='lock' iconPosition='left'
+                               id="cpassword"
+                               onChange={this.handleChange}
+                               type="password"
+                               size="huge"
+                               placeholder="Confirm Password"
+                               required
+                        />
+                    </Form.Group>
                     </Form>
-                <Divider />
+                <DividerC />
                 <Button className="signupButton"
                         loading={this.state.loading}
                         size='huge'
                         onClick={this.send}>
                     Register
                 </Button>
-                <Divider />
+                <DividerC />
                 <div className="signupNoAccount">
                     <p>
                         Have an account ? <a href="/login">Log in</a>
                     </p>
                 </div>
+                <DividerC />
             </Container>
         );
     }

@@ -1,0 +1,18 @@
+
+  .ImagePreview {
+    border: 2px dashed rgba(255, 255, 255, 0.52) !important;
+    border-radius: 10px !important;
+    box-shadow: 5px 5px 5px rgba(0,0,0, 0.05);
+    object-fit: cover !important;
+    width: 200px;
+    height: auto;
+  }
+
+.WarningsAddPhotos {
+  border-radius: 15px;
+  & span {
+    color: white;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+  }
+}

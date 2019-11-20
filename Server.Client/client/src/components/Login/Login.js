@@ -39,10 +39,11 @@ class Login extends React.Component {
                 if (data.token) {
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("newUser", data.newUser);
-                    localStorage.setItem("id", data.id);
+                    localStorage.setItem("user_id", data.user_id);
                     window.location = "/";
                 } else {
-                    this.setState({warnings: data.warnings});
+                    if (data.warnings)
+                        this.setState({warnings: data.warnings});
                     this.setState({send: true});
                 }
             }
@@ -73,6 +74,7 @@ class Login extends React.Component {
         const loading = this.state.loading;
         return (
             <Container className="loginModal">
+                <Divider />
                              <Image className="img-fluid"
                                     src="/img/MatchApp-Logo.png"
                                     alt="Responsive image"
@@ -116,11 +118,12 @@ class Login extends React.Component {
                                 </Button>
                             <Divider />
                             <div className="loginNoAccount">
-                                <p>No account ? <a href="/signup">Register</a></p>
                                 <p className="loginForgot">
                                     <a href="/signup"><strong>Forgot password ?</strong></a>
                                 </p>
+                                <p>No account ? <a href="/signup">Register</a></p>
                             </div>
+                <Divider />
             </Container>
         );
     }

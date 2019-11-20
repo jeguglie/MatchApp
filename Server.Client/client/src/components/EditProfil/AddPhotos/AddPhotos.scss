@@ -31,141 +31,34 @@
 }
 
 .ShadowImage {
-  box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.15) !important;
+  box-shadow: 0 0 15px 5px rgba(0,0,0,0.15) !important;
   border-radius: 10px !important;
 }
 
-.CompleteTitle {
+.titlePreviewAddPhotos {
   color: white;
-  font-size: 2.8em;
+  font-size: 1.8em;
   font-weight: 700;
   font-family: "Open Sans", sans-serif;
   text-shadow: 5px 2px 10px rgba(0,0,0,0.3);
 }
 
-.ui.indicating.progress[data-percent] .bar {
-  background-color: #202540 !important;
-}
-
-.ui.progress .bar{
-  background: #4f384f;
-  border-radius: 15px !important;
-  border: 2px solid white;
-}
-
-.progress {
-  color: white !important;
-  border-radius: 15px !important;
-}
-
-.ui.progress {
-  background: white !important;
-  border-radius: 15px !important;
-}
-
-
-.ui.form .field>label {
-  display: block;
-  margin: 0 0 .28571429rem 0;
-  color: rgba(255, 255, 255, 0.6) !important;
-  font-size: .92857143em;
-  text-transform: none;
-}
-
-
-.formEdit {
-  .field {
-    padding-top: 0.25em !important;
-    padding-bottom: 0.25em !important;
-  }
-  &.ui.form .field .dropdown:not i {
-    font-size: 1.3em !important;
-    color: grey !important;
-  }
-  .ui.form input::placeholder {
-    color: #a2a2a2 !important;
-  }
-  input, .selection , textarea{
-    border-radius: 15px !important;
-    border: none !important;
-    font-family: "Open Sans", sans-serif !important;
-    font-size: 1.3em !important;
-    color: #4f384f !important;
-    font-weight: 700;
-    background: linear-gradient(-150deg, white, #eaeaea) !important;
-    box-shadow: 4px 4px 1px rgba(0,0,0,0.1) !important;
-  }
-}
-.EditProfilTitle {
-  font-weight: 200;
-  font-family: 'Open Sans', sans-serif;
-  color: rgba(113, 26, 54, 1);
-}
-
-
-.SubmitButton {
-  &.button {
-    background-color: white;
-    color: #fc3372;
-    border-radius: 15px !important;
-  }
-  &.button:hover, &.button:active, &.button:focus {
-    box-shadow: -1px 5px 5px -2px rgba(0,0,0,0.2);
-    background-color: white;
-    color: #fc3372;
-    border-radius: 15px !important;
-
-  }
-}
-
-.EditProfilIcons {
-  & i.circular.inverted.icon {
-    transform: scale(1);
-    background-color: #ffffff!important;
-    color: #4f374e!important;
-    margin: 15px;
-    transition: all ease-in-out 0.2s;
-  }
-  & i.circular.inverted.icon:hover{
-  transform: scale(1.5);
-  }
-}
-
-.DropdownEdit {
-  .ui.fluid.dropdown {
-    margin-left: 0.5em !important;
-    margin-right: 0.5em !important;
-  }
-}
-
-@media only screen and (max-width: 767px){
-  .TopEditProfil {
-    display: flex;
-    flex-direction: column;
-  }
-  .TopEditProfilLeft, .TopEditProfilRight {
-    flex-direction: column;
-    display: flex;
-    width: auto;
-  }
-  .TopEditProfilLeft {
-    margin-bottom: 15px;
-  }
+@media only screen and (min-width: 275px) and (max-width: 767px){
   .AddPhotos {
-    width: 340px;
-    margin: auto;
+    margin: 1rem;
+    padding: 2.5rem;
   }
 }
 
 @media only screen and (min-width: 1200px){
   .AddPhotos {
-    width: 900px;
+    width: 1000px;
     margin: auto;
   }
 }
 @media only screen and (min-width: 1500px){
   .AddPhotos {
-    width: 800px;
+    width: 1000px !important;
     margin: auto;
   }
 }

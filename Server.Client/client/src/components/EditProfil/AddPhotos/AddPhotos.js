@@ -1,31 +1,18 @@
 import React from 'react';
-import {Grid, Progress, Image, Divider, Icon} from 'semantic-ui-react';
+import {Grid, Progress, Image, Divider, Icon, Container} from 'semantic-ui-react';
 import classnames from 'classnames';
 import DividerC from "../../Divider/Divider";
 import FileUpload from "../../fileUpload/fileUpload";
 import Warnings from '../../../components/Warnings/Warnings';
-import loadPreview from '../../../components/EditProfil/AddPhotos/loadPreview/loadPreview';
+import UploadPreview from '../../../components/EditProfil/AddPhotos/Preview/loadPreview/loadPreview';
+import ProfileImgPreview from '../../../components/EditProfil/AddPhotos/Preview/loadCurrentPictures/loadPreviewImages';
 import API from "../../../utils/API";
 
 const DEFAULT_STATE = {
     profileImg: [],
     coverImage: "",
     previewTab: [],
-    currentImageUpload: '',
-    email: "",
-    firstName: "",
-    lastName: "",
-    interested: "",
-    bio: "",
-    gender: "",
-    interests: [],
-    country: "",
-    birthday: "",
-    messages : {
-        save: false,
-    },
     warnings: [],
-    savePhotos: 0,
 };
 
 const ProgressBar = () => (
@@ -44,12 +31,13 @@ class AddPhotos extends React.Component {
         super(props);
         this.state = ({...DEFAULT_STATE});
         this.state.coverImage = "https://react.semantic-ui.com/images/wireframe/white-image.png";
+        this.handleImageUpload = this.handleImageUpload.bind(this);
     }
 
     async componentDidMount() {
         try {
-            const { data } = await API.getPhotos(localStorage.getItem('id'));
-            if (data.profileImg)
+            const { data } = await API.getPhotos(localStorage.getItem('user_id'));
+            if (data.profileImg.length > 0)
                 this.setState({profileImg: data.profileImg}, () => {
                     this.updateImages();
                 });
@@ -57,35 +45,34 @@ class AddPhotos extends React.Component {
             console.log(error);
         }
     }
-    setWarnings = (data) => this.setState({warnings: data});
 
+    // Warnings for errors during upload or file
+    setWarnings = (data) => this.setState({warnings: data});
     // Load preview tab for loadPreview Component
     showPreview = (previewTab) => this.setState({previewTab: previewTab});
+    // Update Top image preview
+    updateImages = () => this.setState({coverImage: "http://localhost:8800/" + this.state.profileImg[0].img_link});
+    // Delete Image
+    async deleteImage (event) {
+        try {
+            const { data } = await API.deleteImage(localStorage.getItem(''))
 
-    updateImages = () => this.setState({coverImage: "http://localhost:8800/" +
-            this.state.profileImg[0]});
-    handleSave = () => this.setState({savePhotos: 1});
-    handleSaveFinished = () => this.setState({savePhotos: 0});
-    handleImageUpload = (imageNumber) => {
-        if (imageNumber == -100)
-            this.setState({currentImageUpload: -100, activeLoader: false});
-        else
-            this.setState({currentImageUpload: imageNumber, activeLoader: true});
+        } catch (error){
+            console.log(error)
+        }
+    }
+    async handleImageUpload () {
+        try {
+            const { data } = await API.getPhotos(localStorage.getItem('user_id'));
+            if (data.profileImg.length > 0)
+                this.setState({profileImg: data.profileImg}, () => {
+                    this.updateImages();
+                });
+        } catch(error){
+            console.log(error);
+        }
     };
-
-
     render() {
-        const warningsPhotos = () => {
-            if (this.state.warnings.length > 0){
-                return (
-                    <div className="WarningsAddPhotos">
-                        <Warnings data={this.state.warnings}/>
-                    </div>
-                );
-            }
-            else
-                return null
-        };
         return (
             <div className="container-fluid">
                 <div className={classnames("ui middle", "AddPhotos")}>
@@ -100,34 +87,33 @@ class AddPhotos extends React.Component {
                     <DividerC vertically={false}/>
                     <Grid verticalAlign='middle' columns={2} doubling textAlign="center">
                         <Grid.Column>
+                            <Image className="ShadowImage"
+                                   src={this.state.coverImage}
+                                   size='medium'
+                                   centered
+                                   rounded bordered />
+                        </Grid.Column>
+                        <Grid.Column>
                             <FileUpload
                                 handleSaveFinished={this.handleSaveFinished}
                                 savePhotos={this.state.savePhotos}
                                 showPreview={this.showPreview}
                                 setWarnings={this.setWarnings}
-                                handleImageUpload={this.handleImageUpload}
-                            />
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Image className="ShadowImage"
-                                   src={this.state.coverImage}
-                                   size='medium'
-                                   centered
-                                   rounded bordered
-                            />
+                                handleImageUpload={this.handleImageUpload} />
+                            <Container fluid textAlign="center">
+                                <div className="loginWarnings">
+                                    <Warnings data={this.state.warnings}/>
+                                </div>
+                            </Container>
+                            <ProfileImgPreview  data={this.state.profileImg}
+                                                deleteImage={this.deleteImage()}/>
                         </Grid.Column>
                     </Grid>
-                    <DividerC vertically={false}/>
-                    <DividerC vertically={false}/>
-                    <Grid textAlign="left">
-                       {warningsPhotos}
-                        <loadPreview
+                        <UploadPreview
                             data={this.state.previewTab}
-                            currentImageUpload={this.state.currentImageUpload}
-                            imageNumber={this.state.currentImageUpload}
-                            activeLoader={this.state.activeLoader} />
-                    </Grid>
-                    <Grid>
+                            imgNb={this.state.ImgUploadingNb}
+                        />
+                        <Grid>
                         <Grid.Row centered>
                             <Icon className="EditProfilArrow"
                                   name='arrow alternate circle left outline'

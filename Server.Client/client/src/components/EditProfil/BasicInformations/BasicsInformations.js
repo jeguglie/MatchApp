@@ -3,16 +3,17 @@ import {Form, TextArea, Grid, Progress, Icon, Select} from 'semantic-ui-react';
 import API from "../../../utils/API";
 import classnames from 'classnames';
 import DividerC from "../../Divider/Divider";
-const mongoose = require('mongoose');
+
 const DEFAULT_STATE = {
-    email: "",
-    firstName: "",
-    lastName: "",
+    lastname: "",
+    firstname: "",
     interested: "",
-    bio: "",
-    gender: "",
-    interests: [],
     country: "",
+    gender: "",
+    bio: "",
+    user_id: '',
+    email: "",
+    interests: [],
     birthday: "",
     messages : {
         save: false,
@@ -48,14 +49,15 @@ class BasicsInformations extends React.Component {
 
     async componentDidMount() {
         try {
-            const ObjectId = mongoose.Types.ObjectId(localStorage.getItem('id'));
-            const {data} = await API.getEditProfilValues(ObjectId);
-            if (data && data.message === true)
-                this.setState({warnings: data.message});
-            const newState = data.findProfil;
-            if (data.findProfil) {
-                this.setState({...newState});
-            }
+            this.setState({user_id: localStorage.getItem('user_id')}, async function(){
+                const {data} = await API.getEditProfilValues(this.state.user_id);
+                if (data && data.warnings === true)
+                    this.setState({warnings: data.warnings});
+                const newState = data.findProfil;
+                if (data.findProfil) {
+                    this.setState({...newState});
+                }
+            });
         } catch (error) {
             console.error(error);
         }
@@ -63,8 +65,7 @@ class BasicsInformations extends React.Component {
     handleSave = async(props) => {
         this.props.nextSection();
         try {
-            const ObjectId2 = mongoose.Types.ObjectId(localStorage.getItem('id'));
-            const data = await API.updateEditProfilValues(this.state, ObjectId2);
+            const data = await API.updateEditProfilValues(this.state);
             if (Array.isArray(data.warnings) && data.warnings.length)
                 this.setState({warnings: data.warnings});
             else
@@ -81,7 +82,7 @@ class BasicsInformations extends React.Component {
     render() {
         return (
             <div className="container-fluid">
-                <div className={classnames("ui middle", "EditProfil")}>
+                <div className={classnames("ui middle", "BasicInformations")}>
                     <Grid columns={2} doubling>
                         <Grid.Column>
                             <h1 className="CompleteTitle">Complete Basics Informations</h1>
@@ -93,25 +94,25 @@ class BasicsInformations extends React.Component {
                     <Grid columns={1} doubling>
                         <DividerC vertically={false} />
                         <Grid.Column>
-                            <Form  className="formEdit">
+                            <Form className="formEdit">
                                 <Form.Group widths='equal'>
                                     <Form.Input fluid
                                                 label='Last Name'
                                                 color="white"
-                                                id="lastName"
-                                                value={this.state.lastName}
+                                                id="lastname"
+                                                value={this.state.lastname}
                                                 onChange={this.handleChange}
                                                 placeholder="Last Name"
                                     />
                                     <Form.Input fluid
                                                 label='First Name'
-                                                id="firstName"
-                                                value={this.state.firstName}
+                                                id="firstname"
+                                                value={this.state.firstname}
                                                 onChange={this.handleChange}
                                                 placeholder="First Name"
                                     />
                                 </Form.Group>
-                                <Form.Group widths='equal' className="DropdownEdit">
+                                <Form.Group widths='equal' className="DropdownBasic">
                                     <Form.Field
                                         id="gender"
                                         control={Select}

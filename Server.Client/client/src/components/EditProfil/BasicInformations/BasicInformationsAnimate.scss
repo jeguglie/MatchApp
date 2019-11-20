@@ -1,3 +1,4 @@
+// Animate
 .BasicsInformationsAnimate-enter {
   opacity: 0;
   right: 750px;
@@ -19,4 +20,39 @@
   right: 750px;
   position: relative;
   transition: all ease-in 0.2s;
+}
+
+.BasicInformations{
+  padding: 5em;
+  margin-left: 5em;
+  margin-right: 5em;
+  background-color: #f93874;
+  border-radius: 20px !important;
+}
+
+.DropdownBasic{
+  .ui.fluid.dropdown {
+    margin-left: 0.5em !important;
+    margin-right: 0.5em !important;
+  }
+}
+
+@media only screen and (min-width: 275px) and (max-width: 767px){
+  .BasicInformations {
+    margin: 1rem;
+    padding: 2.5rem;
+  }
+}
+
+@media only screen and (min-width: 1200px){
+  .BasicInformations {
+    width: 900px;
+    margin: auto;
+  }
+}
+@media only screen and (min-width: 1500px){
+  .BasicInformations {
+    width: 800px;
+    margin: auto;
+  }
 }

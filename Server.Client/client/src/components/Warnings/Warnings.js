@@ -1,7 +1,6 @@
 import React from "react";
 
 function warnings (props) {
-    console.log(props.data);
     if (Array.isArray(props.data) && props.data.length > 0)
     {
         return props.data.map((item, key) => {

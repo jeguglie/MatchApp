@@ -17,10 +17,10 @@ export default {
             }
         );
     },
-    signup: function(email, username, password, cpassword) {
+    signup: function(lastName, firstName, email, username, password, cpassword) {
         return axios.post(
             `${ burl}/user/signup`,
-            {email, username, password, cpassword},
+            {lastName, firstName, email, username, password, cpassword},
             {
                 headers: headers
             }
@@ -44,34 +44,33 @@ export default {
             }
         );
     },
-    updateEditProfilValues: function(state, id) {
+    updateEditProfilValues: function(state) {
         return axios.post(
             `${burl}/user/updateEditProfilValues`,
             {
-                state,
-                id
+                state
             },
             {
                 headers: headers
             }
         );
     },
-    getEditProfilValues: function(id) {
+    getEditProfilValues: function(user_id) {
         return axios.post(
             `${burl}/user/getEditProfilValues`,
             {
-                id,
+                user_id,
             },
             {
                 headers: headers
             }
         );
     },
-    getPhotos: function(id) {
+    getPhotos: function(user_id) {
         return axios.post(
             `${burl}/user/getPhotos`,
             {
-                id,
+                user_id,
             },
             {
                 headers: headers
