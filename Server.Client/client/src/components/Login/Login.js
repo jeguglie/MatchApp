@@ -22,6 +22,7 @@ class Login extends React.Component {
     };
 
     send = async () => {
+        // Check Validity Mail and Password
         const { email, password } = this.state;
         if ((!email || email.length === 0) || (!password || password.length === 0)) {
             const warnings = [];
@@ -32,24 +33,32 @@ class Login extends React.Component {
             this.setState({warnings: warnings});
             return;
         }
+        // Set Loader
         this.setState({loading: true});
+        // Send Request
         try {
-            const { data } = await API.login(email, password);
-            if (data) {
-                if (data.token) {
-                    localStorage.setItem("token", data.token);
-                    localStorage.setItem("newUser", data.newUser);
-                    localStorage.setItem("user_id", data.user_id);
-                    window.location = "/";
+            const { data } = await API.login(email, password)
+                .then(res => {
+                if (res.status === 200) {
+                    this.props.history.push('/');
                 } else {
-                    if (data.warnings)
+                    const error = new Error(res.error);
+                    throw error;
+                }
+            })
+                .catch(err => {
+                    console.error(err);
+                    alert('Error logging in please try again');
+                });
+            if (data) {
+               if (data.warnings)
                         this.setState({warnings: data.warnings});
                     this.setState({send: true});
                 }
-            }
         } catch (error) {
             console.error(error);
         }
+        // Unset Loader
         this.setState({loading: false});
     };
 
@@ -57,20 +66,8 @@ class Login extends React.Component {
             [event.target.id]: event.target.value
         });
 
-    handleChangeMail = async(event) => {
-        this.setState({correctEmail: false});
-        this.setState({ [event.target.id]: event.target.value });
-        try {
-            const {data} = await API.checkMail(event.target.value);
-            if (data.exist === true)
-                this.setState({correctEmail: true});
-        }   catch (error) {
-                console.error(error);
-            }
-    };
 
     render() {
-        const correctEmail = this.state.correctEmail;
         const loading = this.state.loading;
         return (
             <Container className="loginModal">
@@ -87,13 +84,13 @@ class Login extends React.Component {
                             <Divider />
                             <h1 className="loginh1">User Login</h1>
                                 <Form className="loginForm">
-                                    <Form.Field className={correctEmail === true ? "inputUser" : null}>
+                                    <Form.Field>
                                         <Input id="email"
                                                icon='users'
                                                iconPosition='left'
                                                autoFocus
                                                type="email"
-                                               onChange={this.handleChangeMail}
+                                               onChange={this.handleChange}
                                                size="huge"
                                                placeholder="Email"
                                                required
@@ -103,7 +100,6 @@ class Login extends React.Component {
                                         <Input icon='lock' iconPosition='left'
                                                id="password"
                                                onChange={this.handleChange}
-                                               onClick={this.checkMail}
                                                type="password"
                                                size="huge"
                                                placeholder="Password"

@@ -1,6 +1,7 @@
 const account = require('./account/lib.js');
 const addphotos = require('./account/addphotos.js');
 const multer = require('multer');
+const withAuth = require('./middleware');
 const uuidv4 = require('uuid/v4');
 const DIR = './public/';
 const storage = multer.diskStorage({
@@ -28,9 +29,8 @@ const upload = multer({
 module.exports = function (app) {
     app.post('/login', account.login);
     app.post('/signup',account.signup);
-    app.post('/getEditProfilValues', account.getEditProfilValues);
-    app.post('/updateEditProfilValues', account.updateEditProfilValues);
-    app.post('/user-profile', upload.single('file'), addphotos.uploadPhoto);
-    app.post('/getPhotos', addphotos.getPhotos);
-    // app.post('/checkMail', account.checkMail);
+    app.post('/getEditProfilValues', withAuth, account.getEditProfilValues);
+    app.post('/updateEditProfilValues', withAuth, account.updateEditProfilValues);
+    app.post('/user-profile', withAuth, upload.single('file'), addphotos.uploadPhoto);
+    app.post('/getPhotos', withAuth, addphotos.getPhotos);
 };

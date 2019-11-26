@@ -1,5 +1,6 @@
 const jwt = require("jwt-simple");
 const passwordHash = require("password-hash");
+const secret = 'mysecretsshhhmatchApp';
 const {Pool} = require('pg');
 const config = require("../../config/config");
 const pool = new Pool({
@@ -38,7 +39,7 @@ async function signup(req, res) {
         if (response.rows.length > 0 && response.rows[0].username === username)
             warnings.push('Username already exist');
         if (warnings.length > 0)
-            return res.status(200).json({
+            return res.status(500).json({
                 warnings: warnings
             });
 
@@ -56,14 +57,15 @@ async function signup(req, res) {
         // Create Profil
         text = 'INSERT INTO profile(user_id, lastName, firstName) VALUES($1, $2, $3)';
         values = [id, lastName, firstName];
-        response = await pool.query(text, values);
+        await pool.query(text, values);
 
-        return res.status(200).json({
-            text: ["Success"],
-            token: jwt.encode(response, config.secret),
-            user_id: id,
-            newUser: true
+        // Issue Token
+        const payload = { email };
+        const token = jwt.sign(payload, secret, {
+            expiresIn: '1h'
         });
+        return res.cookie('token', token, { httpOnly: true })
+            .sendStatus(200);
 
     } catch (error) {
         return res.status(500).json({
@@ -89,37 +91,22 @@ async function login(req, res) {
             });
         }
         if (!passwordHash.verify(password, response.rows[0].password))
-            return res.status(200).json({
+            return res.status(500).json({
                warnings: ['Wrong username or password']
             });
-        return res.status(200).json({
-            token: jwt.encode(response, config.secret),
-            newUser: response.rows[0].newuser,
-            user_id: response.rows[0].user_id
-        });
+        else {
+            // Issue Token
+            const payload = { email };
+            const token = jwt.sign(payload, secret, {
+                expiresIn: '1h'
+            });
+            return res.cookie('token', token, { httpOnly: true })
+                .sendStatus(200);
+        }
     }
     catch (error) {
         return res.status(500).json({
             warnings: ['Catch error']
-        });
-    }
-}
-
-async function checkMail(req, res) {
-    const {email} = req.body;
-    try {
-        const findUser = await User.findOne({email});
-        if (!findUser) {
-            return res.status(200).json({
-                exist: false
-            });
-        } else
-            return res.status(200).json({
-                exist: true
-            });
-    } catch (error) {
-        return res.status(500).json({
-            error
         });
     }
 }
