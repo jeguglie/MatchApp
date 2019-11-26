@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import {Grid, Divider} from 'semantic-ui-react';
 export default class FileUpload extends React.Component {
     constructor(props){
         super(props);

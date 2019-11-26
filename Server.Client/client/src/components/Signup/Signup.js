@@ -19,7 +19,7 @@ class Signup extends React.Component {
         this.state = {...DEFAULT_STATE};
     }
 
-    send = async () => {
+    send = () => {
         const warnings = [];
         this.setState({warnings: []});
         const {lastName, firstName, email, username, password, cpassword } = this.state;
@@ -46,19 +46,23 @@ class Signup extends React.Component {
         }
         this.setState({loading: true});
         try {
-            const {data} = await API.signup(lastName, firstName, email, username, password, cpassword);
-            if (data) {
-                if (data.token) {
-                    localStorage.setItem("token", data.token);
-                    localStorage.setItem("newUser", data.newUser);
-                    localStorage.setItem("user_id", data.user_id);
-                    window.location = "/";
-                } else {
-                    this.setState({warnings: data.warnings});
-                    this.setState({send: true});
-                }
-            }
-        } catch (error) {console.error(error);}
+            API.signup(lastName, firstName, email, username, password, cpassword)
+                .then(res => {
+                    if (res.status === 200) {
+                        this.props.history.push('/');
+                    } else {
+                        const error = new Error(res.error);
+                        throw error;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    this.setState({warnings: ["Error"]});
+                });
+            this.setState({send: true});
+        } catch (error) {
+            console.error(error);
+        }
         this.setState({loading: false});
     };
 

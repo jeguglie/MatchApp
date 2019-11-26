@@ -1,8 +1,7 @@
-const jwt = require("jwt-simple");
+const jwt = require("jsonwebtoken");
 const passwordHash = require("password-hash");
 const secret = 'mysecretsshhhmatchApp';
 const {Pool} = require('pg');
-const config = require("../../config/config");
 const pool = new Pool({
     user: 'jv',
     host: 'localhost',
@@ -64,7 +63,7 @@ async function signup(req, res) {
         const token = jwt.sign(payload, secret, {
             expiresIn: '1h'
         });
-        return res.cookie('token', token, { httpOnly: true })
+         res.cookie('token', token, { httpOnly: true })
             .sendStatus(200);
 
     } catch (error) {
@@ -100,13 +99,12 @@ async function login(req, res) {
             const token = jwt.sign(payload, secret, {
                 expiresIn: '1h'
             });
-            return res.cookie('token', token, { httpOnly: true })
-                .sendStatus(200);
+            res.cookie('token', token, { httpOnly: true }).sendStatus(200);
         }
     }
     catch (error) {
         return res.status(500).json({
-            warnings: ['Catch error']
+            warnings: ['Catch error server']
         });
     }
 }
@@ -153,6 +151,5 @@ async function updateEditProfilValues(req, res) {
 
 exports.login = login;
 exports.signup = signup;
-// exports.checkMail = checkMail;
 exports.getEditProfilValues = getEditProfilValues;
 exports.updateEditProfilValues = updateEditProfilValues;

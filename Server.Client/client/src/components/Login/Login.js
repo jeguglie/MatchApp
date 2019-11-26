@@ -37,24 +37,20 @@ class Login extends React.Component {
         this.setState({loading: true});
         // Send Request
         try {
-            const { data } = await API.login(email, password)
+            await API.login(email, password)
                 .then(res => {
-                if (res.status === 200) {
-                    this.props.history.push('/');
-                } else {
-                    const error = new Error(res.error);
-                    throw error;
-                }
-            })
+                    if (res.status === 200) {
+                        this.props.history.push('/');
+                    } else {
+                        const error = new Error(res.error);
+                        throw error;
+                    }
+                })
                 .catch(err => {
                     console.error(err);
-                    alert('Error logging in please try again');
+                    this.setState({warnings: ["Wrong username or password"]});
                 });
-            if (data) {
-               if (data.warnings)
-                        this.setState({warnings: data.warnings});
-                    this.setState({send: true});
-                }
+                this.setState({send: true});
         } catch (error) {
             console.error(error);
         }

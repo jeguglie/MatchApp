@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const secret = 'mysecretsshhh';
+const secret = 'mysecretsshhhmatchApp';
 const withAuth = function(req, res, next) {
     const token = req.cookies.token;
     if (!token) {

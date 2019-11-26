@@ -1,6 +1,4 @@
-const Profil = require('../../schema/schemaProfil');
 const {Pool} = require('pg');
-const config = require("../../config/config");
 const pool = new Pool({
     user: 'jv',
     host: 'localhost',
