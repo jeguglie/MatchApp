@@ -1,13 +1,27 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 
-import API from "../../utils/API";
-
 class Dashboard extends React.Component {
     disconnect = () => {
-        API.logout();
-        localStorage.clear();
-        window.location = "/";
+        fetch('http://localhost:3000/logout', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    this.props.history.push('/');
+                } else {
+                    const error = new Error(res.error);
+                    throw error;
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                this.setState({warnings: ["Wrong username or password"]});
+            });
     };
     render() {
         return (

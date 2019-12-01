@@ -13,7 +13,7 @@ const LoadPreviewImages = (props) => {
                     <h1 className="titlePreviewAddPhotos">Profile images</h1><br/>
                 </Container>
                 <Grid columns={props.data.length} doubling>
-                    <LoadImages deleteImage={props.deleteImage} data={props.data} />
+                    <LoadImages data={props.data} />
                 </Grid>
                 <DividerC vertically={false}/>
             </div>

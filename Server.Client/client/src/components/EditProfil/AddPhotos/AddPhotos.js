@@ -51,19 +51,10 @@ class AddPhotos extends React.Component {
     // Load preview tab for loadPreview Component
     showPreview = (previewTab) => this.setState({previewTab: previewTab});
     // Update Top image preview
-    updateImages = () => this.setState({coverImage: "http://localhost:8800/" + this.state.profileImg[0].img_link});
-    // Delete Image
-    async deleteImage (event) {
-        try {
-            const { data } = await API.deleteImage(localStorage.getItem(''))
-
-        } catch (error){
-            console.log(error)
-        }
-    }
+    updateImages = () => this.setState({coverImage: "http://localhost:3000/" + this.state.profileImg[0].img_link});
     async handleImageUpload () {
         try {
-            const { data } = await API.getPhotos(localStorage.getItem('user_id'));
+            const { data } = await API.getPhotos();
             if (data.profileImg.length > 0)
                 this.setState({profileImg: data.profileImg}, () => {
                     this.updateImages();
@@ -105,8 +96,7 @@ class AddPhotos extends React.Component {
                                     <Warnings data={this.state.warnings}/>
                                 </div>
                             </Container>
-                            <ProfileImgPreview  data={this.state.profileImg}
-                                                deleteImage={this.deleteImage()}/>
+                            <ProfileImgPreview  data={this.state.profileImg}/>
                         </Grid.Column>
                     </Grid>
                         <UploadPreview
@@ -122,7 +112,7 @@ class AddPhotos extends React.Component {
                             <Icon className="EditProfilArrow"
                                   name='arrow alternate circle right outline'
                                   size="huge"
-                                  onClick={this.handleSave}/>
+                                  onClick={this.props.nextSection}/>
                         </Grid.Row>
                     </Grid>
                 </div>

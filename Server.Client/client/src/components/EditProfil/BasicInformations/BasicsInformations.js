@@ -49,15 +49,13 @@ class BasicsInformations extends React.Component {
 
     async componentDidMount() {
         try {
-            this.setState({user_id: localStorage.getItem('user_id')}, async function(){
-                const {data} = await API.getEditProfilValues(this.state.user_id);
-                if (data && data.warnings === true)
-                    this.setState({warnings: data.warnings});
-                const newState = data.findProfil;
-                if (data.findProfil) {
-                    this.setState({...newState});
-                }
-            });
+            const {data} = await API.getEditProfilValues();
+            if (data && data.warnings === true)
+                this.setState({warnings: data.warnings});
+            const newState = data.findProfil;
+            if (data.findProfil) {
+                this.setState({...newState});
+            }
         } catch (error) {
             console.error(error);
         }

@@ -1,6 +1,7 @@
 import React from 'react';
 import BasicsInformations from "./BasicInformations/BasicsInformations";
 import AddPhotos from "./AddPhotos/AddPhotos";
+import AddInterests from "./AddInterests/AddInterests";
 import {CSSTransition} from 'react-transition-group';
 
 const DEFAULT_SATE = {
@@ -24,6 +25,9 @@ class EditProfil extends React.Component {
         this.setState({section: this.state.section + 1, bool: true});
     };
 
+    handleSection3 = () => {
+        this.setState({section2: false, section1: false, section3: true});
+    };
     handleSection2 = () => {
         this.setState({section2: true, section1: false, section3: false});
     };
@@ -48,10 +52,21 @@ class EditProfil extends React.Component {
                 this.handleSection2();
             return (
                 <CSSTransition in={this.state.section2} timeout={1000} classNames="AddPhotosAnimate">
-                    <AddPhotos prevSection={this.handlePrev}/>
+                    <AddPhotos prevSection={this.handlePrev}
+                               nextSection={this.handleNext}/>
                 </CSSTransition>
             );
         }
+        else if (this.state.section === 3) {
+            if (this.state.section3 === false)
+                this.handleSection3();
+            return (
+                <CSSTransition in={this.state.section3} timeout={1000} classNames="AddInterestsAnimate">
+                    <AddInterests prevSection={this.handlePrev}/>
+                </CSSTransition>
+            );
+        }
+
     }
 }
 

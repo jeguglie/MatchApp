@@ -21,7 +21,7 @@ class Login extends React.Component {
         this.state = {...DEFAULT_STATE}
     };
 
-    send = async () => {
+    send = () =>  {
         // Check Validity Mail and Password
         const { email, password } = this.state;
         if ((!email || email.length === 0) || (!password || password.length === 0)) {
@@ -36,8 +36,14 @@ class Login extends React.Component {
         // Set Loader
         this.setState({loading: true});
         // Send Request
-        try {
-            await API.login(email, password)
+            fetch('http://localhost:3000/login', {
+                method: 'POST',
+                body: JSON.stringify(this.state),
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
                 .then(res => {
                     if (res.status === 200) {
                         this.props.history.push('/');
@@ -51,9 +57,6 @@ class Login extends React.Component {
                     this.setState({warnings: ["Wrong username or password"]});
                 });
                 this.setState({send: true});
-        } catch (error) {
-            console.error(error);
-        }
         // Unset Loader
         this.setState({loading: false});
     };

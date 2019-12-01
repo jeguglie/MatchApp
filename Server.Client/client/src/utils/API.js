@@ -2,12 +2,12 @@ import axios from "axios";
 const headers = {
     "Content-Type": "application/json"
 };
-const burl = "http://localhost:8800";
+const burl = "http://localhost:3000";
 
 export default {
     login: function(email, password) {
         return axios.post(
-            `${burl}/user/login`,
+            `${burl}/login`,
             {
                 email,
                 password
@@ -19,20 +19,16 @@ export default {
     },
     signup: function(lastName, firstName, email, username, password, cpassword) {
         return axios.post(
-            `${ burl}/user/signup`,
+            `${ burl}/signup`,
             {lastName, firstName, email, username, password, cpassword},
             {
                 headers: headers
             }
         );
     },
-
-    logout: function() {
-        localStorage.clear();
-    },
     updateEditProfilValues: function(state) {
         return axios.post(
-            `${burl}/user/updateEditProfilValues`,
+            `${burl}/updateEditProfilValues`,
             {
                 state
             },
@@ -43,22 +39,22 @@ export default {
     },
     getEditProfilValues: function(user_id) {
         return axios.post(
-            `${burl}/user/getEditProfilValues`,
+            `${burl}/getEditProfilValues`,
             {
                 user_id,
             },
             {
+                withCredentials: 'true',
                 headers: headers
             }
         );
     },
     getPhotos: function(user_id) {
         return axios.post(
-            `${burl}/user/getPhotos`,
+            `${burl}/getPhotos`,
+            {},
             {
-                user_id,
-            },
-            {
+                withCredentials: 'true',
                 headers: headers
             }
         );

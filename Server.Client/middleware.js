@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const secret = 'mysecretsshhhmatchApp';
+const secret = 'mysecretsshhh';
+
 const withAuth = function(req, res, next) {
     const token = req.cookies.token;
     if (!token) {
@@ -9,10 +10,11 @@ const withAuth = function(req, res, next) {
             if (err) {
                 res.status(401).send('Unauthorized: Invalid token');
             } else {
-                req.email = decoded.email;
+                res.locals.email = decoded.email;
                 next();
             }
         });
     }
 };
+
 module.exports = withAuth;

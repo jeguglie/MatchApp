@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const passwordHash = require("password-hash");
-const secret = 'mysecretsshhhmatchApp';
 const {Pool} = require('pg');
 const pool = new Pool({
     user: 'jv',
@@ -58,15 +57,10 @@ async function signup(req, res) {
         values = [id, lastName, firstName];
         await pool.query(text, values);
 
-        // Issue Token
-        const payload = { email };
-        const token = jwt.sign(payload, secret, {
-            expiresIn: '1h'
-        });
-         res.cookie('token', token, { httpOnly: true })
-            .sendStatus(200);
+        return res.status(200);
 
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             warnings: ['Catch error']
         });
@@ -91,18 +85,20 @@ async function login(req, res) {
         }
         if (!passwordHash.verify(password, response.rows[0].password))
             return res.status(500).json({
-               warnings: ['Wrong username or password']
+                warnings: ['Wrong username or password']
             });
         else {
-            // Issue Token
+            const secret = 'mysecretsshhh';
+            // Issue token
             const payload = { email };
             const token = jwt.sign(payload, secret, {
-                expiresIn: '1h'
+                expiresIn: '1h',
             });
-            res.cookie('token', token, { httpOnly: true }).sendStatus(200);
+            res.cookie('token', token, { httpOnly: true, path: '/', domain: 'localhost' }).sendStatus(200);
         }
     }
     catch (error) {
+        console.log(error);
         return res.status(500).json({
             warnings: ['Catch error server']
         });
@@ -110,8 +106,10 @@ async function login(req, res) {
 }
 
 async function getEditProfilValues(req, res) {
-    const text = 'SELECT * FROM profile WHERE user_id = $1';
-    const values = [req.body.user_id];
+    // Get User ID
+    let userID = null;
+    let text = 'SELECT user_id FROM users WHERE email = $1';
+    let values = [res.locals.email];
     try {
         const response = await pool.query(text, values);
         if (response.rows.length < 1) {
@@ -119,14 +117,35 @@ async function getEditProfilValues(req, res) {
                 warnings: ["Not Found"]
             });
         } else
-            return res.status(200).json({
-                findProfil: response.rows[0]
-            })
+            userID =  response.rows[0].user_id;
     } catch (error) {
         return res.status(500).json({
             warnings: [""]
         });
     }
+    if (userID != null)
+    {
+        text = 'SELECT * FROM profile WHERE user_id = $1';
+        values = [userID];
+        try {
+            const response = await pool.query(text, values);
+            if (response.rows.length < 1) {
+                return res.status(500).json({
+                    warnings: ["Not Found"]
+                });
+            } else {
+                console.log(response.rows[0]);
+                return res.status(200).json({
+                    findProfil: response.rows[0]
+                })
+            }
+        } catch (error) {
+            return res.status(500).json({
+                warnings: [""]
+            });
+        }
+    }
+
 }
 
 async function updateEditProfilValues(req, res) {
@@ -145,9 +164,6 @@ async function updateEditProfilValues(req, res) {
         });
     }
 }
-
-
-
 
 exports.login = login;
 exports.signup = signup;

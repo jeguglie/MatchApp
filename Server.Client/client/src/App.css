@@ -660,6 +660,64 @@ body {
   padding: 20px;
 }
 
+.AddInterests {
+  padding: 5em;
+  margin-left: 5em;
+  margin-right: 5em;
+  background-color: #f93874;
+  border-radius: 20px !important;
+  position: relative;
+}
+
+.InterestsTitle {
+  color: white;
+  font-size: 1.5em;
+}
+
+.AddInterestsAnimate-enter {
+  opacity: 0;
+  right: -750px;
+  position: relative;
+}
+
+.AddInterestsAnimate-enter-active {
+  opacity: 1;
+  right: 0px;
+  position: relative;
+  transition: all ease-in-out 0.2s;
+}
+
+.AddInterestsAnimate-exit {
+  opacity: 1;
+  right: 0px;
+  position: relative;
+}
+
+.AddInterestsAnimate-exit-active {
+  opacity: 0;
+  right: -750px;
+  position: relative;
+  transition: all ease-in 0.2s;
+}
+
+@media only screen and (min-width: 275px) and (max-width: 767px) {
+  .AddInterests {
+    margin: 1rem;
+    padding: 2.5rem;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .AddInterests {
+    width: 1000px;
+    margin: auto;
+  }
+}
+@media only screen and (min-width: 1500px) {
+  .AddInterests {
+    width: 1000px !important;
+    margin: auto;
+  }
+}
 .dividerC {
   padding-top: 20px;
   padding-bottom: 20px;
