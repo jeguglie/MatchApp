@@ -58,6 +58,26 @@ export default {
                 headers: headers
             }
         );
+    },
+    addInterests: function(interest){
+        return axios.post(
+            `${burl}/addInterests`,
+            {interest},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        );
+    },
+    getInterests: () => {
+        return axios.post(
+            `${burl}/getInterests`,
+            {},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        );
     }
 
 };

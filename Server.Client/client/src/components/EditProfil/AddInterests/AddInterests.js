@@ -1,10 +1,22 @@
-import React from 'react';
+import _ from 'lodash';
+import React, {Component} from 'react';
+import API from "../../../utils/API";
 import classnames from "classnames";
-import {Grid, Progress, Input, Icon, Divider} from "semantic-ui-react";
-import ReactSearchBox from 'react-search-box';
+import {Grid, Progress, Input, Icon, Divider, Search, Header, Segment, Container} from "semantic-ui-react";
+import ReactSearchBox from '../../SearchBox/index'
+import Interests from "./Interests/Interests";
+import Warnings from '../../../components/Warnings/Warnings';
 const DEFAULT_STATE = {
-    interests: []
+    interests: [],
+    clear: false,
+    isLoading: false,
+    value: '',
+    warnings: [],
+    successAdd: [],
+    results: [],
 };
+
+let RESULTS;
 
 const ProgressBar = () => (
     <Progress
@@ -15,51 +27,74 @@ const ProgressBar = () => (
         size="large"/>
 );
 
-const InputRightLabeledTag = (
-    <Input
-        icon='tags'
-        iconPosition='left'
-        label={{ tag: true, content: 'Add Tag' }}
-        labelPosition='right'
-        placeholder='Add interests'
-    />
-)
-
-class AddInterests extends React.Component {
+class AddInterests extends Component {
     constructor(props){
         super(props);
-       this.state = DEFAULT_STATE;
+        this.state = DEFAULT_STATE;
     }
 
-    componentDidMount() {
-
+    async componentDidMount() {
+        try {
+            const { data } = await API.getInterests();
+            if (data.results.length > 0){
+                DEFAULT_STATE.results = data.results;
+                this.setState({results: data.results});
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
-    data = [
-        {
-            key: 'john',
-            value: 'John Doe',
-        },
-        {
-            key: 'jane',
-            value: 'Jane Doe',
-        },
-        {
-            key: 'mary',
-            value: 'Mary Phillips',
-        },
-        {
-            key: 'robert',
-            value: 'Robert',
-        },
-        {
-            key: 'karius',
-            value: 'Karius',
-        },
-    ]
+    handleResultSelect = (e, { result }) => this.setState({ value: result.title })
+
+    handleSearchChange = (e, { value }) => {
+        this.setState({ isLoading: true, value});
+
+        setTimeout(async () => {
+            console.log(this.state.results);
+            if (this.state.value.length < 1) return this.setState(DEFAULT_STATE);
+
+            const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
+            const isMatch = (result) => re.test(result.title)
+
+            this.setState({
+                isLoading: false,
+                results: _.filter(this.data, isMatch),
+            })
+        }, 300)
+    };
+
+    handleKeyDown = async (data) => {
+        if (data.key === 'Enter') {
+            const regex = new RegExp('[^A-Za-z0-9]');
+            const interests = this.state.interests;
+            const new_interest = data.target.value;
+            const warnings = [];
+            // Parsing check Interest
+            if (!new_interest || new_interest.length < 3)
+                warnings.push("Your interest must contain between 3 and 20 characters");
+            if (regex.test(new_interest))
+                warnings.push("Your interest is not valid. Only letter and numeric value is accepted");
+            // If there is no warnings
+            if (warnings.length < 1) {
+                try {
+                    const {data} = await API.addInterests(new_interest);
+                    if (data.success) {
+                       interests.push(new_interest);
+                       this.setState({interests: interests, successAdd: data.warnings, value: ''});
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            this.setState({warnings: warnings});
+        }
+    };
+
     render() {
+        const {isLoading, value, warnings, successAdd, results} = this.state;
         return(
-            <div className="container-fluid">
+            <div className="container-fluid centered">
                 <div className={classnames("ui middle", "AddInterests")}>
                     <Grid columns={2} doubling>
                         <Grid.Column>
@@ -69,17 +104,37 @@ class AddInterests extends React.Component {
                             <ProgressBar />
                         </Grid.Column>
                     </Grid>
+                    <Divider hidden />
+                    <Divider hidden />
                     <Grid  verticalAlign={"middle"}>
-                    <Grid.Row centered>
-                        <h1 className="InterestsTitle">Tell us what do you like</h1>
-                    </Grid.Row>
-                    <Grid.Row centered>
-                        <ReactSearchBox
-                            placeholder="Placeholder"
-                            data={this.data}
-                            callback={record => console.log(record)}
-                        />
-                    </Grid.Row>
+                        <Grid.Row centered>
+                            <div className="loginWarnings">
+                                <Warnings data={warnings}/>
+                                <Warnings data={successAdd}/>
+                            </div>
+                        </Grid.Row>
+                        <Grid.Row centered>
+                            <Interests
+                                interests={this.state.interests}
+                            />
+                        </Grid.Row>
+                        <Grid.Row centered>
+                            <h1 className="InterestsTitle">Tell us what do you like</h1>
+                        </Grid.Row>
+                        <Grid.Row centered>
+                            <Search
+                                onKeyDown={this.handleKeyDown}
+                                size="huge"
+                                loading={isLoading}
+                                onResultSelect={this.handleResultSelect}
+                                onSearchChange={_.debounce(this.handleSearchChange, 500, {
+                                    leading: true,
+                                })}
+                                results={results}
+                                value={value}
+                                {...this.props}
+                            />
+                        </Grid.Row>
                     </Grid>
                     <Divider hidden />
                     <Divider hidden />

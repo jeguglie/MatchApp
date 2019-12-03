@@ -62,6 +62,8 @@ app.post('/getEditProfilValues', withAuth, account.getEditProfilValues);
 app.post('/updateEditProfilValues', account.updateEditProfilValues);
 app.post('/user-profile', upload.single('file'), withAuth, addphotos.uploadPhoto);
 app.post('/getPhotos', withAuth, addphotos.getPhotos);
+app.post('/addInterests', withAuth, account.addInterests);
+app.post('/getInterests', account.getInterests);
 
 
 const port = 3000;

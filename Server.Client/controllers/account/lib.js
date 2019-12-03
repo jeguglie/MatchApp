@@ -1,3 +1,4 @@
+const { mapKeys } = require('lodash');
 const jwt = require("jsonwebtoken");
 const passwordHash = require("password-hash");
 const {Pool} = require('pg');
@@ -9,6 +10,19 @@ const pool = new Pool({
     port: 5432,
 });
 
+async function getUserId(email){
+    let text = 'SELECT user_id FROM users WHERE email = $1';
+    let values = [email];
+    try {
+        const response = await pool.query(text, values);
+        if (response.rows.length < 1) {
+            return null;
+        } else
+            return response.rows[0].user_id;
+    } catch (error) {
+        return null;
+    }
+}
 
 async function signup(req, res) {
     const { lastName, firstName, password, email, username, cpassword } = req.body;
@@ -134,7 +148,6 @@ async function getEditProfilValues(req, res) {
                     warnings: ["Not Found"]
                 });
             } else {
-                console.log(response.rows[0]);
                 return res.status(200).json({
                     findProfil: response.rows[0]
                 })
@@ -165,7 +178,78 @@ async function updateEditProfilValues(req, res) {
     }
 }
 
+async function addInterests(req, res) {
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return (res.status(500));
+    // GET INTEREST
+    const interest = req.body.interest;
+    try {
+        // INTEREST ALREADY EXIST?
+        let id_interest = null;
+        let text = 'SELECT * FROM interests WHERE interest = $1';
+        let values = [interest];
+        let response = await pool.query(text, values);
+        // IF NOT, ADD INTEREST
+        if (response.rows && response.rows.length < 1) {
+            text = 'INSERT INTO interests(interest) VALUES ($1);';
+            values = [interest];
+            await pool.query(text, values);
+            // GET THE ID OF THIS INTEREST
+            text = 'SELECT id FROM interests WHERE interest = $1';
+            values = [interest];
+            response = await pool.query(text, values);
+            if (response.rows && response.rows.length > 0)
+                id_interest = response.rows[0].id;
+            // IF ERROR
+            else return res.status(500).json({
+                    warnings: ["Catch error get ID last interest"]
+                });
+            // THEN ADD INTO USERS_INTERESTS
+            text = 'INSERT INTO user_interests(user_id, interest_id) VALUES ($1::integer, $2::integer)';
+            values = [userID, id_interest];
+            await pool.query(text, values);
+        }
+        // IF YES, ADD DIRECTLY INTO USERS_INTERESTS
+        else if (response.rows && response.rows.length > 0) {
+            id_interest = response.rows[0].id;
+            text = 'INSERT INTO user_interests(user_id, interest_id) VALUES ($1::integer , $2::integer)';
+            values = [userID, id_interest];
+            await pool.query(text, values);
+        }
+        return res.status(200).json({
+            success: true,
+            warnings: ["Your interest " + req.body.interest + " was successfully added to your profile."]
+        });
+    } catch (error) {
+        return res.status(500).json({
+            warnings: ["Catch error"]
+        });
+    }
+}
+
+
+async function getInterests(req, res){
+    try {
+        let text = 'SELECT interest FROM interests';
+        let response = await pool.query(text);
+        if (response.rows && response.rows.length > 1) {
+            const transformed = response.rows.map(({ interest}) => ({ "title": interest}));
+            return res.status(200).json({
+                results: transformed,
+            });
+        }
+        else return res.status(500);
+    } catch(error) {
+        return res.status(500).json({
+            warnings: ["Catch error"]
+        });
+    }
+}
+
 exports.login = login;
 exports.signup = signup;
 exports.getEditProfilValues = getEditProfilValues;
 exports.updateEditProfilValues = updateEditProfilValues;
+exports.addInterests = addInterests;
+exports.getInterests = getInterests;
