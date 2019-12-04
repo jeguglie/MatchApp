@@ -21,6 +21,17 @@ class Login extends React.Component {
         this.state = {...DEFAULT_STATE}
     };
 
+    handleKeyDown = (event) => {
+        if (event.key === 'Enter')
+            this.send();
+    };
+
+    componentDidMount() {
+        document.addEventListener("keydown", this.handleKeyDown, false);
+    }
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleKeyDown, false);
+    }
     send = () =>  {
         // Check Validity Mail and Password
         const { email, password } = this.state;

@@ -2,8 +2,7 @@ import _ from 'lodash';
 import React, {Component} from 'react';
 import API from "../../../utils/API";
 import classnames from "classnames";
-import {Grid, Progress, Input, Icon, Divider, Search, Header, Segment, Container} from "semantic-ui-react";
-import ReactSearchBox from '../../SearchBox/index'
+import {Grid, Progress, Icon, Divider, Search} from "semantic-ui-react";
 import Interests from "./Interests/Interests";
 import Warnings from '../../../components/Warnings/Warnings';
 const DEFAULT_STATE = {
@@ -12,11 +11,9 @@ const DEFAULT_STATE = {
     isLoading: false,
     value: '',
     warnings: [],
-    successAdd: [],
     results: [],
 };
-
-
+// Store data results BDD of interest here
 let DATA = [];
 
 const ProgressBar = () => (
@@ -62,15 +59,16 @@ class AddInterests extends Component {
         }, 300)
     };
 
+
     handleKeyDown = async (data) => {
-        if (data.key === 'Enter') {
+      if (data.key === 'Enter') {
             const regex = new RegExp('[^A-Za-z0-9]');
             const interests = this.state.interests;
             const new_interest = data.target.value;
             const warnings = [];
             // Parsing check Interest
-            if (!new_interest || new_interest.length < 3)
-                warnings.push("Your interest must contain between 3 and 20 characters");
+            if (!new_interest || new_interest.length < 2)
+                warnings.push("Your interest must contain between 2 and 20 characters");
             if (regex.test(new_interest))
                 warnings.push("Your interest is not valid. Only letter and numeric value is accepted");
             // If there is no warnings
@@ -79,13 +77,14 @@ class AddInterests extends Component {
                     const {data} = await API.addInterests(new_interest);
                     if (data.success) {
                        interests.push(new_interest);
-                       this.setState({interests: interests, successAdd: data.warnings, value: ''});
+                       this.setState({interests: interests, warnings: data.warnings, value: ''});
                     }
                 } catch (error) {
                     console.log(error);
                 }
             }
-            this.setState({warnings: warnings});
+            else
+                this.setState({warnings: warnings});
         }
     };
 
@@ -102,13 +101,10 @@ class AddInterests extends Component {
                             <ProgressBar />
                         </Grid.Column>
                     </Grid>
-                    <Divider hidden />
-                    <Divider hidden />
                     <Grid  verticalAlign={"middle"}>
                         <Grid.Row centered>
                             <div className="loginWarnings">
                                 <Warnings data={warnings}/>
-                                <Warnings data={successAdd}/>
                             </div>
                         </Grid.Row>
                         <Grid.Row centered>
@@ -117,10 +113,11 @@ class AddInterests extends Component {
                             />
                         </Grid.Row>
                         <Grid.Row centered>
-                            <h1 className="InterestsTitle">Tell us what do you like</h1>
+                            <h1 className="InterestsTitle">Tell others what do you like</h1>
                         </Grid.Row>
                         <Grid.Row centered>
                             <Search
+                                icon={"hashtag"}
                                 onKeyDown={this.handleKeyDown}
                                 size="huge"
                                 loading={isLoading}
@@ -134,6 +131,7 @@ class AddInterests extends Component {
                             />
                         </Grid.Row>
                     </Grid>
+                    <Divider hidden />
                     <Divider hidden />
                     <Divider hidden />
                     <Grid>

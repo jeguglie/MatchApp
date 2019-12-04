@@ -42,7 +42,7 @@ class EditProfil extends React.Component {
             if (this.state.section1 === false)
                 this.handleSection1();
             return (
-                <CSSTransition in={this.state.section1} timeout={1000} classNames="BasicsInformationsAnimate">
+                <CSSTransition in={this.state.section1} timeout={500} classNames="BasicsInformationsAnimate">
                     <BasicsInformations nextSection={this.handleNext}/>
                 </CSSTransition>
             );
@@ -51,7 +51,7 @@ class EditProfil extends React.Component {
             if (this.state.section2 === false)
                 this.handleSection2();
             return (
-                <CSSTransition in={this.state.section2} timeout={1000} classNames="AddPhotosAnimate">
+                <CSSTransition in={this.state.section2} timeout={500} classNames="AddPhotosAnimate">
                     <AddPhotos prevSection={this.handlePrev}
                                nextSection={this.handleNext}/>
                 </CSSTransition>
@@ -61,7 +61,7 @@ class EditProfil extends React.Component {
             if (this.state.section3 === false)
                 this.handleSection3();
             return (
-                <CSSTransition in={this.state.section3} timeout={1000} classNames="AddInterestsAnimate">
+                <CSSTransition in={this.state.section3} timeout={500} classNames="AddInterestsAnimate">
                     <AddInterests prevSection={this.handlePrev}/>
                 </CSSTransition>
             );

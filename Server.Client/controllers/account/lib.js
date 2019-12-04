@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const passwordHash = require("password-hash");
 const {Pool} = require('pg');
 const pool = new Pool({
-    user: 'jv',
+    user: 'jeguglie',
     host: 'localhost',
     database: 'api',
     password: '06245547Jv345102.',
@@ -148,6 +148,7 @@ async function getEditProfilValues(req, res) {
                     warnings: ["Not Found"]
                 });
             } else {
+                response.rows[0].email = res.locals.email;
                 return res.status(200).json({
                     findProfil: response.rows[0]
                 })
@@ -162,18 +163,17 @@ async function getEditProfilValues(req, res) {
 }
 
 async function updateEditProfilValues(req, res) {
+    const userID = await getUserId(res.locals.email);
+    if (userID === null) return (res.status(500));
     try {
+        const {lastname, firstname, interested, country, gender, bio} = req.body.state;
         const text = 'UPDATE profile SET lastname = $1, firstname = $2, interested = $3, country = $4, gender = $5, bio = $6 WHERE user_id = $7';
-        const values = Object.values(req.body.state);
-        const sliceValues = values.slice(0, 7);
-        pool.query(text, sliceValues);
-        return res.status(200).json({
-                warnings: ["Saved"],
-                save: true
-            });
+        const values = [lastname, firstname, interested, country, gender, bio, userID]
+        await pool.query(text, values);
+        return res.status(200).json({ save: true });
        } catch (error) {
             return res.status(500).json({
-            warnings: ["Catch error"]
+            warnings: ["Error during the save of your profile"]
         });
     }
 }

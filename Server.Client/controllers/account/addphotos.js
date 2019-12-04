@@ -1,6 +1,6 @@
 const {Pool} = require('pg');
 const pool = new Pool({
-    user: 'jv',
+    user: 'jeguglie',
     host: 'localhost',
     database: 'api',
     password: '06245547Jv345102.',

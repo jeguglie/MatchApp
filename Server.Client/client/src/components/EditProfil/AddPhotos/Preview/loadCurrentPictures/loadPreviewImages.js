@@ -11,11 +11,10 @@ const LoadPreviewImages = (props) => {
                     <Divider hidden/>
                     <Divider />
                     <h1 className="titlePreviewAddPhotos">Profile images</h1><br/>
+                    <Grid columns={props.data.length} doubling>
+                        <LoadImages data={props.data} />
+                    </Grid>
                 </Container>
-                <Grid columns={props.data.length} doubling>
-                    <LoadImages data={props.data} />
-                </Grid>
-                <DividerC vertically={false}/>
             </div>
         );
     }

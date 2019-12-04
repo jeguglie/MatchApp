@@ -33,6 +33,7 @@ export default {
                 state
             },
             {
+                withCredentials: 'true',
                 headers: headers
             }
         );

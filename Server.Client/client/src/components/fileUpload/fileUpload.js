@@ -35,12 +35,18 @@ export default class FileUpload extends React.Component {
         }
     };
 
+    simulateClick = (e) => {
+        e.click()
+    }
+
+
     render(){
         return (
             <div className="containerUpload">
                 <div className="file-upload">
                     <div className="image-upload-wrap">
-                         <input className="file-upload-input"
+                         <input
+                               className="file-upload-input"
                                type="file"
                                onChange={this.onFileChange}
                                accept="image/png, image/jpg, image/jpeg"

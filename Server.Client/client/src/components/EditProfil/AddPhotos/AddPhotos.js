@@ -33,10 +33,9 @@ class AddPhotos extends React.Component {
         this.state.coverImage = "https://react.semantic-ui.com/images/wireframe/white-image.png";
         this.handleImageUpload = this.handleImageUpload.bind(this);
     }
-
     async componentDidMount() {
         try {
-            const { data } = await API.getPhotos(localStorage.getItem('user_id'));
+            const { data } = await API.getPhotos();
             if (data.profileImg.length > 0)
                 this.setState({profileImg: data.profileImg}, () => {
                     this.updateImages();
@@ -45,7 +44,6 @@ class AddPhotos extends React.Component {
             console.log(error);
         }
     }
-
     // Warnings for errors during upload or file
     setWarnings = (data) => this.setState({warnings: data});
     // Load preview tab for loadPreview Component
@@ -76,7 +74,7 @@ class AddPhotos extends React.Component {
                         </Grid.Column>
                     </Grid>
                     <DividerC vertically={false}/>
-                    <Grid verticalAlign='middle' columns={2} doubling textAlign="center">
+                    <Grid columns={2} doubling textAlign="center">
                         <Grid.Column>
                             <Image className="ShadowImage"
                                    src={this.state.coverImage}
@@ -84,18 +82,20 @@ class AddPhotos extends React.Component {
                                    centered
                                    rounded bordered />
                         </Grid.Column>
-                        <Grid.Column>
+                        <Grid.Column centered>
+                            <Grid.Row centered>
                             <FileUpload
                                 handleSaveFinished={this.handleSaveFinished}
                                 savePhotos={this.state.savePhotos}
                                 showPreview={this.showPreview}
                                 setWarnings={this.setWarnings}
                                 handleImageUpload={this.handleImageUpload} />
-                            <Container fluid textAlign="center">
-                                <div className="loginWarnings">
-                                    <Warnings data={this.state.warnings}/>
-                                </div>
-                            </Container>
+                            </Grid.Row>
+                                <Container fluid textAlign="center">
+                                    <div className="loginWarnings WarningsUpload">
+                                        <Warnings data={this.state.warnings}/>
+                                    </div>
+                                </Container>
                             <ProfileImgPreview  data={this.state.profileImg}/>
                         </Grid.Column>
                     </Grid>
@@ -104,6 +104,7 @@ class AddPhotos extends React.Component {
                             imgNb={this.state.ImgUploadingNb}
                         />
                         <Grid>
+                            <Divider hidden />
                         <Grid.Row centered>
                             <Icon className="EditProfilArrow"
                                   name='arrow alternate circle left outline'

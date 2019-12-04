@@ -17,7 +17,7 @@ class Interests extends React.Component {
                 <Label.Group size='huge'>
                     {interests.map((data, i) => {
                         return (
-                                <Label>{data}</Label>
+                            <Label><strong>#</strong>{data}</Label>
                         )
                     })}
                 </Label.Group>

@@ -56,16 +56,21 @@
   margin-top: -30px;
 }
 .loginWarnings {
+  text-align: left;
   display: flex;
   flex-direction: column;
   span {
+    font-family: "Roboto", sans-serif;
+
+    font-size: 1.2em;
     background-color: rgba(255, 255, 255, 0.2);
-    margin: 4px;
+    margin: 5px;
     border-radius: 10px;
-    padding: 10px;
+    padding: 12px;
     font-weight: 500;
     font-family: "Open Sans", sans-serif;
     color: white;
+    box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.1);
   }
 }
 
