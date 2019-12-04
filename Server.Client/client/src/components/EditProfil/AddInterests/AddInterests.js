@@ -16,7 +16,8 @@ const DEFAULT_STATE = {
     results: [],
 };
 
-let RESULTS;
+
+let DATA = [];
 
 const ProgressBar = () => (
     <Progress
@@ -28,6 +29,7 @@ const ProgressBar = () => (
 );
 
 class AddInterests extends Component {
+
     constructor(props){
         super(props);
         this.state = DEFAULT_STATE;
@@ -36,30 +38,26 @@ class AddInterests extends Component {
     async componentDidMount() {
         try {
             const { data } = await API.getInterests();
-            if (data.results.length > 0){
-                DEFAULT_STATE.results = data.results;
-                this.setState({results: data.results});
-            }
+            DATA = data.results;
+            console.log(DATA);
         } catch (error) {
             console.log(error);
         }
     }
 
-    handleResultSelect = (e, { result }) => this.setState({ value: result.title })
+    handleResultSelect = (e, { result }) => this.setState({ value: result.title.trim() })
 
     handleSearchChange = (e, { value }) => {
         this.setState({ isLoading: true, value});
 
         setTimeout(async () => {
-            console.log(this.state.results);
             if (this.state.value.length < 1) return this.setState(DEFAULT_STATE);
-
             const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
             const isMatch = (result) => re.test(result.title)
 
             this.setState({
                 isLoading: false,
-                results: _.filter(this.data, isMatch),
+                results: _.filter(DATA, isMatch),
             })
         }, 300)
     };

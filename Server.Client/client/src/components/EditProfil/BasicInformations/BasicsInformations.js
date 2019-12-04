@@ -47,7 +47,11 @@ class BasicsInformations extends React.Component {
         this.state = {...DEFAULT_STATE};
     }
 
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleKeyDown, false);
+    }
     async componentDidMount() {
+        document.addEventListener("keydown", this.handleKeyDown, false);
         try {
             const {data} = await API.getEditProfilValues();
             if (data && data.warnings === true)
@@ -77,9 +81,14 @@ class BasicsInformations extends React.Component {
         this.setState({ [id]: value });
     };
 
+    handleKeyDown = (event) => {
+        if (event.key == 'ArrowRight'){
+            this.handleSave();
+        }
+    }
     render() {
         return (
-            <div className="container-fluid">
+            <div className="container-fluid" onKeyDown={this.handleKeyDown}>
                 <div className={classnames("ui middle", "BasicInformations")}>
                     <Grid columns={2} doubling>
                         <Grid.Column>

@@ -183,7 +183,7 @@ async function addInterests(req, res) {
     if (userID === null)
         return (res.status(500));
     // GET INTEREST
-    const interest = req.body.interest;
+    const interest = req.body.interest.trim();
     try {
         // INTEREST ALREADY EXIST?
         let id_interest = null;
@@ -222,6 +222,7 @@ async function addInterests(req, res) {
             warnings: ["Your interest " + req.body.interest + " was successfully added to your profile."]
         });
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             warnings: ["Catch error"]
         });
