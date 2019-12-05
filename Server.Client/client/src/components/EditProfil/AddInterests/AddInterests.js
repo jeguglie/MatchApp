@@ -16,15 +16,6 @@ const DEFAULT_STATE = {
 // Store data results BDD of interest here
 let DATA = [];
 
-const ProgressBar = () => (
-    <Progress
-        percent={70}
-        className="ProgressBarProfile"
-        indicating
-        progress
-        size="large"/>
-);
-
 class AddInterests extends Component {
 
     constructor(props){
@@ -32,11 +23,26 @@ class AddInterests extends Component {
         this.state = DEFAULT_STATE;
     }
 
+    componentWillUnmount() {
+        const CLEAR_STATE = {
+            interests: [],
+            clear: false,
+            isLoading: false,
+            value: '',
+            warnings: [],
+            results: []
+        }
+        this.setState({...CLEAR_STATE});
+    }
+
     async componentDidMount() {
         try {
             const { data } = await API.getInterests();
             DATA = data.results;
-            console.log(DATA);
+            const user_interests = await API.getUserInterests();
+            console.log(user_interests);
+            DEFAULT_STATE.interests = user_interests.data.interests;
+            this.setState({interests: user_interests.data.interests})
         } catch (error) {
             console.log(error);
         }
@@ -75,9 +81,13 @@ class AddInterests extends Component {
             if (warnings.length < 1) {
                 try {
                     const {data} = await API.addInterests(new_interest);
-                    if (data.success) {
+                    if (data.success === true) {
                        interests.push(new_interest);
                        this.setState({interests: interests, warnings: data.warnings, value: ''});
+                    }
+                    else {
+                        console.log(data.warnings);
+                        this.setState({warnings: data.warnings});
                     }
                 } catch (error) {
                     console.log(error);
@@ -89,7 +99,15 @@ class AddInterests extends Component {
     };
 
     render() {
-        const {isLoading, value, warnings, successAdd, results} = this.state;
+        const ProgressBar = () => (
+            <Progress
+                percent={this.props.complete}
+                className="ProgressBarProfile"
+                indicating
+                progress
+                size="large"/>
+        );
+        const {isLoading, value, warnings, results} = this.state;
         return(
             <div className="container-fluid centered">
                 <div className={classnames("ui middle", "AddInterests")}>

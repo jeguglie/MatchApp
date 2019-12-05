@@ -267,7 +267,7 @@ const DEFAULT_STATE = {
     email: "",
     birthday: "",
     save: false,
-    complete : 0,
+    complete_basics : 0,
     loading: false,
     w_lastname: false,
     w_firstname: false,
@@ -277,19 +277,12 @@ const DEFAULT_STATE = {
     w_bio: false,
 };
 
-const ProgressBar = () => (
-    <Progress
-        percent={70}
-        className="ProgressBarProfile"
-        indicating
-        progress
-        size="large"/>
-);
 class BasicsInformations extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {...DEFAULT_STATE};
+        // Set key for countries
         this.countries = countries.map((item, index) => ({key: index, text: item.value, value: item.value }));
     }
 
@@ -301,7 +294,7 @@ class BasicsInformations extends React.Component {
         try {
             const {data} = await API.getEditProfilValues();
             if (data.findProfil)
-                this.setState({...data.findProfil});
+                this.setState({...data.findProfil}, () => this.props.increaseComplete(data.findProfil.complete_basics));
         } catch (error) {
             console.error(error);
         }
@@ -343,16 +336,18 @@ class BasicsInformations extends React.Component {
         }
         if(errors !== true) {
             try {
-                const data = await API.updateEditProfilValues(this.state);
-                if (!data.save)
-                    throw new Error("Error API");
+                const { data } = await API.updateEditProfilValues(this.state);
+                if (!data.save) {
+                    this.setState({warnings: data.warnings});
+                }
                 if (data.save)
-                    this.setState({save: true, loading: false});
+                    this.setState({save: true, loading: false, complete: data.complete}, () => {
+                        this.props.nextSection();
+                    });
             }
              catch (error) {
                 console.error(error);
             }
-            this.props.nextSection();
         };
     }
 
@@ -363,6 +358,14 @@ class BasicsInformations extends React.Component {
 
     render() {
         const {w_firstname, w_lastname, w_gender, w_interested, w_country, w_bio} = this.state;
+        const ProgressBar = () => (
+            <Progress
+                percent={this.props.complete}
+                className="ProgressBarProfile"
+                indicating
+                progress
+                size="large"/>
+        );
         return (
             <div className="container-fluid">
                 <div className={classnames("ui middle", "BasicInformations")}>

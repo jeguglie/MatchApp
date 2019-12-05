@@ -9,7 +9,8 @@ const DEFAULT_SATE = {
     section1: true,
     section2: false,
     section3: false,
-    bool: false
+    bool: false,
+    complete: 0,
 };
 
 class EditProfil extends React.Component {
@@ -18,52 +19,54 @@ class EditProfil extends React.Component {
         this.state = {...DEFAULT_SATE};
     }
 
-    componentDidMount() {
-    }
-
-    handleNext = () => {
-        this.setState({section: this.state.section + 1, bool: true});
-    };
-
-    handleSection3 = () => {
-        this.setState({section2: false, section1: false, section3: true});
-    };
-    handleSection2 = () => {
-        this.setState({section2: true, section1: false, section3: false});
-    };
-    handleSection1 = () => {
-        this.setState({section2: false, section1: true, section3: false});
-    };
-
-
+    handleNext = () => this.setState({section: this.state.section + 1, bool: true});
+    handleSection3 = () => this.setState({section2: false, section1: false, section3: true});
+    handleSection2 = () => this.setState({section2: true, section1: false, section3: false});
+    handleSection1 = () => this.setState({section2: false, section1: true, section3: false});
     handlePrev = () => this.setState({section: this.state.section - 1});
+    handleIncreaseComplete = (complete) => {this.setState({complete: this.state.complete + complete})};
     render(){
         if (this.state.section === 1) {
             if (this.state.section1 === false)
                 this.handleSection1();
             return (
-                <CSSTransition in={this.state.section1} timeout={500} classNames="BasicsInformationsAnimate">
-                    <BasicsInformations nextSection={this.handleNext}/>
-                </CSSTransition>
+               // // <CSSTransition
+               //      in={this.state.section1}
+               //          timeout={500}
+               //      classNames="BasicsInformationsAnimate">
+                    <BasicsInformations
+                        nextSection={this.handleNext}
+                        complete={this.state.complete}
+                        increaseComplete={this.handleIncreaseComplete}/>
+              //  </CSSTransition>
             );
         }
         else if (this.state.section === 2) {
             if (this.state.section2 === false)
                 this.handleSection2();
             return (
-                <CSSTransition in={this.state.section2} timeout={500} classNames="AddPhotosAnimate">
+               // // <CSSTransition in={this.state.section2}
+               //                 timeout={500}
+               //                 classNames="AddPhotosAnimate">
                     <AddPhotos prevSection={this.handlePrev}
-                               nextSection={this.handleNext}/>
-                </CSSTransition>
+                               nextSection={this.handleNext}
+                               complete={this.state.complete}
+                               increaseComplete={this.handleIncreaseComplete}/>
+                // </CSSTransition>
             );
         }
         else if (this.state.section === 3) {
             if (this.state.section3 === false)
                 this.handleSection3();
             return (
-                <CSSTransition in={this.state.section3} timeout={500} classNames="AddInterestsAnimate">
-                    <AddInterests prevSection={this.handlePrev}/>
-                </CSSTransition>
+               // // <CSSTransition in={this.state.section3}
+               //                 timeout={500}
+               //                 classNames="AddInterestsAnimate">
+                    <AddInterests
+                        prevSection={this.handlePrev}
+                        complete={this.state.complete}
+                        increaseComplete={this.handleIncreaseComplete}/>
+              //  </CSSTransition>
             );
         }
 

@@ -22,16 +22,19 @@
   background: #4f384f;
   border-radius: 15px !important;
   border: 2px solid white;
+  transition: all 500ms ease-out;
 }
 
 .progress {
   color: white !important;
   border-radius: 15px !important;
+  transition : all 3s ease-in-out;
 }
 
 .ui.progress {
   background: white !important;
   border-radius: 15px !important;
+  transition : all 3s ease-in-out;
 }
 
 .ui.form .field>label {

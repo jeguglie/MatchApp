@@ -15,16 +15,6 @@ const DEFAULT_STATE = {
     warnings: [],
 };
 
-const ProgressBar = () => (
-    <Progress
-        percent={70}
-        className="ProgressBarProfile"
-        indicating
-        progress
-        size="large"/>
-);
-
-
 
 class AddPhotos extends React.Component {
     constructor(props) {
@@ -62,6 +52,14 @@ class AddPhotos extends React.Component {
         }
     };
     render() {
+        const ProgressBar = () => (
+            <Progress
+                percent={this.props.complete}
+                className="ProgressBarProfile"
+                indicating
+                progress
+                size="large"/>
+        );
         return (
             <div className="container-fluid">
                 <div className={classnames("ui middle", "AddPhotos")}>

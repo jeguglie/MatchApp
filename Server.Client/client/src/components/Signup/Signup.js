@@ -50,7 +50,7 @@ class Signup extends React.Component {
             API.signup(lastName, firstName, email, username, password, cpassword)
                 .then(res => {
                     if (res.status === 200) {
-                        // this.props.history.push('/');
+                        this.props.history.push('/');
                     } else {
                         const error = new Error(res.error);
                         throw error;

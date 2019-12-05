@@ -79,6 +79,26 @@ export default {
                 headers: headers
             }
         );
-    }
+    },
+    getUserInterests: () => {
+        return axios.post(
+            `${burl}/getUserInterests`,
+            {},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
+    getUserComplete: () => {
+        return axios.post(
+            `${burl}/getUserComplete`,
+            {},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
 
 };
