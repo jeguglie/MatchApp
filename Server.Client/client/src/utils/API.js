@@ -17,10 +17,10 @@ export default {
             }
         );
     },
-    signup: function(lastName, firstName, email, username, password, cpassword) {
+    signup: function(lastname, firstname, email, username, password, cpassword) {
         return axios.post(
             `${ burl}/signup`,
-            {lastName, firstName, email, username, password, cpassword},
+            {lastname, firstname, email, username, password, cpassword},
             {
                 headers: headers
             }
@@ -50,7 +50,7 @@ export default {
             }
         );
     },
-    getPhotos: function(user_id) {
+    getPhotos: function() {
         return axios.post(
             `${burl}/getPhotos`,
             {},
@@ -89,16 +89,5 @@ export default {
                 headers: headers
             }
         )
-    },
-    getUserComplete: () => {
-        return axios.post(
-            `${burl}/getUserComplete`,
-            {},
-            {
-                withCredentials: 'true',
-                headers: headers
-            }
-        )
-    },
-
+    }
 };

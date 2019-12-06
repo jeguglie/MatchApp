@@ -1,7 +1,29 @@
-const { mapKeys } = require('lodash');
 const jwt = require("jsonwebtoken");
 const passwordHash = require("password-hash");
 const {Pool} = require('pg');
+
+// Validate mail
+function validateEmail(email)
+{
+    let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+// Validate password
+function validatePassword(password) {
+    let re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    return re.test(password);
+}
+// Validate username
+function validateUsername(username) {
+    let re = /^(?=.{4,15}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
+    return re.test(username)
+}
+// Validate First Name and Last Name
+function validateFirstName(name) {
+    let re = /^(?=.{1,20}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
+    return re.test(name);
+}
+
 const pool = new Pool({
     user: 'jeguglie',
     host: 'localhost',
@@ -272,56 +294,76 @@ async function getUserId(email){
 }
 
 async function signup(req, res) {
-    const { lastName, firstName, password, email, username, cpassword } = req.body;
-    const warnings = [];
-
-    // Check validity
-    if (!email || !password || !cpassword)
-        warnings.push("Invalid request");
-    if (cpassword !== password)
-        warnings.push("Passwords does not match");
-    if (lastName.length > 13 || firstName.length > 13)
-        warnings.push("Your last name or first name is too long. Max length of 13.");
-    if (warnings.length > 0)
-        return res.status(200).json({
-            warnings: warnings
-        });
+    const { lastname, firstname, password, email, username, cpassword } = req.body;
+    let errors = false;
+    const warnings = {
+        w_lastname: '',
+        w_firstname: '',
+        w_email: '',
+        w_username: '',
+        w_password: '',
+        w_cpassword: '',
+        warnings: [],
+    };
+    // Check Validity
+    if (!validateEmail(email))
+       warnings.w_email = "Please enter a valid email.";
+    if (!validatePassword(password))
+        warnings.w_password = "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters.";
+    if (cpassword.localeCompare(password) !== 0)
+        warnings.w_cpassword = "Password does not match.";
+    if (!validateUsername(username))
+        warnings.w_username = "Please use a valid username.";
+    if (!validateFirstName(firstname))
+        warnings.w_firstname = "Please use a valid first name.";
+    if (!validateFirstName(lastname))
+        warnings.w_lastname = "Please use a valid last name.";
+    // Check if warning is set
+    if (Object.values(warnings).map((data) => {
+        if (data.length > 0)
+            return res.status(409).json({
+                warnings: warnings
+            })
+    }))
     try {
         // Check if user exist
         let text = 'SELECT email, username FROM users WHERE email = $1 OR username = $2';
         let values = [email, username];
-        const warnings = [];
         let response = await pool.query(text, values);
         if (response.rows.length > 0 && response.rows[0].email === email)
-            warnings.push('Email already exist');
+            warnings.w_email = 'Email already exist';
         if (response.rows.length > 0 && response.rows[0].username === username)
-            warnings.push('Username already exist');
-        if (warnings.length > 0)
-            return res.status(500).json({
+            warnings.w_username = 'Username already exist';
+        // Check if warning is set
+        if (Object.values(warnings).map((data) => {
+            if (data.length > 0)
+                errors = true;
+        }))
+        if (errors === true)
+            return res.status(409).json({
                 warnings: warnings
-            });
+            })
         // Create User
         text = 'INSERT INTO users(email, username, password) VALUES($1, $2, $3)';
         values = [email, username, passwordHash.generate(password)];
         await pool.query(text, values);
-
         // Get user_id
         const userID = await getUserId(email);
-
         // Create Profil
         text = 'INSERT INTO profile(user_id, lastName, firstName) VALUES($1, $2, $3)';
-        values = [userID, lastName, firstName];
+        values = [userID, lastname, firstname];
         await pool.query(text, values);
-
         // Insert Complete
         text = 'INSERT INTO user_complete(complete_basics, user_id) VALUES($1, $2)';
         values = [10, userID];
         await pool.query(text, values);
-        return res.status(200);
+        return res.status(200).json({});
 
     } catch (error) {
+        warnings.warnings.push("Catch error");
+        console.log(error);
         return res.status(500).json({
-            warnings: ['Catch error']
+            warnings: warnings
         });
     }
 }
