@@ -2,9 +2,10 @@ import _ from 'lodash';
 import React, {Component} from 'react';
 import API from "../../../utils/API";
 import classnames from "classnames";
-import {Grid, Progress, Icon, Divider, Search} from "semantic-ui-react";
+import {Grid, Progress, Icon, Divider, Search, Dimmer, Loader} from "semantic-ui-react";
 import Interests from "./Interests/Interests";
 import Warnings from '../../../components/Warnings/Warnings';
+import VALIDATE from "../../../utils/validation";
 const DEFAULT_STATE = {
     interests: [],
     clear: false,
@@ -12,6 +13,7 @@ const DEFAULT_STATE = {
     value: '',
     warnings: [],
     results: [],
+    loading: false,
 };
 // Store data results BDD of interest here
 let DATA = [];
@@ -33,19 +35,22 @@ class AddInterests extends Component {
             results: []
         }
         this.setState({...CLEAR_STATE});
+        DATA = [];
     }
 
     async componentDidMount() {
-        try {
-            const { data } = await API.getInterests();
-            DATA = data.results;
-            const user_interests = await API.getUserInterests();
-            console.log(user_interests);
-            DEFAULT_STATE.interests = user_interests.data.interests;
-            this.setState({interests: user_interests.data.interests})
-        } catch (error) {
-            console.log(error);
-        }
+        this.setState({loading: true, interests: []});
+        await VALIDATE.sleepLoader(400).then(async () => {
+            try {
+                const {data} = await API.getInterests();
+                const user_interests = await API.getUserInterests();
+                DATA = data.results;
+                DEFAULT_STATE.interests = user_interests.data.interests;
+                this.setState({interests: user_interests.data.interests})
+            } catch (error) {
+            }
+        });
+        this.setState({loading: false});
     }
 
     handleResultSelect = (e, { result }) => this.setState({ value: result.title.trim() })
@@ -85,10 +90,8 @@ class AddInterests extends Component {
                        interests.push(new_interest);
                        this.setState({interests: interests, warnings: data.warnings, value: ''});
                     }
-                    else {
-                        console.log(data.warnings);
+                    else
                         this.setState({warnings: data.warnings});
-                    }
                 } catch (error) {
                     console.log(error);
                 }
@@ -111,6 +114,9 @@ class AddInterests extends Component {
         return(
             <div className="container-fluid centered">
                 <div className={classnames("ui middle", "AddInterests")}>
+                    <Dimmer active={this.state.loading}>
+                        <Loader size='massive'>Get interests...</Loader>
+                    </Dimmer>
                     <Grid columns={2} doubling>
                         <Grid.Column>
                             <h1 className="CompleteTitle">Add interests</h1>

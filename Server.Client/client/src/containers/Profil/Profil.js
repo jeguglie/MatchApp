@@ -5,7 +5,7 @@ class Profil extends React.Component {
 
     render() {
         return (
-                <div className="Profil">
+                <div>
                     <EditProfil />
                 </div>
         )

@@ -65,6 +65,7 @@ app.post('/getPhotos', withAuth, addphotos.getPhotos);
 app.post('/addInterests', withAuth, account.addInterests);
 app.post('/getInterests', withAuth, account.getInterests);
 app.post('/getUserInterests', withAuth, account.getUserInterests);
+app.post('/getComplete', withAuth, account.getComplete);
 
 
 const port = 3000;

@@ -13,6 +13,7 @@ export default {
                 password
             },
             {
+                withCredentials: 'true',
                 headers: headers
             }
         );
@@ -83,6 +84,16 @@ export default {
     getUserInterests: () => {
         return axios.post(
             `${burl}/getUserInterests`,
+            {},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
+    getComplete: () => {
+        return axios.post(
+            `${burl}/getComplete`,
             {},
             {
                 withCredentials: 'true',

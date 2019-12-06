@@ -1,6 +1,7 @@
 import React from 'react';
-import {Form, TextArea, Grid, Progress, Icon, Select} from 'semantic-ui-react';
+import {Form, TextArea, Grid, Progress, Icon, Select, Loader, Dimmer, Placeholder} from 'semantic-ui-react';
 import API from "../../../utils/API";
+import VALIDATE from "../../../utils/validation";
 import classnames from 'classnames';
 import DividerC from "../../Divider/Divider";
 import Warnings from "../../Warnings/Warnings";
@@ -267,14 +268,23 @@ const DEFAULT_STATE = {
     email: "",
     birthday: "",
     save: false,
-    complete_basics : 0,
     loading: false,
-    w_lastname: false,
-    w_firstname: false,
-    w_gender: false,
-    w_interested: false,
-    w_country: false,
-    w_bio: false,
+    complete: 0,
+    w_lastname: '',
+    w_firstname: '',
+    w_gender: '',
+    w_interested: '',
+    w_country: '',
+    w_bio: '',
+};
+
+const DEFAULT_ERRORS = {
+    w_lastname: '',
+    w_firstname: '',
+    w_gender: '',
+    w_interested: '',
+    w_country: '',
+    w_bio: '',
 };
 
 class BasicsInformations extends React.Component {
@@ -282,85 +292,90 @@ class BasicsInformations extends React.Component {
     constructor(props) {
         super(props);
         this.state = {...DEFAULT_STATE};
+        this.state.complete = this.props.complete;
         // Set key for countries
         this.countries = countries.map((item, index) => ({key: index, text: item.value, value: item.value }));
+        // Set default errors
+        this.warnings = {...DEFAULT_ERRORS};
     }
 
     componentWillUnmount() {
-        this.setState({save: false, loading: false})
+        this.setState({save: false, loading: false});
+        this._mounted = false;
     }
+
+    componentWillReceiveProps(props) {
+        this.setState({complete: props.complete});
+    }
+
 
     async componentDidMount() {
-        try {
-            const {data} = await API.getEditProfilValues();
-            if (data.findProfil)
-                this.setState({...data.findProfil}, () => this.props.increaseComplete(data.findProfil.complete_basics));
-        } catch (error) {
-            console.error(error);
+        this.setState({loading: true});
+        this.setState({complete: this.props.complete});
+        this._mounted = true;
+            await API.getEditProfilValues()
+                .then((response) => {
+                        if (typeof response.data.findProfil !== 'undefined')
+                            this.setState({...response.data.findProfil});
+                    }
+                )
+                .catch((error) => {
+                    if (typeof error.response !== 'undefined'
+                        && typeof error.response.data !== 'undefined' && typeof error.response.data.warnings !== 'undefined')
+                        if(this._mounted === true)
+                            this.setState({...error.response.data.warnings});
+                })
+            this.setState({loading: false});
         }
-    }
-    handleSave = async(props) => {
-        // Init errors
-        let errors = false;
-        // Check Country
-        const country = this.countries;
-        let find = false;
-        country.map((data) => {
-            if (data.value === this.state.country)
-                find = true;
-        });
-        if (!find)
-            this.state.w_country = "Please select a valid country"
-        // Check Name and Last Name
-        const regex = new RegExp("[^A-Za-z]");
-        if (regex.test(this.state.lastname)){
-           this.setState({w_lastname : "Only characters are allowed for your lastname. Must contain between 3 and 13 characters."});
-            errors = true;
-        }
-        if (regex.test(this.state.firstname)) {
-            this.setState({w_firstname: "Only characters are allowed for your first name. Must contain between 3 and 13 characters."});
-            errors = true;
-        }
-        // Check Gender and Interested by
-        if (this.state.interested !== "male" && this.state.interested !== "female"){
-            this.setState({w_interested : "Please select a valid interest option"});
-            errors = true;
-        }
-        if (this.state.gender !== "male" && this.state.gender !== "female"){
-            this.setState({w_gender : "Please select a valid gender option"});
-            errors = true;
-        }
-        if (this.state.bio && this.state.bio.length > 90) {
-            this.setState({w_bio: "Your bio is too long, please use 90 maximum characters. You have " + this.state.bio.length});
-            errors = true;
-        }
-        if(errors !== true) {
-            try {
-                const { data } = await API.updateEditProfilValues(this.state);
-                if (!data.save) {
-                    this.setState({warnings: data.warnings});
-                }
-                if (data.save)
-                    this.setState({save: true, loading: false, complete: data.complete}, () => {
-                        this.props.nextSection();
-                    });
-            }
-             catch (error) {
-                console.error(error);
-            }
-        };
-    }
 
+    handleSave = async() => {
+        this.warnings = {...DEFAULT_ERRORS};
+        // Check country
+        let detectCountry = false;
+        this.countries.map((data) => {
+            if (data.value === this.state.country)
+                return detectCountry = true;
+        });
+        if (!detectCountry)
+            this.warnings.w_country = "Please select a valid country";
+        if (!VALIDATE.validateFirstName(this.state.lastname))
+            this.warnings.w_lastname = "Only characters are allowed for your lastname. Must contain between 3 and 13 characters";
+        if (!VALIDATE.validateFirstName(this.state.firstname))
+            this.warnings.w_firstname = "Only characters are allowed for your first name. Must contain between 3 and 13 characters";
+        if (this.state.interested !== "male" && this.state.interested !== "female")
+            this.warnings.w_interested = "Please select a valid interest option";
+        if (this.state.gender !== "male" && this.state.gender !== "female")
+            this.warnings.w_gender = "Please select a valid gender option";
+        if (this.state.bio && this.state.bio.length > 90)
+            this.warnings.w_bio = "Your bio is too long, please use 90 maximum characters. You have " + this.state.bio.length;
+        if (VALIDATE.checkWarnings(this.warnings)) {
+            await API.updateEditProfilValues(this.state)
+                .then(() => {
+                    if (this._mounted === true) {
+                        this.setState({loading: false}, () => {
+                            this.props.nextSection();
+                        });
+                    }
+                })
+                .catch(error => {
+                    if (typeof error.response !== 'undefined'
+                        && typeof error.response.data !== 'undefined' && typeof error.response.data.warnings !== 'undefined')
+                        if (this._mounted === true)
+                            this.setState({...error.response.data.warnings});
+                });
+        }
+        else
+            this.setState({...this.warnings});
+    };
     handleChange = (e, { value, id }) => {
         // Unset warnings if change
         this.setState({ [id]: value, ["w_" + id]: ''});
     };
-
     render() {
-        const {w_firstname, w_lastname, w_gender, w_interested, w_country, w_bio} = this.state;
+        const {w_firstname, w_lastname, w_gender, w_interested, w_country, w_bio, complete} = this.state;
         const ProgressBar = () => (
             <Progress
-                percent={this.props.complete}
+                percent={complete}
                 className="ProgressBarProfile"
                 indicating
                 progress
@@ -369,6 +384,9 @@ class BasicsInformations extends React.Component {
         return (
             <div className="container-fluid">
                 <div className={classnames("ui middle", "BasicInformations")}>
+                    <Dimmer active={this.state.loading}>
+                        <Loader size='massive'>Get profile...</Loader>
+                    </Dimmer>
                     <Grid columns={2} doubling>
                         <Grid.Column>
                             <h1 className="CompleteTitle">Complete Basics Informations</h1>
@@ -377,8 +395,8 @@ class BasicsInformations extends React.Component {
                             <ProgressBar />
                         </Grid.Column>
                     </Grid>
-                    <Grid textAlign="left">
-                        <Grid.Row textAlign="center">
+                    <Grid textAlign="center">
+                        <Grid.Row centered textAlign="center">
                             <div className="loginWarnings">
                                 <Warnings data={this.state.warnings} />
                             </div>
@@ -389,23 +407,23 @@ class BasicsInformations extends React.Component {
                             <Form className="formEdit">
                                 <Form.Group widths='equal'>
                                     <Form.Input
-                                                error={w_lastname.length > 0 ? w_lastname : null}
-                                                fluid
-                                                label='Last Name'
-                                                color="white"
-                                                id="lastname"
-                                                value={this.state.lastname}
-                                                onChange={this.handleChange}
-                                                placeholder="Last Name"
+                                        error={w_lastname.length > 0 ? w_lastname : null}
+                                        fluid
+                                        label='Last Name'
+                                        color="white"
+                                        id="lastname"
+                                        value={this.state.lastname}
+                                        onChange={this.handleChange}
+                                        placeholder="Last Name"
                                     />
                                     <Form.Input
-                                                error={w_firstname.length > 0 ? w_firstname : null}
-                                                fluid
-                                                label='First Name'
-                                                id="firstname"
-                                                value={this.state.firstname}
-                                                onChange={this.handleChange}
-                                                placeholder="First Name"
+                                        error={w_firstname.length > 0 ? w_firstname : null}
+                                        fluid
+                                        label='First Name'
+                                        id="firstname"
+                                        value={this.state.firstname}
+                                        onChange={this.handleChange}
+                                        placeholder="First Name"
                                     />
                                 </Form.Group>
                                 <Form.Group widths='equal' className="DropdownBasic">
@@ -458,7 +476,7 @@ class BasicsInformations extends React.Component {
                                     control={TextArea}
                                     id="bio"
                                     placeholder="Bio"
-                                    value={this.state.bio}
+                                    value={this.state.bio != null && this.state.bio.length ? this.state.bio : ''}
                                     onChange={this.handleChange}
                                 />
                             </Form>

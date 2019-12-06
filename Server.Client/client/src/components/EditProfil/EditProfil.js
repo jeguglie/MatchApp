@@ -1,8 +1,8 @@
 import React from 'react';
 import BasicsInformations from "./BasicInformations/BasicsInformations";
 import AddPhotos from "./AddPhotos/AddPhotos";
+import API from "../../utils/API";
 import AddInterests from "./AddInterests/AddInterests";
-import {CSSTransition} from 'react-transition-group';
 
 const DEFAULT_SATE = {
     section: 1,
@@ -24,49 +24,53 @@ class EditProfil extends React.Component {
     handleSection2 = () => this.setState({section2: true, section1: false, section3: false});
     handleSection1 = () => this.setState({section2: false, section1: true, section3: false});
     handlePrev = () => this.setState({section: this.state.section - 1});
-    handleIncreaseComplete = (complete) => {this.setState({complete: this.state.complete + complete})};
+
+    async componentDidMount() {
+        this._mounted = true;
+        this.getComplete();
+    }
+
+    componentWillUnmount() {
+        this._mounted = false;
+    }
+
+    getComplete = async() => {
+        await API.getComplete()
+            .then ((response) => {
+                    if (this._mounted)
+                        this.setState({complete: response.data.complete});
+                })
+            .catch((error) => {
+                console.log(error);
+            })
+    };
+
     render(){
         if (this.state.section === 1) {
             if (this.state.section1 === false)
                 this.handleSection1();
             return (
-               // // <CSSTransition
-               //      in={this.state.section1}
-               //          timeout={500}
-               //      classNames="BasicsInformationsAnimate">
                     <BasicsInformations
                         nextSection={this.handleNext}
-                        complete={this.state.complete}
-                        increaseComplete={this.handleIncreaseComplete}/>
-              //  </CSSTransition>
+                        complete={this.state.complete} />
             );
         }
         else if (this.state.section === 2) {
             if (this.state.section2 === false)
                 this.handleSection2();
             return (
-               // // <CSSTransition in={this.state.section2}
-               //                 timeout={500}
-               //                 classNames="AddPhotosAnimate">
                     <AddPhotos prevSection={this.handlePrev}
                                nextSection={this.handleNext}
-                               complete={this.state.complete}
-                               increaseComplete={this.handleIncreaseComplete}/>
-                // </CSSTransition>
+                               complete={this.state.complete} />
             );
         }
         else if (this.state.section === 3) {
             if (this.state.section3 === false)
                 this.handleSection3();
             return (
-               // // <CSSTransition in={this.state.section3}
-               //                 timeout={500}
-               //                 classNames="AddInterestsAnimate">
                     <AddInterests
                         prevSection={this.handlePrev}
-                        complete={this.state.complete}
-                        increaseComplete={this.handleIncreaseComplete}/>
-              //  </CSSTransition>
+                        complete={this.state.complete} />
             );
         }
 

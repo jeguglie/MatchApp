@@ -1,7 +1,7 @@
 import React from "react";
 import API from "../../utils/API";
 import VALIDATE from "../../utils/validation";
-import {Button, Container, Form, Image, Grid, Divider, Dimmer, Segment, Loader} from "semantic-ui-react";
+import {Button, Container, Form, Image, Grid, Divider, Dimmer,Loader} from "semantic-ui-react";
 import Warnings from "../Warnings/Warnings";
 import DividerC from "./../../components/Divider/Divider";
 
@@ -49,7 +49,6 @@ class Signup extends React.Component {
 
     send = async() => {
         const {lastname, firstname, email, username, password, cpassword} = this.state;
-        let errors = false;
         this.warnings = {...DEFAULT_ERRORS};
         if (!VALIDATE.validateEmail(email))
             this.warnings.w_email = "Please enter a valid email.";
@@ -64,26 +63,20 @@ class Signup extends React.Component {
         if (!VALIDATE.validateFirstName(lastname))
             this.warnings.w_lastname = "Please use a valid last name.";
         // Check if warning is set
-        if (Object.values(this.warnings).map((data) => {
-            if (data.length > 0) {
-                errors = true;
-                this.setState({...this.warnings});
-            }
-        }))
-        // Stop function if errors is true
-        if (errors === false){
+        if (VALIDATE.checkWarnings(this.warnings)){
             this.setState({loading: true});
-            await VALIDATE.sleepLoader(600).then(async () => {
-                await API.signup(lastname, firstname, email, username, password, cpassword)
-                    .then(() => {
-                        this.props.history.push('/login');
-                    })
-                    .catch(error => {
-                        if (typeof error.response.data.warnings !== 'undefined')
-                            if(this._mounted === true)
-                                this.setState({...error.response.data.warnings});
-                    });
-            })
+            await VALIDATE.sleepLoader(1200)
+                .then(async () => {
+                    await API.signup(lastname, firstname, email, username, password, cpassword)
+                        .then(() => {
+                            this.props.history.push('/login');
+                        })
+                        .catch(error => {
+                            if (typeof error.response.data !== 'undefined' && typeof error.response.data.warnings !== 'undefined')
+                                    if(this._mounted === true)
+                                        this.setState({...error.response.data.warnings});
+                            });
+                })
             this.setState({loading: false});
         }
         else

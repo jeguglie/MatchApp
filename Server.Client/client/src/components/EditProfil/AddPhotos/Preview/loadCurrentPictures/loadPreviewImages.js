@@ -1,7 +1,6 @@
 import React from 'react';
 import LoadImages from "./loadImages/loadImages";
 import {Container, Divider, Grid} from "semantic-ui-react";
-import DividerC from "../../../../Divider/Divider";
 
 const LoadPreviewImages = (props) => {
     if (props.data.length > 0) {

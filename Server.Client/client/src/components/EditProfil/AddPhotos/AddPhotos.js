@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, Progress, Image, Divider, Icon, Container} from 'semantic-ui-react';
+import {Grid, Progress, Image, Divider, Icon, Container, Dimmer, Loader} from 'semantic-ui-react';
 import classnames from 'classnames';
 import DividerC from "../../Divider/Divider";
 import FileUpload from "../../fileUpload/fileUpload";
@@ -7,12 +7,14 @@ import Warnings from '../../../components/Warnings/Warnings';
 import UploadPreview from '../../../components/EditProfil/AddPhotos/Preview/loadPreview/loadPreview';
 import ProfileImgPreview from '../../../components/EditProfil/AddPhotos/Preview/loadCurrentPictures/loadPreviewImages';
 import API from "../../../utils/API";
+import VALIDATE from "../../../utils/validation";
 
 const DEFAULT_STATE = {
     profileImg: [],
     coverImage: "",
     previewTab: [],
     warnings: [],
+    loading: false,
 };
 
 
@@ -24,16 +26,24 @@ class AddPhotos extends React.Component {
         this.handleImageUpload = this.handleImageUpload.bind(this);
     }
     async componentDidMount() {
-        try {
-            const { data } = await API.getPhotos();
-            if (data.profileImg.length > 0)
-                this.setState({profileImg: data.profileImg}, () => {
-                    this.updateImages();
-                });
-        } catch(error){
-            console.log(error);
-        }
+        this.setState({loading: true});
+        await VALIDATE.sleepLoader(400).then(async()=>{
+            try {
+                const { data } = await API.getPhotos();
+                if (data.profileImg.length > 0)
+                    this.setState({profileImg: data.profileImg}, () => {
+                        this.updateImages();
+                    });
+            } catch(error){
+            }
+        })
+        this.setState({loading: false});
     }
+
+    componentWillUnmount() {
+        this.setState({...DEFAULT_STATE});
+    }
+
     // Warnings for errors during upload or file
     setWarnings = (data) => this.setState({warnings: data});
     // Load preview tab for loadPreview Component
@@ -63,6 +73,9 @@ class AddPhotos extends React.Component {
         return (
             <div className="container-fluid">
                 <div className={classnames("ui middle", "AddPhotos")}>
+                    <Dimmer active={this.state.loading}>
+                        <Loader size='massive'>Get photos...</Loader>
+                    </Dimmer>
                     <Grid columns={2} doubling>
                         <Grid.Column>
                             <h1 className="CompleteTitle">Add photos</h1>
@@ -80,7 +93,7 @@ class AddPhotos extends React.Component {
                                    centered
                                    rounded bordered />
                         </Grid.Column>
-                        <Grid.Column centered>
+                        <Grid.Column>
                             <Grid.Row centered>
                             <FileUpload
                                 handleSaveFinished={this.handleSaveFinished}

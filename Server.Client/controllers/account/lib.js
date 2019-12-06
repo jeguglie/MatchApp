@@ -2,23 +2,18 @@ const jwt = require("jsonwebtoken");
 const passwordHash = require("password-hash");
 const {Pool} = require('pg');
 
-// Validate mail
-function validateEmail(email)
-{
+function validateEmail(email) {
     let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
 }
-// Validate password
 function validatePassword(password) {
     let re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
     return re.test(password);
 }
-// Validate username
 function validateUsername(username) {
     let re = /^(?=.{4,15}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
     return re.test(username)
 }
-// Validate First Name and Last Name
 function validateFirstName(name) {
     let re = /^(?=.{1,20}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
     return re.test(name);
@@ -361,7 +356,6 @@ async function signup(req, res) {
 
     } catch (error) {
         warnings.warnings.push("Catch error");
-        console.log(error);
         return res.status(500).json({
             warnings: warnings
         });
@@ -371,7 +365,7 @@ async function signup(req, res) {
 async function login(req, res) {
     const { password, email } = req.body;
     if (!email || !password) {
-        return res.status(400).json({
+        return res.status(401).json({
             warnings: "Invalid request"
         });
     }
@@ -380,28 +374,27 @@ async function login(req, res) {
         const values = [email];
         const response = await pool.query(text, values);
         if (!response.rows || response.rows.length < 1) {
-            return res.status(200).json({
-                warnings: ["User doesn't exist"]
+            return res.status(401).json({
+                w_email: "Wrong email or password"
             });
         }
         if (!passwordHash.verify(password, response.rows[0].password))
-            return res.status(500).json({
-                warnings: ['Wrong username or password']
+            return res.status(401).json({
+                w_email: "Wrong email or password"
             });
         else {
             const secret = 'mysecretsshhh';
-            // Issue token
             const payload = { email };
             const token = jwt.sign(payload, secret, {
                 expiresIn: '1h',
             });
-            res.cookie('token', token, { httpOnly: true, path: '/', domain: 'localhost' }).sendStatus(200);
+            res.cookie('token', token, { httpOnly: true, path: '/', domain: 'localhost' })
+            return res.status(200).json({connect: true});
         }
     }
     catch (error) {
-        console.log(error);
         return res.status(500).json({
-            warnings: ['Catch error server']
+            warnings: ['An error occured with server']
         });
     }
 }
@@ -409,71 +402,73 @@ async function login(req, res) {
 async function getEditProfilValues(req, res) {
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return res.status(500).json({warnings: ["Not Found"]});
-    let text = 'SELECT * FROM profile JOIN user_complete ON profile.user_id = user_complete.user_id WHERE profile.user_id = $1';
+        return res.status(500).json({
+            warnings: ["User ID not found, please logout and login."]
+        });
+    // Get Profile and User complete values
+    let text = 'SELECT * FROM profile WHERE user_id = $1';
     let values = [userID];
     try {
         const response = await pool.query(text, values);
         if (response.rows.length < 1)
-            return res.status(500).json({ warnings: ["Not Found"]});
-        else
-            return res.status(200).json({ findProfil: response.rows[0]})
+            return res.status(500).json({ warnings: ["Profile not found, please logout and login"]});
+        else {
+            response.rows[0].email = res.locals.email;
+            return res.status(200).json({ findProfil: response.rows[0] })
+        }
     } catch (e) {
         return res.status(500).json({
-            warnings: ["Error during getEditProfilValues"]
+            warnings: ["Error during query"]
         });
     }
 }
 
 async function updateEditProfilValues(req, res) {
     const userID = await getUserId(res.locals.email);
-    if (userID === null) return (res.status(500));
-    try {
-        let total = 0;
-        let valid = false;
-        let find = false;
-        const {lastname, firstname, interested, country, gender, bio} = req.body.state;
+    if (userID === null)
+        return (res.status(500).json({
+            warnings: ["User not found. Please logout and login."]
+        }));
+    const {lastname, firstname, interested, country, gender, bio} = req.body.state;
 
-        // Get Complete of user
-        let text = 'SELECT complete from users WHERE user_id = $1'
-        let values = [userID]
-        let response = await pool.query(text, values);
-        total = response.rows[0].complete;
-        // Check Input
-        if ((lastname.length > 2 && lastname.length < 14)
-            && (firstname.length > 2 && firstname.length < 14)
-            && (interested === "male" || interested === "female")
-            && (gender === "male" || gender === "female")) {
-                total = total + 20;
+    // Check DATA -------------------------------------------------------
+    let valid = false;
+    let find = false;
+    let total = 25;
+    if (!validateFirstName(lastname) || !validateFirstName(lastname) ||
+        ((interested !== "male" && interested !== "female")) || ((gender !== "male" || gender !== "female")))
                 valid = true;
-        }
-        else
-            throw new Error;
-        // Check Bio length
-        if ((bio.length >= 3 && bio.length <= 90)) total = total + 5;
-        // Check Country
-        countries.map((data) => {if (data.value === country) find = true});
-        if (!find || !valid)
-            return (res.status(200)).json({
-                warnings: ["Error during the save of your profile"]
-            })
-        else
-            total = total + 5;
-        text = 'UPDATE profile SET lastname = $1, firstname = $2, interested = $3, country = $4, gender = $5, bio = $6 WHERE user_id = $7; UPDATE users SET complete = $8 WHERE user_id = $7';
-        values = [lastname, firstname, interested, country, gender, bio, userID, total]
+    countries.map((data) => {
+        if (data.value === country)
+            return find = true
+    });
+    if (((typeof bio !== 'undefined' && bio.length < 3 && bio.length > 90)))
+        valid = false;
+    if (!find || !valid)
+        return (res.status(409)).json({
+            warnings: ["Wrong input was sent. Please send valid data."]
+        });
+    try {
+        // Save DATA -------------------------------------------------------
+        let text = 'UPDATE profile SET lastname = $1, firstname = $2, interested = $3, country = $4, gender = $5, bio = $6 WHERE user_id = $7';
+        let values = [lastname, firstname, interested, country, gender, bio, userID]
         await pool.query(text, values);
+
+        // Set Complete
+        if (typeof bio !== 'undefined' && bio.length > 0)
+            total += 5;
         text = 'UPDATE users SET complete = $1 WHERE user_id = $2';
         values = [total, userID];
         await pool.query(text, values);
+
+        // Send complete for increase bar and save true for switch to next component
         return res.status(200).json({
-            complete: total,
-            save: true
+            complete: total
         });
        } catch (error) {
-        console.log(error);
             return res.status(500).json({
-            warnings: ["Error during the save of your profile"]
-        });
+                warnings: ["Error during the save of your profile"]
+            });
     }
 }
 
@@ -576,8 +571,27 @@ async function getUserInterests(req, res){
         else
             return res.status(500);
     } catch (error) {
-        console.log(error);
         return res.status(500);
+    }
+}
+
+async function getComplete(req, res){
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return (res.status(500));
+    try {
+        let text = 'SELECT * FROM user_complete WHERE user_id = $1';
+        let values = [userID];
+        let response = await pool.query(text, values);
+        if (response.rows && response.rows[0]){
+            return res.status(200).json({
+                complete: response.rows[0].complete_basics + response.rows[0].complete_photos + response.rows[0].complete_interets,
+            });
+        }
+        else
+            return res.status(500).json({});
+    } catch (error) {
+        return res.status(500).json({});
     }
 }
 
@@ -588,3 +602,4 @@ exports.updateEditProfilValues = updateEditProfilValues;
 exports.addInterests = addInterests;
 exports.getInterests = getInterests;
 exports.getUserInterests = getUserInterests;
+exports.getComplete = getComplete;
