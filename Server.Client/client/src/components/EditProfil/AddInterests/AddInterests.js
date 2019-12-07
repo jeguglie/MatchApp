@@ -33,22 +33,26 @@ class AddInterests extends Component {
             value: '',
             warnings: [],
             results: []
-        }
+        };
         this.setState({...CLEAR_STATE});
         DATA = [];
     }
 
     async componentDidMount() {
         this.setState({loading: true, interests: []});
+        this.props.getcomplete();
         await VALIDATE.sleepLoader(400).then(async () => {
-            try {
-                const {data} = await API.getInterests();
-                const user_interests = await API.getUserInterests();
-                DATA = data.results;
-                DEFAULT_STATE.interests = user_interests.data.interests;
-                this.setState({interests: user_interests.data.interests})
-            } catch (error) {
-            }
+            await API.getInterests()
+                  .then(response => {
+                      DATA = response.data.results;
+                  }).catch(error => console.log(error.response));
+            await API.getUserInterests()
+                .then(response => {
+                    if (response.data.interests !== false){
+                        DEFAULT_STATE.interests = response.data.interests;
+                        this.setState({interests: response.data.interests})
+                    }
+                }).catch(error => console.log(error.response));
         });
         this.setState({loading: false});
     }
@@ -65,7 +69,7 @@ class AddInterests extends Component {
 
             this.setState({
                 isLoading: false,
-                results: _.filter(DATA, isMatch),
+                results: _.filter(DATA, isMatch).slice(0,3),
             })
         }, 300)
     };
@@ -102,6 +106,7 @@ class AddInterests extends Component {
     };
 
     render() {
+        const {isLoading, value, warnings, results} = this.state;
         const ProgressBar = () => (
             <Progress
                 percent={this.props.complete}
@@ -110,7 +115,17 @@ class AddInterests extends Component {
                 progress
                 size="large"/>
         );
-        const {isLoading, value, warnings, results} = this.state;
+        const Warnings = () => {
+            if (warnings && warnings.length > 0)
+                return (
+                    <Grid.Row centered textAlign="center">
+                        <div className="loginWarnings">
+                            <Warnings data={warnings} />
+                        </div>
+                    </Grid.Row>
+                )
+            else return null
+        }
         return(
             <div className="container-fluid centered">
                 <div className={classnames("ui middle", "AddInterests")}>
@@ -125,19 +140,18 @@ class AddInterests extends Component {
                             <ProgressBar />
                         </Grid.Column>
                     </Grid>
-                    <Grid  verticalAlign={"middle"}>
+                    <Grid verticalAlign={"middle"}>
+                       <Warnings/>
                         <Grid.Row centered>
-                            <div className="loginWarnings">
-                                <Warnings data={warnings}/>
-                            </div>
+                            <Interests interests={this.state.interests} />
                         </Grid.Row>
-                        <Grid.Row centered>
-                            <Interests
-                                interests={this.state.interests}
-                            />
-                        </Grid.Row>
+                    </Grid>
+                    <Divider hidden />
+                    <Grid verticalAlign={"middle"} className="TellOthersBox">
+                        <Divider hidden />
                         <Grid.Row centered>
                             <h1 className="InterestsTitle">Tell others what do you like</h1>
+                            <p className="TextInfoInterests">Choose an existing interest and increase your chances of match!</p>
                         </Grid.Row>
                         <Grid.Row centered>
                             <Search
@@ -146,14 +160,12 @@ class AddInterests extends Component {
                                 size="huge"
                                 loading={isLoading}
                                 onResultSelect={this.handleResultSelect}
-                                onSearchChange={_.debounce(this.handleSearchChange, 500, {
-                                    leading: true,
-                                })}
+                                onSearchChange={_.debounce(this.handleSearchChange, 500, {leading: true,})}
                                 results={results}
                                 value={value}
-                                {...this.props}
-                            />
+                                showNoResults={false}/>
                         </Grid.Row>
+                        <Divider hidden />
                     </Grid>
                     <Divider hidden />
                     <Divider hidden />
@@ -163,11 +175,11 @@ class AddInterests extends Component {
                             <Icon className="EditProfilArrow"
                                   name='arrow alternate circle left outline'
                                   size="huge"
-                                  onClick={this.props.prevSection}/>
+                                  onClick={this.props.prevsection}/>
                             <Icon className="EditProfilArrow"
                                   name='arrow alternate circle right outline'
                                   size="huge"
-                                  onClick={this.props.nextSection}/>
+                                  onClick={this.props.nextsection}/>
                         </Grid.Row>
                     </Grid>
                 </div>

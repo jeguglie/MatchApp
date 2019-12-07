@@ -1,7 +1,7 @@
 export default {
     validateEmail: function(email)
     {
-        let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let re = /^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
     },
     validatePassword: function(password) {
@@ -21,11 +21,12 @@ export default {
     },
     checkWarnings: function(warnings) {
         let valid = true;
-        if (Object.values(warnings).map((data) => {
-            if (data.length > 0) {
+        if (Object.entries(warnings).forEach(([key, value]) => {
+            if (value.length > 0) {
                 return valid = false;
             }
         }))
+            console.log(valid);
         return valid;
     }
 }

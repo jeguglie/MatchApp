@@ -27,16 +27,16 @@ class AddPhotos extends React.Component {
     }
     async componentDidMount() {
         this.setState({loading: true});
+        this.props.getcomplete();
         await VALIDATE.sleepLoader(400).then(async()=>{
-            try {
-                const { data } = await API.getPhotos();
-                if (data.profileImg.length > 0)
-                    this.setState({profileImg: data.profileImg}, () => {
-                        this.updateImages();
-                    });
-            } catch(error){
-            }
-        })
+            await API.getPhotos()
+                .then(response => {
+                    if (response.data.profileImg.length > 0)
+                        this.setState({profileImg: response.data.profileImg}, () => {
+                            this.updateImages();
+                        });
+                })
+        });
         this.setState({loading: false});
     }
 
@@ -110,21 +110,18 @@ class AddPhotos extends React.Component {
                             <ProfileImgPreview  data={this.state.profileImg}/>
                         </Grid.Column>
                     </Grid>
-                        <UploadPreview
-                            data={this.state.previewTab}
-                            imgNb={this.state.ImgUploadingNb}
-                        />
+                        <UploadPreview data={this.state.previewTab} />
                         <Grid>
                             <Divider hidden />
                         <Grid.Row centered>
                             <Icon className="EditProfilArrow"
                                   name='arrow alternate circle left outline'
                                   size="huge"
-                                  onClick={this.props.prevSection}/>
+                                  onClick={this.props.prevsection}/>
                             <Icon className="EditProfilArrow"
                                   name='arrow alternate circle right outline'
                                   size="huge"
-                                  onClick={this.props.nextSection}/>
+                                  onClick={this.props.nextsection}/>
                         </Grid.Row>
                     </Grid>
                 </div>

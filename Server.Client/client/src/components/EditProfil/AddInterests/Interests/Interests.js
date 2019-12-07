@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, Label} from 'semantic-ui-react';
+import {Label, Divider} from 'semantic-ui-react';
 const DEFAULT_STATE =  {
   interests: [],
 };
@@ -17,9 +17,10 @@ class Interests extends React.Component {
                 <Label.Group size='huge'>
                     {interests.map((data, i) => {
                         return (
-                            <Label><strong>#</strong>{data}</Label>
+                            <Label key={i}><strong>#</strong>{data}</Label>
                         )
                     })}
+                    <Divider />
                 </Label.Group>
             </div>
         )

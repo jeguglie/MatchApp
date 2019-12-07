@@ -100,5 +100,14 @@ export default {
                 headers: headers
             }
         )
+    },
+    withAuth: () => {
+        return axios.get(
+            `${burl}/checkToken`,
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
     }
 };

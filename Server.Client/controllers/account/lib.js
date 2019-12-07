@@ -442,7 +442,7 @@ async function updateEditProfilValues(req, res) {
         if (data.value === country)
             return find = true
     });
-    if (((typeof bio !== 'undefined' && bio.length < 3 && bio.length > 90)))
+    if ((typeof bio !== 'undefined' && bio) && (bio.length < 3 && bio.length > 90))
         valid = false;
     if (!find || !valid)
         return (res.status(409)).json({
@@ -455,13 +455,13 @@ async function updateEditProfilValues(req, res) {
         await pool.query(text, values);
 
         // Set Complete
-        if (typeof bio !== 'undefined' && bio.length > 0)
+        if (typeof bio !== 'undefined' && bio && bio.length > 0)
             total += 5;
-        text = 'UPDATE users SET complete = $1 WHERE user_id = $2';
+        text = 'UPDATE user_complete SET complete_basics = $1 WHERE user_id = $2';
         values = [total, userID];
         await pool.query(text, values);
 
-        // Send complete for increase bar and save true for switch to next component
+        // Send complete for increase bar
         return res.status(200).json({
             complete: total
         });
@@ -540,11 +540,15 @@ async function getInterests(req, res){
         let response = await pool.query(text);
         if (response.rows && response.rows.length > 1) {
             const transformed = response.rows.map(({ interest}) => ({ "title": interest}));
+            console.log(1);
             return res.status(200).json({
                 results: transformed,
             });
         }
-        else return res.status(500);
+        else
+            return res.status(500).json({
+                warnings: ["Error server"]
+            });
     } catch(error) {
         return res.status(500).json({
             warnings: ["Catch error"]
@@ -557,9 +561,11 @@ async function getUserInterests(req, res){
     if (userID === null)
         return (res.status(500));
     try {
+        console.log(2);
         let text = 'SELECT interest FROM interests INNER JOIN user_interests ON interests.id = user_interests.interest_id WHERE user_id = $1';
         let values = [userID];
         let response = await pool.query(text, values);
+        console.log(2);
         if (response.rows && response.rows.length > 0) {
             const finalArray = response.rows.map(function (obj) {
                 return obj.interest;
@@ -569,7 +575,9 @@ async function getUserInterests(req, res){
             });
         }
         else
-            return res.status(500);
+            return res.status(200).json({
+                interests: false
+            });
     } catch (error) {
         return res.status(500);
     }

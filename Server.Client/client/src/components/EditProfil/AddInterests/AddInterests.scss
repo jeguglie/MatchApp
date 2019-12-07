@@ -1,7 +1,7 @@
 .AddInterests {
+  width: 750px;
   padding: 5em;
-  margin-left: 5em;
-  margin-right: 5em;
+  margin: auto;
   background-color: #f93874;
   border-radius: 20px !important;
   position: relative;
@@ -14,27 +14,17 @@
   text-shadow: 5px 2px 10px rgba(0,0,0,0.3);
 }
 
-.AddInterestsAnimate-enter {
-  opacity: 0;
-  right: -750px;
-  position: relative;
+.TellOthersBox {
+  border-radius: 20px;
+  border: 2px dashed rgba(255, 255, 255, 0.41);
+  background-color: #d03368;
 }
-.AddInterestsAnimate-enter-active {
-  opacity: 1;
-  right: 0px;
-  position: relative;
-  transition: all ease-in-out 0.2s;
-}
-.AddInterestsAnimate-exit {
-  opacity: 1;
-  right: 0px;
-  position: relative;
-}
-.AddInterestsAnimate-exit-active {
-  opacity: 0;
-  right: -750px;
-  position: relative;
-  transition: all ease-in 0.2s;
+
+.TextInfoInterests {
+  color: white;
+  padding-left: 4rem;
+  padding-right: 4rem;
+  font-weight: bold;
 }
 
 .dropdown-active  {
@@ -57,7 +47,7 @@
 }
 @media only screen and (min-width: 1500px) {
   .AddInterests {
-    width: 900px !important;
+    width: 700px !important;
     margin: auto;
 
   }

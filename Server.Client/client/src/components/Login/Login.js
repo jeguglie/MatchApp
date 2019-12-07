@@ -3,7 +3,7 @@ import Warnings from "../Warnings/Warnings";
 import Divider from "../../components/Divider/Divider";
 import VALIDATE from "../../utils/validation";
 import API from "../../utils/API";
-import {Input, Container, Image, Form, Button, Dimmer, Loader} from 'semantic-ui-react';
+import { Container, Image, Form, Button, Dimmer, Loader} from 'semantic-ui-react';
 
 const DEFAULT_STATE = {
     email: "",
@@ -25,34 +25,47 @@ class Login extends React.Component {
         super(props);
         this.state = {...DEFAULT_STATE};
         this.warnings = {...DEFAULT_ERRORS}
+        this._mounted = false;
     };
 
+    componentWillUnmount() {
+        this._mounted = false;
+    }
+
+    componentDidMount() {
+        this._mounted = true;
+    }
+
     send = async() => {
-        // Clear warnings
-        this.warnings = {...DEFAULT_ERRORS};
-        const {email, password} = this.state;
-        // Check Validity
-        this.setState({loading: true});
-        await VALIDATE.sleepLoader(300)
-            .then(async () => {
-                if (!VALIDATE.validateEmail(email))
-                    this.warnings.w_email = "Please enter a valid email";
-                if (!VALIDATE.validatePassword(password))
-                    this.warnings.w_password = "Please enter a valid password";
-                if (VALIDATE.checkWarnings(this.warnings)) {
-                    await API.login(email, password)
-                        .then((response) => {
-                            if (typeof response.data !== 'undefined' && typeof response.data.connect !== 'undefined')
-                                this.props.history.push('/');
-                        })
-                        .catch(error => {
-                            if (typeof error.response.data !== 'undefined' && typeof error.response.data !== 'undefined')
-                                this.setState({w_email: error.response.data.w_email});
-                        });
-                } else
-                    this.setState({...this.warnings});
-            });
-        this.setState({loading: false});
+            // Clear warnings
+            this.warnings = {...DEFAULT_ERRORS};
+            const {email, password} = this.state;
+            // Check Validity
+            if (this._mounted)
+                this.setState({loading: true});
+            await VALIDATE.sleepLoader(300)
+                .then(async () => {
+                    if (!VALIDATE.validateEmail(email))
+                        this.warnings.w_email = "Please enter a valid email";
+                    if (!VALIDATE.validatePassword(password))
+                        this.warnings.w_password = "Please enter a valid password";
+                    if (VALIDATE.checkWarnings(this.warnings)) {
+                        await API.login(email, password)
+                            .then((response) => {
+                                if (typeof response.data !== 'undefined' && typeof response.data.connect !== 'undefined')
+                                    this.props.history.push('/');
+                            })
+                            .catch(error => {
+                                if (typeof error.response.data !== 'undefined' && typeof error.response.data !== 'undefined') {
+                                    if (this._mounted)
+                                        this.setState({w_email: error.response.data.w_email});
+                                }
+                            });
+                    } else if (this._mounted)
+                        this.setState({...this.warnings});
+                });
+            if (this._mounted)
+                this.setState({loading: false});
     };
 
     handleChange = (event) => {
@@ -66,7 +79,6 @@ class Login extends React.Component {
 
 
     render() {
-        console.log(this.state);
         const {loading, w_email, w_password} = this.state;
         return (
             <Container className="loginModal">

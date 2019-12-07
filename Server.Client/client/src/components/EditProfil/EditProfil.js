@@ -51,17 +51,19 @@ class EditProfil extends React.Component {
                 this.handleSection1();
             return (
                     <BasicsInformations
-                        nextSection={this.handleNext}
-                        complete={this.state.complete} />
+                        nextsection={this.handleNext}
+                        complete={this.state.complete}
+                        getcomplete={this.getComplete}/>
             );
         }
         else if (this.state.section === 2) {
             if (this.state.section2 === false)
                 this.handleSection2();
             return (
-                    <AddPhotos prevSection={this.handlePrev}
-                               nextSection={this.handleNext}
-                               complete={this.state.complete} />
+                    <AddPhotos prevsection={this.handlePrev}
+                               nextsection={this.handleNext}
+                               complete={this.state.complete}
+                               getcomplete={this.getComplete}/>
             );
         }
         else if (this.state.section === 3) {
@@ -69,8 +71,9 @@ class EditProfil extends React.Component {
                 this.handleSection3();
             return (
                     <AddInterests
-                        prevSection={this.handlePrev}
-                        complete={this.state.complete} />
+                        prevsection={this.handlePrev}
+                        complete={this.state.complete}
+                        getcomplete={this.getComplete}/>
             );
         }
 

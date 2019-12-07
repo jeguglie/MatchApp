@@ -64,7 +64,8 @@ class Signup extends React.Component {
             this.warnings.w_lastname = "Please use a valid last name.";
         // Check if warning is set
         if (VALIDATE.checkWarnings(this.warnings)){
-            this.setState({loading: true});
+            if(this._mounted)
+                this.setState({loading: true});
             await VALIDATE.sleepLoader(1200)
                 .then(async () => {
                     await API.signup(lastname, firstname, email, username, password, cpassword)
@@ -73,13 +74,14 @@ class Signup extends React.Component {
                         })
                         .catch(error => {
                             if (typeof error.response.data !== 'undefined' && typeof error.response.data.warnings !== 'undefined')
-                                    if(this._mounted === true)
+                                    if(this._mounted)
                                         this.setState({...error.response.data.warnings});
                             });
                 })
-            this.setState({loading: false});
+            if (this._mounted)
+                this.setState({loading: false});
         }
-        else
+        else if (this._mounted)
             this.setState({...this.warnings});
     };
 

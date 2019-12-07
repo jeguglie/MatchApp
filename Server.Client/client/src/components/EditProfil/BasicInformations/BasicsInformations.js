@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, TextArea, Grid, Progress, Icon, Select, Loader, Dimmer, Placeholder} from 'semantic-ui-react';
+import {Form, TextArea, Grid, Progress, Icon, Select, Loader, Dimmer} from 'semantic-ui-react';
 import API from "../../../utils/API";
 import VALIDATE from "../../../utils/validation";
 import classnames from 'classnames';
@@ -304,21 +304,24 @@ class BasicsInformations extends React.Component {
         this._mounted = false;
     }
 
-    componentWillReceiveProps(props) {
-        this.setState({complete: props.complete});
+    static getDerivedStateFromProps(nextProps, prevState){
+        if(nextProps.complete !== prevState.complete)
+            return { complete: nextProps.complete}
+        else return null;
     }
 
 
     async componentDidMount() {
+        this._mounted = true;
         this.setState({loading: true});
         this.setState({complete: this.props.complete});
-        this._mounted = true;
+            this.props.getcomplete();
             await API.getEditProfilValues()
                 .then((response) => {
                         if (typeof response.data.findProfil !== 'undefined')
-                            this.setState({...response.data.findProfil});
-                    }
-                )
+                            if (this._mounted === true)
+                                this.setState({...response.data.findProfil});
+                    })
                 .catch((error) => {
                     if (typeof error.response !== 'undefined'
                         && typeof error.response.data !== 'undefined' && typeof error.response.data.warnings !== 'undefined')
@@ -329,48 +332,49 @@ class BasicsInformations extends React.Component {
         }
 
     handleSave = async() => {
-        this.warnings = {...DEFAULT_ERRORS};
-        // Check country
-        let detectCountry = false;
-        this.countries.map((data) => {
-            if (data.value === this.state.country)
-                return detectCountry = true;
-        });
-        if (!detectCountry)
-            this.warnings.w_country = "Please select a valid country";
-        if (!VALIDATE.validateFirstName(this.state.lastname))
-            this.warnings.w_lastname = "Only characters are allowed for your lastname. Must contain between 3 and 13 characters";
-        if (!VALIDATE.validateFirstName(this.state.firstname))
-            this.warnings.w_firstname = "Only characters are allowed for your first name. Must contain between 3 and 13 characters";
-        if (this.state.interested !== "male" && this.state.interested !== "female")
-            this.warnings.w_interested = "Please select a valid interest option";
-        if (this.state.gender !== "male" && this.state.gender !== "female")
-            this.warnings.w_gender = "Please select a valid gender option";
-        if (this.state.bio && this.state.bio.length > 90)
-            this.warnings.w_bio = "Your bio is too long, please use 90 maximum characters. You have " + this.state.bio.length;
-        if (VALIDATE.checkWarnings(this.warnings)) {
-            await API.updateEditProfilValues(this.state)
-                .then(() => {
-                    if (this._mounted === true) {
+        if (this._mounted) {
+            this.warnings = {...DEFAULT_ERRORS};
+            // Check country
+            let detectCountry = false;
+            this.countries.forEach((data) => {
+                if (data.value === this.state.country) {
+                    detectCountry = true;
+                    return;
+                }
+            });
+            if (!detectCountry)
+                this.warnings.w_country = "Please select a valid country";
+            if (!VALIDATE.validateFirstName(this.state.lastname))
+                this.warnings.w_lastname = "Only characters are allowed for your lastname. Must contain between 3 and 13 characters";
+            if (!VALIDATE.validateFirstName(this.state.firstname))
+                this.warnings.w_firstname = "Only characters are allowed for your first name. Must contain between 3 and 13 characters";
+            if (this.state.interested !== "male" && this.state.interested !== "female")
+                this.warnings.w_interested = "Please select a valid interest option";
+            if (this.state.gender !== "male" && this.state.gender !== "female")
+                this.warnings.w_gender = "Please select a valid gender option";
+            if (this.state.bio && this.state.bio.length > 90)
+                this.warnings.w_bio = "Your bio is too long, please use 90 maximum characters. You have " + this.state.bio.length;
+            if (VALIDATE.checkWarnings(this.warnings) === true) {
+                await API.updateEditProfilValues(this.state)
+                    .then(() => {
                         this.setState({loading: false}, () => {
-                            this.props.nextSection();
+                            this.props.nextsection();
                         });
-                    }
-                })
-                .catch(error => {
-                    if (typeof error.response !== 'undefined'
-                        && typeof error.response.data !== 'undefined' && typeof error.response.data.warnings !== 'undefined')
-                        if (this._mounted === true)
+                    })
+                    .catch(error => {
+                        if (typeof error.response !== 'undefined'
+                            && typeof error.response.data !== 'undefined' && typeof error.response.data.warnings !== 'undefined')
                             this.setState({...error.response.data.warnings});
-                });
+                    });
+            } else
+                this.setState({...this.warnings});
         }
-        else
-            this.setState({...this.warnings});
     };
     handleChange = (e, { value, id }) => {
         // Unset warnings if change
         this.setState({ [id]: value, ["w_" + id]: ''});
     };
+
     render() {
         const {w_firstname, w_lastname, w_gender, w_interested, w_country, w_bio, complete} = this.state;
         const ProgressBar = () => (
@@ -381,6 +385,17 @@ class BasicsInformations extends React.Component {
                 progress
                 size="large"/>
         );
+        const Warnings = () => {
+            if (this.state.warnings && this.state.warnings.length > 0)
+                return (
+                    <Grid.Row centered textAlign="center">
+                        <div className="loginWarnings">
+                            <Warnings data={this.state.warnings} />
+                        </div>
+                    </Grid.Row>
+                )
+            else return null
+        }
         return (
             <div className="container-fluid">
                 <div className={classnames("ui middle", "BasicInformations")}>
@@ -396,11 +411,7 @@ class BasicsInformations extends React.Component {
                         </Grid.Column>
                     </Grid>
                     <Grid textAlign="center">
-                        <Grid.Row centered textAlign="center">
-                            <div className="loginWarnings">
-                                <Warnings data={this.state.warnings} />
-                            </div>
-                        </Grid.Row>
+                        <Warnings/>
                     </Grid>
                     <Grid columns={1} doubling>
                         <Grid.Column>
