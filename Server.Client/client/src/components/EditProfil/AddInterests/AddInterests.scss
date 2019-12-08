@@ -1,11 +1,11 @@
 .AddInterests {
-  width: 750px;
   padding: 5em;
   margin: auto;
   background-color: #f93874;
   border-radius: 20px !important;
-  position: relative;
   overflow: hidden !important;
+  position: relative !important;
+  width: 600px;
 }
 
 .InterestsTitle {
@@ -19,11 +19,11 @@
   border: 2px dashed rgba(255, 255, 255, 0.41);
   background-color: #d03368;
 }
-
+.TextInfoInterestsRow{
+  padding-top: 0 !important;
+}
 .TextInfoInterests {
   color: white;
-  padding-left: 4rem;
-  padding-right: 4rem;
   font-weight: bold;
 }
 
@@ -36,6 +36,12 @@
   .AddInterests {
     margin: 1rem;
     padding: 2.5rem;
+  }
+  .TellOthersBox {
+    border-radius: 20px;
+    border: 2px dashed rgba(255, 255, 255, 0.41);
+    background-color: #d03368;
+    padding: 1em !important;
   }
 }
 

@@ -109,5 +109,25 @@ export default {
                 headers: headers
             }
         )
+    },
+    deleteInterest: (data) => {
+        return axios.post(
+            `${burl}/deleteInterest`,
+            {data},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
+    deleteImage: (imgID) => {
+        return axios.post(
+            `${burl}/deleteImage`,
+            {imgID},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
     }
 };

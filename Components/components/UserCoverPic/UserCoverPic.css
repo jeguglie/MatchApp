@@ -57,6 +57,5 @@
     margin-top: 1em;
     margin-bottom: 2.5em;
     box-shadow: 12px 12px 15px 0px rgba(0,0,0, 0.06);
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-radius: 10px;
 }

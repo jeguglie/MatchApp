@@ -3,6 +3,9 @@ import {Grid, Image} from "semantic-ui-react";
 
 
 const LoadImages = (props) => {
+    const deleteImage = (event) => {
+        props.deleteImage(event);
+    }
     if (Array.isArray(props.data) && props.data.length > 0) {
         return props.data.map((item, key) => {
             return (
@@ -12,7 +15,7 @@ const LoadImages = (props) => {
                             src={"http://localhost:3000/" + item.img_link}
                             rounded
                             fluid
-                            label={{ as: 'a', corner: 'right', icon: 'close' }}
+                            label={{ as: 'a', corner: 'right', icon: 'close' , onClick: () => deleteImage(item.img_id, key) }}
                         />
                 </Grid.Column>
             )

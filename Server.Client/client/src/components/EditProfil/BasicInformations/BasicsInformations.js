@@ -307,15 +307,15 @@ class BasicsInformations extends React.Component {
     static getDerivedStateFromProps(nextProps, prevState){
         if(nextProps.complete !== prevState.complete)
             return { complete: nextProps.complete}
-        else return null;
+        return null;
     }
 
 
     async componentDidMount() {
         this._mounted = true;
         this.setState({loading: true});
+        await this.props.getcomplete();
         this.setState({complete: this.props.complete});
-            this.props.getcomplete();
             await API.getEditProfilValues()
                 .then((response) => {
                         if (typeof response.data.findProfil !== 'undefined')
@@ -342,6 +342,7 @@ class BasicsInformations extends React.Component {
                     return;
                 }
             });
+            // let detectCountry = this.countries.some(data => data.value === this.state.country);
             if (!detectCountry)
                 this.warnings.w_country = "Please select a valid country";
             if (!VALIDATE.validateFirstName(this.state.lastname))
@@ -380,9 +381,7 @@ class BasicsInformations extends React.Component {
         const ProgressBar = () => (
             <Progress
                 percent={complete}
-                className="ProgressBarProfile"
                 indicating
-                progress
                 size="large"/>
         );
         const Warnings = () => {

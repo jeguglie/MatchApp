@@ -1,9 +1,8 @@
 import React from 'react';
-import UserCoverPic from "../../components/UserCoverPic/UserCoverPic";
 import CardsBuilder from "../CardsBuilder/CardsBuilder";
-import ModalViewProfil from '../../components/UI/Modal/ModalViewProfil/ModalViewProfil';
-import Aux from '../../hoc/Aux';
-import BlurBackdrop from "../../components/UI/Backdrop/BlurBackdrop/BlurBackdrop";
+import Aux from '../../../Server.Client/client/src/hoc/Aux';
+import ModalViewProfil from "../../components/UI/Modal/ModalViewProfil/ModalViewProfil";
+import UserCoverPic from "../../components/UserCoverPic/UserCoverPic";
 
 class  WallUserCover extends React.Component {
 
@@ -21,6 +20,10 @@ class  WallUserCover extends React.Component {
         viewUser: null
     };
 
+    // componentDidMount() {
+    //     await API.getUsersCover.then()
+    // }
+
     closeCard = () => {
         this.setState({showCardUser: false});
         this.props.modalNotActive();
@@ -31,6 +34,7 @@ class  WallUserCover extends React.Component {
     };
     modalActive = () => this.props.modalActive;
 
+
     render() {
         let modal;
         let showCard = this.showCard;
@@ -38,8 +42,7 @@ class  WallUserCover extends React.Component {
             modal = (
                 <ModalViewProfil
                     show={this.state.showCardUser}
-                    modalClosed={this.closeCard}
-                >
+                    modalClosed={this.closeCard} >
                     <CardsBuilder renderCard={this.state.showCardUser} user={this.state.viewUser}/>
                 </ModalViewProfil>
             )
@@ -51,9 +54,7 @@ class  WallUserCover extends React.Component {
                     Object.values(this.state.user).map(function (src, index) {
                         return <UserCoverPic clicked={showCard}
                                              key={index}
-                                             src={src}
-
-                        />
+                                             src={src} />
                     })
                 }
             </Aux>

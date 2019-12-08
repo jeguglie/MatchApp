@@ -1,5 +1,5 @@
 import React from 'react';
-import './UserCoverPic.css';
+// import './UserCoverPic.css';
 import WallUserCoverBottom from "./WallUserCoverBottom/WallUserCoverBottom";
 
 function UserCoverPic (props) {

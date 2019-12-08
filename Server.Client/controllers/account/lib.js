@@ -279,10 +279,11 @@ async function getUserId(email){
     let values = [email];
     try {
         const response = await pool.query(text, values);
-        if (response.rows.length < 1) {
-            return null;
-        } else
-            return response.rows[0].user_id;
+        // if (response.rows.length < 1) {
+        //     return null;
+        // } else
+        //     return response.rows[0].user_id;
+        return response.rows.length ? response.rows[0].user_id : null;
     } catch (error) {
         return null;
     }
@@ -313,13 +314,18 @@ async function signup(req, res) {
         warnings.w_firstname = "Please use a valid first name.";
     if (!validateFirstName(lastname))
         warnings.w_lastname = "Please use a valid last name.";
+
+    if (Object.values(warnings).some(warning => warning.length))
+        return res.status(409).json({
+            warnings: warnings
+        })
     // Check if warning is set
-    if (Object.values(warnings).map((data) => {
-        if (data.length > 0)
-            return res.status(409).json({
-                warnings: warnings
-            })
-    }))
+    // if (Object.values(warnings).map((data) => {
+    //     if (data.length > 0)
+    //         return res.status(409).json({
+    //             warnings: warnings
+    //         })
+    // }))
     try {
         // Check if user exist
         let text = 'SELECT email, username FROM users WHERE email = $1 OR username = $2';
@@ -338,6 +344,7 @@ async function signup(req, res) {
             return res.status(409).json({
                 warnings: warnings
             })
+        // @TODO can be replace by some
         // Create User
         text = 'INSERT INTO users(email, username, password) VALUES($1, $2, $3)';
         values = [email, username, passwordHash.generate(password)];
@@ -352,23 +359,22 @@ async function signup(req, res) {
         text = 'INSERT INTO user_complete(complete_basics, user_id) VALUES($1, $2)';
         values = [10, userID];
         await pool.query(text, values);
+
+        // await Promise.all([ profilePromise, userCompletePromise ]);
+
         return res.status(200).json({});
 
     } catch (error) {
         warnings.warnings.push("Catch error");
-        return res.status(500).json({
-            warnings: warnings
-        });
+        return res.status(500).json({ warnings });
     }
 }
 
 async function login(req, res) {
     const { password, email } = req.body;
-    if (!email || !password) {
-        return res.status(401).json({
-            warnings: "Invalid request"
-        });
-    }
+    if (!email || !password)
+        return res.status(400).json({ warnings: "Invalid request" });
+
     try {
         const text = 'SELECT * FROM users WHERE email = $1';
         const values = [email];
@@ -476,59 +482,69 @@ async function addInterests(req, res) {
     const userID = await getUserId(res.locals.email);
     if (userID === null)
         return (res.status(500));
-    // GET INTEREST
+    // Get interest
+    const regex = new RegExp('[^A-Za-z0-9]');
     const interest = req.body.interest.trim();
+    // Check value
+    let warnings = [];
+    if (!interest  || interest .length < 2)
+        warnings.push("Your interest must contain between 2 and 20 characters");
+    if (regex.test(interest))
+        warnings.push("Your interest is not valid. Only letter and numeric value is accepted");
+    if (warnings.length > 0)
+        return res.status(401).json({
+            warnings: warnings
+        });
     try {
-        // MAXIMUM 30 INTERETS
-        let text = 'SELECT interest_id FROM user_interests WHERE user_id = $1';
+        // Check user limit
+        let text = 'SELECT * FROM user_interests WHERE user_id = $1';
         let values = [userID]
         let response = await pool.query(text, values);
-        console.log(userID);
-        if (response.rows && response.rows && response.rows.length > 30)
-            return res.status(200).json({
-                success: false,
-                warnings: ["Max interest 30"]
-            });
-        // INTEREST ALREADY EXIST?
-        let id_interest = null;
-        text = 'SELECT * FROM interests WHERE interest = $1';
-        values = [interest];
+        // If user reach 30
+        if (response.rows.length >= 30)
+            return res.status(401).json({
+                warnings: ["Limit of 30 interests per profile"]
+            })
+        // Check if already exist in user_interests database
+        text = 'SELECT interest FROM interests I INNER JOIN user_interests U ON I.id = U.interest_id WHERE U.user_id = $1 AND I.interest = $2';
+        values = [userID, interest]
         response = await pool.query(text, values);
-        // IF NOT, ADD INTEREST
-        if (response.rows && response.rows.length < 1) {
-            text = 'INSERT INTO interests(interest) VALUES ($1);';
-            values = [interest];
-            await pool.query(text, values);
-            // GET THE ID OF THIS INTEREST
-            text = 'SELECT id FROM interests WHERE interest = $1';
-            values = [interest];
-            response = await pool.query(text, values);
-            if (response.rows && response.rows.length > 0)
-                id_interest = response.rows[0].id;
-            // IF ERROR
-            else return res.status(500).json({
-                    warnings: ["Catch error get ID last interest"]
-                });
-            // THEN ADD INTO USERS_INTERESTS
-            text = 'INSERT INTO user_interests(user_id, interest_id) VALUES ($1::integer, $2::integer)';
-            values = [userID, id_interest];
-            await pool.query(text, values);
+        if (response.rows.length > 0){
+            return res.status(401).json({
+                warnings: ["You already add this interest, try with other one"]
+            })
         }
-        // IF YES, ADD DIRECTLY INTO USERS_INTERESTS
-        else if (response.rows && response.rows.length > 0) {
-            id_interest = response.rows[0].id;
-            text = 'INSERT INTO user_interests(user_id, interest_id) VALUES ($1::integer , $2::integer)';
-            values = [userID, id_interest];
+        // Check if exist in database
+       text = 'SELECT interest FROM interests WHERE interest = $1';
+       values = [interest]
+       response = await pool.query(text, values);
+       // If not exist in database, then create
+       if (response.rows.length < 1){
+           text = 'INSERT INTO interests(interest) VALUES ($1)';
+           values = [interest]
+           await pool.query(text, values);
+       }
+       // Get interest ID
+        text = 'SELECT id FROM interests WHERE interest = $1';
+        values = [interest]
+        response = await pool.query(text, values);
+        if (response.rows.length > 0) {
+            let interestID = response.rows[0].id;
+            // Insert interest in user_interests
+            text = 'INSERT INTO user_interests(user_id, interest_id) VALUES ($1, $2)';
+            values = [userID, interestID];
             await pool.query(text, values);
+            return res.status(200).json({
+                warnings: ["Your interest \""+interest+"\" was successfully added"]
+            });
         }
-        return res.status(200).json({
-            success: true,
-            warnings: ["Your interest " + req.body.interest + " was successfully added to your profile."]
+        return res.status(401).json({
+            warnings: ["Error when trying to get interest ID"]
         });
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            warnings: ["Catch error"]
+            warnings: ["Server error"]
         });
     }
 }
@@ -539,15 +555,14 @@ async function getInterests(req, res){
         let text = 'SELECT interest FROM interests';
         let response = await pool.query(text);
         if (response.rows && response.rows.length > 1) {
-            const transformed = response.rows.map(({ interest}) => ({ "title": interest}));
-            console.log(1);
+            const transformed = response.rows.map(({ interest}) => ({ "title": interest.trim()}));
             return res.status(200).json({
                 results: transformed,
             });
         }
         else
-            return res.status(500).json({
-                warnings: ["Error server"]
+            return res.status(200).json({
+                results: [],
             });
     } catch(error) {
         return res.status(500).json({
@@ -559,13 +574,13 @@ async function getInterests(req, res){
 async function getUserInterests(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return (res.status(500));
+        return (res.status(500).json({
+            warnings: ["Can't get user ID, please logout and login"]
+        }));
     try {
-        console.log(2);
         let text = 'SELECT interest FROM interests INNER JOIN user_interests ON interests.id = user_interests.interest_id WHERE user_id = $1';
         let values = [userID];
         let response = await pool.query(text, values);
-        console.log(2);
         if (response.rows && response.rows.length > 0) {
             const finalArray = response.rows.map(function (obj) {
                 return obj.interest;
@@ -576,10 +591,12 @@ async function getUserInterests(req, res){
         }
         else
             return res.status(200).json({
-                interests: false
+                interests: []
             });
     } catch (error) {
-        return res.status(500);
+        return res.status(500).json({
+            warnings: ["Catch error"]
+        });
     }
 }
 
@@ -603,6 +620,36 @@ async function getComplete(req, res){
     }
 }
 
+async function deleteInterest(req, res){
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return (res.status(500).json({
+            warnings: ["Can't get user ID, please logout and login"]
+        }));
+    try {
+        let data = req.body.data.trim();
+        let text = 'SELECT interest_id FROM interests I INNER JOIN user_interests U ON U.interest_id = I.id WHERE U.user_id = $1 AND I.interest = $2';
+        let values = [userID, data];
+        let response = await pool.query(text, values);
+        if (response.rows && response.rows[0]){
+            text = 'DELETE FROM user_interests WHERE user_id = $1 AND interest_id = $2';
+            values = [userID, response.rows[0].interest_id];
+            await pool.query(text,values);
+            return res.status(200).json({
+                warnings: ["Your interest \""+data+"\" was successfully removed"]
+            });
+        }
+        else
+            return res.status(400).json({
+                warnings: ["You are not allowed to delete this interest"]
+            });
+    } catch (error) {
+        return res.status(500).json({
+            warnings: ["Catch error"]
+        });
+    }
+}
+
 exports.login = login;
 exports.signup = signup;
 exports.getEditProfilValues = getEditProfilValues;
@@ -611,3 +658,5 @@ exports.addInterests = addInterests;
 exports.getInterests = getInterests;
 exports.getUserInterests = getUserInterests;
 exports.getComplete = getComplete;
+exports.deleteInterest = deleteInterest;
+exports.getUserId = getUserId;

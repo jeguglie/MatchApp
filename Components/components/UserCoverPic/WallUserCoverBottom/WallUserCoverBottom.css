@@ -3,6 +3,8 @@
     /*padding: 15px;*/
     border: 1px solid #e5e5e5;
     border-top: none;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 .LikeCounter {

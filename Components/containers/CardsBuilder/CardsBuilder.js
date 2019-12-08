@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import TopCard from '../../components/TopCard/TopCard';
-import './CardsBuilder.css';
-import BottomCard from '../../components/BottomCard/BottomCard';
+// import './CardsBuilder.css';
+import BottomCard from '../../../Server.Client/client/src/components/BottomCard/BottomCard';
 import InfoConnect from "../../components/UI/InfoConnect/InfoConnect";
 import Modal from '../../components/UI/Modal/Modal';
-import Hashtags from '../../components/BottomCard/Hashtags/Hashtags';
+import Hashtags from '../../../Server.Client/client/src/components/BottomCard/Hashtags/Hashtags';
 import SignalUserConfirmation from "../../components/UI/SignalUser/SignalUserConfirmation/SignalUserConfirmation";
+import TopCard from "../../components/TopCard/TopCard";
 
 class CardsBuilder extends React.Component {
     state = {

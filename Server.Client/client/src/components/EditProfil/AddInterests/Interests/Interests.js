@@ -17,7 +17,11 @@ class Interests extends React.Component {
                 <Label.Group size='huge'>
                     {interests.map((data, i) => {
                         return (
-                            <Label key={i}><strong>#</strong>{data}</Label>
+                            <Label className="interestLabel"
+                                   id={i}
+                                   key={i}
+                                   data={data}
+                                   onClick={() => this.props.deleteInterest({data, i})}><strong>#</strong>{data}</Label>
                         )
                     })}
                     <Divider />

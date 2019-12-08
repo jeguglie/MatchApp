@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import API from "../../../utils/API";
 import classnames from "classnames";
 import {Grid, Progress, Icon, Divider, Search, Dimmer, Loader} from "semantic-ui-react";
@@ -19,6 +19,7 @@ const DEFAULT_STATE = {
 let DATA = [];
 
 class AddInterests extends Component {
+    // state = DEFAULT_STATE
 
     constructor(props){
         super(props);
@@ -26,44 +27,59 @@ class AddInterests extends Component {
     }
 
     componentWillUnmount() {
+        this._mounted = false;
         const CLEAR_STATE = {
             interests: [],
             clear: false,
             isLoading: false,
             value: '',
             warnings: [],
-            results: []
+            results: [],
+            loading: false,
         };
         this.setState({...CLEAR_STATE});
         DATA = [];
     }
 
     async componentDidMount() {
-        this.setState({loading: true, interests: []});
-        this.props.getcomplete();
+        this._mounted = true;
+        // Set loader and get progress bar
+        this.setState({loading: true, interests: []}, this.props.getcomplete);
         await VALIDATE.sleepLoader(400).then(async () => {
-            await API.getInterests()
-                  .then(response => {
+            API.getInterests()
+                .then(response => {
                       DATA = response.data.results;
-                  }).catch(error => console.log(error.response));
-            await API.getUserInterests()
+                })
+                .catch(error => {
+                    if (this._mounted)
+                        this.setState({warnings: error.response.data.warnings})
+                });
+            API.getUserInterests()
                 .then(response => {
                     if (response.data.interests !== false){
                         DEFAULT_STATE.interests = response.data.interests;
-                        this.setState({interests: response.data.interests})
+                        if (this._mounted)
+                            this.setState({interests: response.data.interests})
                     }
-                }).catch(error => console.log(error.response));
+                })
+                .catch(error => {
+                    if (this._mounted)
+                        this.setState({warnings: error.response.data.warnings})
+                    // @TODO make push instead
+                });
         });
-        this.setState({loading: false});
+        if (this._mounted)
+            this.setState({loading: false});
     }
 
+    // Semantic UI Search
     handleResultSelect = (e, { result }) => this.setState({ value: result.title.trim() })
-
     handleSearchChange = (e, { value }) => {
-        this.setState({ isLoading: true, value});
+        this.setState({ isLoading: true, value });
 
         setTimeout(async () => {
-            if (this.state.value.length < 1) return this.setState(DEFAULT_STATE);
+            if (this.state.value.length < 1)
+                return this.setState(DEFAULT_STATE);
             const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
             const isMatch = (result) => re.test(result.title)
 
@@ -76,58 +92,45 @@ class AddInterests extends Component {
 
 
     handleKeyDown = async (data) => {
-      if (data.key === 'Enter') {
+        if (data.key === 'Enter') {
+            // Regex for interest
             const regex = new RegExp('[^A-Za-z0-9]');
-            const interests = this.state.interests;
-            const new_interest = data.target.value;
-            const warnings = [];
-            // Parsing check Interest
+            let new_interest = data.target.value;
+            let warnings = [];
             if (!new_interest || new_interest.length < 2)
                 warnings.push("Your interest must contain between 2 and 20 characters");
             if (regex.test(new_interest))
                 warnings.push("Your interest is not valid. Only letter and numeric value is accepted");
-            // If there is no warnings
             if (warnings.length < 1) {
-                try {
-                    const {data} = await API.addInterests(new_interest);
-                    if (data.success === true) {
-                       interests.push(new_interest);
-                       this.setState({interests: interests, warnings: data.warnings, value: ''});
-                    }
-                    else
-                        this.setState({warnings: data.warnings});
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-            else
-                this.setState({warnings: warnings});
+                await API.addInterests(new_interest)
+                    .then(response => response.status === 200 && this._mounted
+                        && this.setState(({ interests }) => ({
+                            interests: [...interests, new_interest],
+                            warnings: response.data.warnings,
+                            value: ''
+                        })))
+                    .catch((error) => this._mounted
+                        && this.setState({warnings: error.response.data.warnings}))
+            } else
+                this.setState({ warnings });
         }
     };
 
+    deleteInterest = async ({ data, i }) =>
+        this.setState(({ interests }) => ({
+            interests: interests.filter((e, index) => i !== index)
+        }), async() =>
+            API.deleteInterest(data)
+                .then(response => response.status === 200 && this._mounted
+                    && this.setState({warnings: response.data.warnings}))
+                .catch(error => this._mounted
+                    && this.setState({warnings: error.response.data.warnings})));
+
     render() {
-        const {isLoading, value, warnings, results} = this.state;
-        const ProgressBar = () => (
-            <Progress
-                percent={this.props.complete}
-                className="ProgressBarProfile"
-                indicating
-                progress
-                size="large"/>
-        );
-        const Warnings = () => {
-            if (warnings && warnings.length > 0)
-                return (
-                    <Grid.Row centered textAlign="center">
-                        <div className="loginWarnings">
-                            <Warnings data={warnings} />
-                        </div>
-                    </Grid.Row>
-                )
-            else return null
-        }
+        const {isLoading, value, results, warnings} = this.state;
+
         return(
-            <div className="container-fluid centered">
+            <div className="container-fluid">
                 <div className={classnames("ui middle", "AddInterests")}>
                     <Dimmer active={this.state.loading}>
                         <Loader size='massive'>Get interests...</Loader>
@@ -137,13 +140,22 @@ class AddInterests extends Component {
                             <h1 className="CompleteTitle">Add interests</h1>
                         </Grid.Column>
                         <Grid.Column>
-                            <ProgressBar />
+                            <Progress
+                                percent={this.props.complete}
+                                indicating
+                                size="large"/>
                         </Grid.Column>
                     </Grid>
                     <Grid verticalAlign={"middle"}>
-                       <Warnings/>
+                        <Grid.Row centered textAlign="center">
+                            <div className="loginWarnings">
+                                <Warnings data={warnings} />
+                            </div>
+                        </Grid.Row>
                         <Grid.Row centered>
-                            <Interests interests={this.state.interests} />
+                            <Interests
+                                interests={this.state.interests}
+                                deleteInterest={this.deleteInterest} />
                         </Grid.Row>
                     </Grid>
                     <Divider hidden />
@@ -151,7 +163,9 @@ class AddInterests extends Component {
                         <Divider hidden />
                         <Grid.Row centered>
                             <h1 className="InterestsTitle">Tell others what do you like</h1>
-                            <p className="TextInfoInterests">Choose an existing interest and increase your chances of match!</p>
+                        </Grid.Row>
+                        <Grid.Row centered className="TextInfoInterestsRow">
+                            <p className="TextInfoInterests">Choose an existing interest increase your chances of match!</p>
                         </Grid.Row>
                         <Grid.Row centered>
                             <Search
@@ -160,10 +174,10 @@ class AddInterests extends Component {
                                 size="huge"
                                 loading={isLoading}
                                 onResultSelect={this.handleResultSelect}
-                                onSearchChange={_.debounce(this.handleSearchChange, 500, {leading: true,})}
+                                onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
                                 results={results}
                                 value={value}
-                                showNoResults={false}/>
+                                showNoResults={false} />
                         </Grid.Row>
                         <Divider hidden />
                     </Grid>
@@ -172,14 +186,16 @@ class AddInterests extends Component {
                     <Divider hidden />
                     <Grid>
                         <Grid.Row centered>
-                            <Icon className="EditProfilArrow"
-                                  name='arrow alternate circle left outline'
-                                  size="huge"
-                                  onClick={this.props.prevsection}/>
-                            <Icon className="EditProfilArrow"
-                                  name='arrow alternate circle right outline'
-                                  size="huge"
-                                  onClick={this.props.nextsection}/>
+                            <Icon
+                                className="EditProfilArrow"
+                                name='arrow alternate circle left outline'
+                                size="huge"
+                                onClick={this.props.prevsection}/>
+                            <Icon
+                                className="EditProfilArrow"
+                                name='arrow alternate circle right outline'
+                                size="huge"
+                                onClick={this.props.nextsection}/>
                         </Grid.Row>
                     </Grid>
                 </div>

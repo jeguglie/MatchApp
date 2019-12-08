@@ -14,10 +14,7 @@ const DEFAULT_SATE = {
 };
 
 class EditProfil extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {...DEFAULT_SATE};
-    }
+    state = DEFAULT_SATE;
 
     handleNext = () => this.setState({section: this.state.section + 1, bool: true});
     handleSection3 = () => this.setState({section2: false, section1: false, section3: true});
@@ -35,6 +32,7 @@ class EditProfil extends React.Component {
     }
 
     getComplete = async() => {
+        // @TODO remove await, code can be shortest
         await API.getComplete()
             .then ((response) => {
                     if (this._mounted)

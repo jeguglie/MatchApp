@@ -1,8 +1,7 @@
 import React from 'react';
-import './WallUserCoverBottom.css';
+// import './WallUserCoverBottom.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart} from '@fortawesome/free-solid-svg-icons';
-import CircleIconGender from '../../UI/CircleIconGender/CircleIconGender';
 
 function WallUserCoverBottom (props) {
     return (
@@ -21,11 +20,7 @@ function WallUserCoverBottom (props) {
                     <span className="BottomDistance">0.7 km</span>
                 </div>
             </div>
-                <div className="SearchFor">
-                        <span className="SearchForText">Interested by</span><br />
-                        <span className="TextWoman">Woman</span>
-                        <span className="TextMan">Man</span>
-                </div>
+
         </div>
     )
 }
