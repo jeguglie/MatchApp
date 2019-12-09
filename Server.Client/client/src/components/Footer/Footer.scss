@@ -1,10 +1,10 @@
 .Footer {
    width: 100% !important;
-   height: 400px !important;
+   height: 300px !important;
    position: absolute !important;
    display: inline-block;
    bottom: 0 !important;
-   left: 0 !important;
+   //left: 0 !important;
    background: linear-gradient(360deg, #55162a, rgba(255,255,255,0)) !important;
    &.segment {
      border: none !important;

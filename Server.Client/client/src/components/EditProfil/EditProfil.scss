@@ -2,7 +2,7 @@
   padding: 5em;
   margin-left: 5em;
   margin-right: 5em;
-  background-color: #f93874;
+  background-color: #db366e;
   border-radius: 20px !important;
 }
 
@@ -15,7 +15,7 @@
 }
 
 .ui.indicating.progress[data-percent] .bar {
-  background-color: #202540 !important;
+  background: linear-gradient(-90deg, #110b1f, #192740) !important;
 }
 
 .ui.progress .bar{

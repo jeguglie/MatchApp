@@ -30,7 +30,7 @@ class AddPhotos extends React.Component {
         this._mounted = true;
         this.setState({loading: true});
         this.props.getcomplete();
-        await VALIDATE.sleepLoader(400).then(async()=>{
+        await VALIDATE.sleepLoader(200).then(async()=>{
             await API.getPhotos()
                 .then(response => {
                     if (response.data.profileImg.length > 0)
@@ -88,7 +88,7 @@ class AddPhotos extends React.Component {
         this.updateImages();
         await API.deleteImage(imgID)
             .then(response => {
-                if (response.status === 200)
+                if (response.status === 300)
                     if (this._mounted) {
                         this.setState({warnings: response.data.warnings});
                         this.removeElement(this.state.profileImg, key);
@@ -112,7 +112,7 @@ class AddPhotos extends React.Component {
                 <div className={classnames("ui middle", "AddPhotos")}>
                     <ProgressBar />
                     <Dimmer active={this.state.loading}>
-                        <Loader size='massive'>Get photos...</Loader>
+                        <Loader size='massive' />
                     </Dimmer>
                     <Grid textAlign="center">
                         <Grid.Row centered>

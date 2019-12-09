@@ -3,16 +3,13 @@ import {Input, Button, Segment, Form, TextArea, Grid, Progress, Icon, Select, Lo
 import VALIDATE from "../../../utils/validation";
 import LocationComponent from "./LocationComponent/LocationComponent";
 import SimpleMap from "./Map/Map";
+import PlacesWithStandaloneSearchBox from "./SearchBoxGoogleMap/SearchBoxGoogleMap";
 
 const DEFAULT_STATE = {
     loading: false,
     complete: 0,
-    center: {
-        lat: 59.95,
-        lng: 30.33
-    },
-    zoom: 11,
-    clicked: false,
+    innerRef: null,
+
 };
 class Location extends React.Component {
 
@@ -20,69 +17,65 @@ class Location extends React.Component {
         super(props);
         this.state = {...DEFAULT_STATE};
         this.state.complete = this.props.complete;
-        // Location ref
+        // Bin for location REF
         this.getInnerRef = this.getInnerRef.bind(this);
         this.getLocation = this.getLocation.bind(this);
     }
-    // React geolocate
-    innerRef;
-    getInnerRef = (ref) => {this.innerRef = ref;};
-    getLocation = () => {
-        this.setState({clicked: true})
-        this.innerRef && this.innerRef.getLocation();
-    };
-    setCoords = (props) => {
-        console.log(props)
-        this.setState({clicked: false, lat: props.latitude, lng: props.longitude});
-    };
 
     async componentDidMount() {
         this.setState({loading: true});
-        await VALIDATE.sleepLoader(500);
+        await VALIDATE.sleepLoader(200);
         await this.props.getcomplete();
         this.setState({complete: this.props.complete});
         this.setState({loading: false});
     }
 
+    // React geolocate
+    innerRef;
+    getInnerRef = (ref) => {
+        this.innerRef = ref;
+
+    };
+    getLocation = () => {
+        this.innerRef && this.innerRef.getLocation();
+        this.setState({innerRef: this.innerRef});
+    };
+
+
 
 
     render() {
         const { getInnerRef, getLocation } = this;
-        const {complete, center, lat, lng} = this.state;
-        const ProgressBar = () => (
-            <Progress
-                percent={complete}
-                progress
-                indicating
-                size="medium"/>
-        );
+        const {complete, loading} = this.state;
+        const {prevsection, nextsection} = this.props;
         return (
                 <div className="Location">
-                    <Dimmer active={this.state.loading}>
-                        <Loader size='massive'>Loading...</Loader>
+                    <Dimmer active={loading}>
+                        <Loader size='massive'/>
                     </Dimmer>
-                    <ProgressBar />
+                    <Progress
+                        percent={complete}
+                        progress
+                        indicating
+                        size="medium"
+                    />
                     <Grid textAlign="center">
                         <Grid.Row centered>
-                            <h1 className="CompleteTitle">Add your location</h1>
+                            <h1 className="CompleteTitle">
+                                Add your location
+                            </h1>
                         </Grid.Row>
                     </Grid>
                     <Divider hidden />
                     <Divider hidden />
                     <LocationComponent
                         ref={getInnerRef}
-                        setCoords={this.setCoords}
-                        clicked={this.state.clicked}/>
+                    />
                     <div className="shapeLastStep"></div>
                     <div className="WrapMap">
                     <Segment>
                         <div className="mapAddLocation">
-                            <SimpleMap
-                                default={center}
-                                zoom={this.state.zoom}
-                                lat={lat}
-                                lng={lng}
-                            />
+                            <SimpleMap innerRef={this.state.innerRef} />
                         </div>
                     </Segment>
                     </div>
@@ -92,24 +85,28 @@ class Location extends React.Component {
                             className="buttonLastStep"
                             size="big"
                             content='Geolocate my position' />
-                        <Divider horizontal className="DividerLastStep"><span>Or add location</span></Divider>
-                        <Input
-                            size="big"
-                            icon='search'
-                            iconPosition='left'
-                            placeholder='Search location' />
+                        <Divider
+                            horizontal
+                            className="DividerLastStep">
+                            <span>
+                                Or set custom location
+                            </span>
+                        </Divider>
+                        <PlacesWithStandaloneSearchBox />
                     </Segment>
                     <Grid>
                         <Divider hidden />
-                        <Grid.Row centered>
-                            <Icon className="EditProfilArrow"
-                                  name='arrow alternate circle left outline'
-                                  size="huge"
-                                  onClick={this.props.prevsection}/>
-                            <Icon className="EditProfilArrow"
-                                  name='arrow alternate circle right outline'
-                                  size="huge"
-                                  onClick={this.props.nextsection}/>
+                        <Grid.Row centered >
+                            <Icon
+                                className="EditProfilArrow"
+                                name='arrow alternate circle left outline'
+                                size="huge"
+                                onClick={prevsection}/>
+                            <Icon
+                                className="EditProfilArrow"
+                                name='arrow alternate circle right outline'
+                                size="huge"
+                                onClick={nextsection}/>
                         </Grid.Row>
                     </Grid>
                 </div>
@@ -118,3 +115,8 @@ class Location extends React.Component {
     }
 }
 export default Location;
+// {/*<Input*/}
+// {/*    size="big"*/}
+// {/*    icon='search'*/}
+// {/*    iconPosition='left'*/}
+// {/*    placeholder='Search location' />*/}

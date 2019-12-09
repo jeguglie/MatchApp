@@ -93,7 +93,7 @@ class NavbarMenu extends React.Component {
                         active={activeItem === '/logout'}
                         onClick={this.disconnect} >
                         <Icon name='logout' />
-                        Log out
+                        <span className="itemMenu">Log out</span>
                     </Menu.Item>
                 </div>
             )
@@ -102,10 +102,12 @@ class NavbarMenu extends React.Component {
     render(){
         const { activeItem } = this.state
         return(
-                <Menu inverted icon='labeled' stackable size={"massive"} className="Menu">
+                <Menu inverted icon='labeled' stackable size={"medium"} className="Menu">
                     {this.renderRedirect()}
+
                     <Menu.Item className="Logo">
                         <Image
+                            className="NavbarLogo"
                             src='./../../img/MatchApp-Logo.png'
                             size={"small"}/>
                     </Menu.Item>
@@ -114,15 +116,22 @@ class NavbarMenu extends React.Component {
                             name='/wall'
                             active={activeItem === '/wall'}
                             onClick={this.handleItemClick} >
-                            <Icon name='home' />
-                            Wall
+                            <Icon name='gratipay' />
+                            <span className="itemMenu">Wall</span>
+                        </Menu.Item>
+                        <Menu.Item
+                            name='/'
+                            active={activeItem === '/'}
+                            onClick={this.handleItemClick} >
+                            <Icon name='user' />
+                            <span className="itemMenu">Profile</span>
                         </Menu.Item>
                         <Menu.Item
                             name='/messages'
                             active={activeItem === '/messages'}
                             onClick={this.handleItemClick}>
                             <Icon name='conversation' />
-                            Messages
+                            <span className="itemMenu">Messages</span>
                         </Menu.Item>
                     </Menu.Menu>
                     <Menu.Item
@@ -130,7 +139,7 @@ class NavbarMenu extends React.Component {
                         active={activeItem === '/notifications'}
                         onClick={this.handleItemClick}>
                         <Icon name='bell' />
-                        Notifications
+                        <span className="itemMenu">Notifications</span>
                     </Menu.Item>
                     <Menu.Menu position='right'>
                         {this.isConnected()}

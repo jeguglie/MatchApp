@@ -1,12 +1,34 @@
+.ui.inverted.menu .item:before {
+  background: none !important;
+}
 .Menu {
-  background-color: #da3870 !important;
-  .active.item {
-    background: #691a33 !important;
+  padding: 1em;
+    box-shadow: 0px 13px 47px rgba(0, 0, 0, 0.44) !important;
+    background-color: #191919 !important;
+    .active.item {
+      background: #db366e !important;
+      border-radius: 10px;
+    }
+  .item  {
+    border-radius: 10px;
   }
-  border-radius: 0 !important;
-}
-.Logo{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    & a, & .ui.inverted.menu .item:before {
+      background: none !important;
+      font-weight: 700 !important;
+      font-size: 1.1em !important;
+    }
+    border-radius: 0 !important;
+    margin-bottom: 5em !important;
+  }
+  .Logo, .Items home{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+  }
+
+
+
+  .NavbarLogo {
+    -webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,0.15)) !important;
+  }

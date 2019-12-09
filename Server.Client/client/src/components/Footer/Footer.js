@@ -6,7 +6,6 @@ export default class FooterMatchApp extends React.Component {
     render() {
         return (
             <div className="Footer">
-
             </div>
         )
     }

@@ -5,7 +5,7 @@ import Profil from "./containers/Profil/Profil";
 import Dashboard from "./components/Dashboard/Dashboard.js";
 import Signup from "./components/Signup/Signup.js";
 import Login from "./components/Login/Login";
-import {Divider} from "semantic-ui-react";
+import {Divider, Container} from "semantic-ui-react";
 import withAuth from "./utils/withAuth";
 import Menu from './components/Menu/Menu'
 import FooterMatchApp from './components/Footer/Footer'
@@ -16,22 +16,18 @@ class App extends Component {
         return (
             <Aux>
                 <Menu />
-                <Divider hidden />
-                <Divider hidden />
-                <Divider hidden />
-                <Divider hidden />
-                <Divider hidden />
-                <Divider hidden />
-                <Switch>
-                    <Route exact path="/" component={withAuth(Profil)} />
-                    <Route exact path="/dashboard" component={withAuth(Dashboard)} />
-                    <Route exact path="/signup" component={Signup} />
-                    <Route exact path="/login" component={Login} />
-                </Switch>
-                <Divider hidden />
-                <Divider hidden />
-                <Divider hidden />
-                <Divider hidden />
+                <Container fluid>
+                    <Switch>
+                        <Route exact path="/" component={withAuth(Profil)} />
+                        <Route exact path="/dashboard" component={withAuth(Dashboard)} />
+                        <Route exact path="/signup" component={Signup} />
+                        <Route exact path="/login" component={Login} />
+                    </Switch>
+                    <Divider hidden />
+                    <Divider hidden />
+                    <Divider hidden />
+                    <Divider hidden />
+                </Container>
                 <FooterMatchApp />
             </Aux>
         );

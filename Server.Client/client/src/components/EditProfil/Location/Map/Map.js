@@ -1,43 +1,73 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 import {Grid, Icon} from "semantic-ui-react";
+import equal from 'fast-deep-equal';
 
 const AnyReactComponent = ({ text }) => {
     return(
     <div>
-        <Icon  color='pink' loading name='heart' size="big"/>
+        <Icon name='map marker alternate' size="big"/>
     </div>
 )
 }
+
+const DEFAULT_POSITION = {
+    center: {
+        lat: 48.845289,
+        lng: 2.338674
+    },
+    zoom: 11,
+    innerRef: null,
+}
 class SimpleMap extends Component {
 
+    state = DEFAULT_POSITION;
     constructor(props){
         super(props);
+        this.updatePosition = this.updatePosition.bind(this);
+    }
+    componentDidMount() {
+        this.setState({...DEFAULT_POSITION});
     }
 
-    static defaultProps = {
-        center: {
-            lat: 59.95,
-            lng: 30.33
-        },
-        zoom: 11
-    };
+    componentDidUpdate(prevProps) {
+       if(!equal(this.props.innerRef, prevProps.innerRef)) {
+           this.updatePosition();
+       }
+    }
 
+    updatePosition = () => {
+        this.setState({
+            lat: this.props.innerRef.state.coords.latitude,
+            lng: this.props.innerRef.state.coords.longitude,
+        }, () => {
+            this.setState(prevState => ({
+                center: {
+                    ...prevState.center,
+                    lat: this.state.lat,
+                    lng: this.state.lng
+                }
+            }))
+        })
+    }
     render() {
-        console.log(this.props);
+        const {center, zoom, lat, lng} = this.state;
         return (
-            // Important! Always set the container height explicitly
             <div style={{ height: '100%', width: '100%' }}>
-                <GoogleMapReact
-                    bootstrapURLKeys={{ key: 'AIzaSyB9cGdWgQvt4wublLDt_ytEGF9TYb128UA' }}
-                    defaultCenter={this.props.center}
-                    defaultZoom={this.props.zoom} >
+                <div id="mapContent">
+                    <GoogleMapReact
+                        bootstrapURLKeys={{ key: 'AIzaSyDMyRL-0tVdDqmG-aCpDaSsI0IbZqb7FQg' }}
+                        defaultCenter={center}
+                        center={center}
+                        defaultZoom={zoom}
+                        className={"content"} >
                     <AnyReactComponent
-                        lat={this.props.lat}
-                        lng={this.props.lng}
+                        lat={lat}
+                        lng={lng}
                         text="Your location"
                     />
                 </GoogleMapReact>
+                </div>
             </div>
         );
     }

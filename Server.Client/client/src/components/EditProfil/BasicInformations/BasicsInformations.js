@@ -401,7 +401,7 @@ class BasicsInformations extends React.Component {
                 <div className={classnames("ui middle", "BasicInformations")}>
                     <ProgressBar />
                     <Dimmer active={this.state.loading}>
-                        <Loader size='massive'>Get profile...</Loader>
+                        <Loader size='massive'/>
                     </Dimmer>
                     <Grid textAlign="center">
                         <Grid.Row centered>

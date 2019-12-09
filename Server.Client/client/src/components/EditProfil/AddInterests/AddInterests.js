@@ -148,7 +148,11 @@ class AddInterests extends Component {
         else
             return null
     };
-
+// <Grid textAlign="center">
+// <Grid.Row >
+// <h1 className="InterestsTitle">Add interests</h1>
+// </Grid.Row>
+// </Grid>
     render() {
         const {isLoading, value, results, warnings, interests} = this.state;
         const ProgressBar = () => (
@@ -163,13 +167,9 @@ class AddInterests extends Component {
                 <div className={classnames("ui middle", "AddInterests")}>
                     <ProgressBar />
                     <Dimmer active={this.state.loading}>
-                        <Loader size='massive'>Get interests...</Loader>
+                        <Loader size='massive'/>
                     </Dimmer>
-                    <Grid textAlign="center">
-                        <Grid.Row >
-                            <h1 className="CompleteTitle">Add interests</h1>
-                        </Grid.Row>
-                    </Grid>
+
                     <div className="shapeAddInterests"></div>
                     <Grid verticalAlign={"middle"}>
                         {this.showWarnings(warnings)}
