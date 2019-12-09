@@ -1,21 +1,20 @@
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-  monospace;
-}
-
-body {
+body,html {
   background-color: #212541;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
   "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+#root {
+  min-height: 100%;
+  position: relative;
 }
 
-html,body {
-  height: 100%;
-  margin: 0;
-}
+
 // Login - Signup
 @import './components/Login/Login.scss';
 @import './components/Signup/SignupStyle.scss';
@@ -28,6 +27,8 @@ html,body {
 @import './components/fileUpload/fileUpload';
 @import './components/EditProfil/AddInterests/AddInterests';
 @import './components/EditProfil/AddInterests/Interests/Interests';
+@import './components/EditProfil/Location/Location';
+@import './containers/Profil/Profil';
 // Layout
 @import './components/Layout/Layout.scss';
 
@@ -35,11 +36,13 @@ html,body {
 @import './components/Divider/Divider';
 
 // Menu
-.Menu {
-  margin-left: 5em;
-  margin-right: 5em;
-  left: 0;
-}
+@import './components/Menu/Menu';
+
+// Footer
+@import './components/Footer/Footer';
+
+
+
 
 // Upload
 .noselect {

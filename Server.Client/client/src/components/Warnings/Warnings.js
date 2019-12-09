@@ -7,9 +7,8 @@ function warnings (props) {
             return (<span key={key}>{item}</span>)
         });
     }
-    else {
+    else
         return null
-    }
 }
 
 export default warnings;

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, TextArea, Grid, Progress, Icon, Select, Loader, Dimmer} from 'semantic-ui-react';
+import {Divider, Form, TextArea, Grid, Progress, Icon, Select, Loader, Dimmer} from 'semantic-ui-react';
 import API from "../../../utils/API";
 import VALIDATE from "../../../utils/validation";
 import classnames from 'classnames';
@@ -381,8 +381,9 @@ class BasicsInformations extends React.Component {
         const ProgressBar = () => (
             <Progress
                 percent={complete}
+                progress
                 indicating
-                size="large"/>
+                size="medium"/>
         );
         const Warnings = () => {
             if (this.state.warnings && this.state.warnings.length > 0)
@@ -398,17 +399,18 @@ class BasicsInformations extends React.Component {
         return (
             <div className="container-fluid">
                 <div className={classnames("ui middle", "BasicInformations")}>
+                    <ProgressBar />
                     <Dimmer active={this.state.loading}>
                         <Loader size='massive'>Get profile...</Loader>
                     </Dimmer>
-                    <Grid columns={2} doubling>
-                        <Grid.Column>
+                    <Grid textAlign="center">
+                        <Grid.Row centered>
                             <h1 className="CompleteTitle">Complete Basics Informations</h1>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <ProgressBar />
-                        </Grid.Column>
+                        </Grid.Row>
                     </Grid>
+                    <Divider hidden />
+                    <Divider hidden />
+                    <div className="shapeBasicsInfos"></div>
                     <Grid textAlign="center">
                         <Warnings/>
                     </Grid>

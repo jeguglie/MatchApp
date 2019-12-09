@@ -3,24 +3,22 @@ import BasicsInformations from "./BasicInformations/BasicsInformations";
 import AddPhotos from "./AddPhotos/AddPhotos";
 import API from "../../utils/API";
 import AddInterests from "./AddInterests/AddInterests";
+import Location from "./Location/Location";
 
 const DEFAULT_SATE = {
     section: 1,
-    section1: true,
-    section2: false,
-    section3: false,
-    bool: false,
     complete: 0,
 };
 
 class EditProfil extends React.Component {
     state = DEFAULT_SATE;
 
-    handleNext = () => this.setState({section: this.state.section + 1, bool: true});
-    handleSection3 = () => this.setState({section2: false, section1: false, section3: true});
-    handleSection2 = () => this.setState({section2: true, section1: false, section3: false});
-    handleSection1 = () => this.setState({section2: false, section1: true, section3: false});
-    handlePrev = () => this.setState({section: this.state.section - 1});
+    handleNext = () => {
+        this.setState({section: this.state.section + 1});
+    }
+    handlePrev = () => {
+        this.setState({section: this.state.section - 1});
+    }
 
     async componentDidMount() {
         this._mounted = true;
@@ -32,7 +30,6 @@ class EditProfil extends React.Component {
     }
 
     getComplete = async() => {
-        // @TODO remove await, code can be shortest
         await API.getComplete()
             .then ((response) => {
                     if (this._mounted)
@@ -44,38 +41,39 @@ class EditProfil extends React.Component {
     };
 
     render(){
-        if (this.state.section === 1) {
-            if (this.state.section1 === false)
-                this.handleSection1();
+        const {section} = this.state;
+            if (section === 1)
+                return (
+                        <BasicsInformations
+                            nextsection={this.handleNext}
+                            complete={this.state.complete}
+                            getcomplete={this.getComplete}/>
+                );
+        else if (section === 2)
             return (
-                    <BasicsInformations
+                    <AddPhotos
+                        prevsection={this.handlePrev}
+                        nextsection={this.handleNext}
+                        complete={this.state.complete}
+                        getcomplete={this.getComplete} />
+            );
+        else if (section === 3)
+            return (
+                    <AddInterests
+                        prevsection={this.handlePrev}
                         nextsection={this.handleNext}
                         complete={this.state.complete}
                         getcomplete={this.getComplete}/>
             );
-        }
-        else if (this.state.section === 2) {
-            if (this.state.section2 === false)
-                this.handleSection2();
+        else if (section === 4)
             return (
-                    <AddPhotos prevsection={this.handlePrev}
-                               nextsection={this.handleNext}
-                               complete={this.state.complete}
-                               getcomplete={this.getComplete}/>
-            );
-        }
-        else if (this.state.section === 3) {
-            if (this.state.section3 === false)
-                this.handleSection3();
-            return (
-                    <AddInterests
-                        prevsection={this.handlePrev}
-                        complete={this.state.complete}
-                        getcomplete={this.getComplete}/>
+                <Location
+                    prevsection={this.handlePrev}
+                    complete={this.state.complete}
+                    getcomplete={this.getComplete} />
             );
         }
 
-    }
 }
 
 export default EditProfil;

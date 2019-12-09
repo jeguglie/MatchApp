@@ -1,11 +1,12 @@
 .AddInterests {
-  padding: 5em;
+  max-width: 700px;
+  padding: 3em;
   margin: auto;
   background-color: #f93874;
   border-radius: 20px !important;
   overflow: hidden !important;
   position: relative !important;
-  width: 600px;
+  z-index: 1;
 }
 
 .InterestsTitle {
@@ -32,29 +33,17 @@
   background-color: #cacaca96 !important;
 }
 
-@media only screen and (min-width: 275px) and (max-width: 767px){
-  .AddInterests {
-    margin: 1rem;
-    padding: 2.5rem;
-  }
-  .TellOthersBox {
-    border-radius: 20px;
-    border: 2px dashed rgba(255, 255, 255, 0.41);
-    background-color: #d03368;
-    padding: 1em !important;
-  }
-}
-
-@media only screen and (min-width: 1200px){
-  .AddInterests {
-    width: 700px;
-    margin: auto;
-  }
-}
-@media only screen and (min-width: 1500px) {
-  .AddInterests {
-    width: 700px !important;
-    margin: auto;
-
-  }
+.shapeAddInterests {
+  top: -608px;
+  border-radius: 31% 69% 32% 68% / 36% 44% 56% 64%;
+  width: 1551px;
+  height: 1523px;
+  position: absolute;
+  background-image: linear-gradient(-82deg, #ffffff 0%, #4c4c4c 100%);
+  right: 255px;
+  z-index: -1;
+  mix-blend-mode: darken;
+  transform: rotate(-155deg);
+  box-shadow: 11px 3px 5px 5px rgba(0, 0, 0, 0.5);
+  opacity: 0.3;
 }

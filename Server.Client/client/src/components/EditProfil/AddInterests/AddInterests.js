@@ -15,6 +15,12 @@ const DEFAULT_STATE = {
     results: [],
     loading: false,
 };
+
+const DEFAULT_STATE_SEARCH = {
+    "isLoading": false,
+    "results": [],
+    "value": ""
+};
 // Store data results BDD of interest here
 let DATA = [];
 
@@ -79,7 +85,7 @@ class AddInterests extends Component {
 
         setTimeout(async () => {
             if (this.state.value.length < 1)
-                return this.setState(DEFAULT_STATE);
+                return this.setState(DEFAULT_STATE_SEARCH);
             const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
             const isMatch = (result) => re.test(result.title)
 
@@ -93,9 +99,11 @@ class AddInterests extends Component {
 
     handleKeyDown = async (data) => {
         if (data.key === 'Enter') {
+            console.log(1);
             // Regex for interest
             const regex = new RegExp('[^A-Za-z0-9]');
             let new_interest = data.target.value;
+            let interests = this.state.interests;
             let warnings = [];
             if (!new_interest || new_interest.length < 2)
                 warnings.push("Your interest must contain between 2 and 20 characters");
@@ -103,14 +111,16 @@ class AddInterests extends Component {
                 warnings.push("Your interest is not valid. Only letter and numeric value is accepted");
             if (warnings.length < 1) {
                 await API.addInterests(new_interest)
-                    .then(response => response.status === 200 && this._mounted
-                        && this.setState(({ interests }) => ({
-                            interests: [...interests, new_interest],
-                            warnings: response.data.warnings,
-                            value: ''
-                        })))
-                    .catch((error) => this._mounted
-                        && this.setState({warnings: error.response.data.warnings}))
+                    .then(response => {
+                        if(response.status === 200 && this._mounted) {
+                            interests.push(new_interest);
+                            this.setState({interests: interests, warnings: response.data.warnings, value: ''})
+                        }
+                    })
+                    .catch((error) => {
+                        this._mounted
+                        && this.setState({warnings: error.response.data.warnings})
+                    })
             } else
                 this.setState({ warnings });
         }
@@ -126,35 +136,46 @@ class AddInterests extends Component {
                 .catch(error => this._mounted
                     && this.setState({warnings: error.response.data.warnings})));
 
-    render() {
-        const {isLoading, value, results, warnings} = this.state;
+    showWarnings(warnings) {
+        if (warnings && warnings.length)
+            return (
+                <Grid.Row centered textAlign="center">
+                    <div className="loginWarnings">
+                        <Warnings data={warnings}/>
+                    </div>
+                </Grid.Row>
+            );
+        else
+            return null
+    };
 
+    render() {
+        const {isLoading, value, results, warnings, interests} = this.state;
+        const ProgressBar = () => (
+            <Progress
+                percent={this.props.complete}
+                progress
+                indicating
+                size="medium"/>
+        );
         return(
             <div className="container-fluid">
                 <div className={classnames("ui middle", "AddInterests")}>
+                    <ProgressBar />
                     <Dimmer active={this.state.loading}>
                         <Loader size='massive'>Get interests...</Loader>
                     </Dimmer>
-                    <Grid columns={2} doubling>
-                        <Grid.Column>
+                    <Grid textAlign="center">
+                        <Grid.Row >
                             <h1 className="CompleteTitle">Add interests</h1>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Progress
-                                percent={this.props.complete}
-                                indicating
-                                size="large"/>
-                        </Grid.Column>
-                    </Grid>
-                    <Grid verticalAlign={"middle"}>
-                        <Grid.Row centered textAlign="center">
-                            <div className="loginWarnings">
-                                <Warnings data={warnings} />
-                            </div>
                         </Grid.Row>
+                    </Grid>
+                    <div className="shapeAddInterests"></div>
+                    <Grid verticalAlign={"middle"}>
+                        {this.showWarnings(warnings)}
                         <Grid.Row centered>
                             <Interests
-                                interests={this.state.interests}
+                                interests={interests}
                                 deleteInterest={this.deleteInterest} />
                         </Grid.Row>
                     </Grid>

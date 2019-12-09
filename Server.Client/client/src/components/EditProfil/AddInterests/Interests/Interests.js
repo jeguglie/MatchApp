@@ -1,8 +1,9 @@
 import React from 'react';
-import {Label, Divider} from 'semantic-ui-react';
+import {Label, Divider, Grid} from 'semantic-ui-react';
 const DEFAULT_STATE =  {
   interests: [],
 };
+
 
 class Interests extends React.Component {
     constructor(props){
@@ -25,6 +26,7 @@ class Interests extends React.Component {
                         )
                     })}
                     <Divider />
+                    <Divider hidden />
                 </Label.Group>
             </div>
         )

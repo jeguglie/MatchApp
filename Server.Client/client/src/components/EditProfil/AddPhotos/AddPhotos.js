@@ -103,24 +103,25 @@ class AddPhotos extends React.Component {
         const ProgressBar = () => (
             <Progress
                 percent={this.props.complete}
+                progress
                 indicating
-                size="large"/>
+                size="medium"/>
         );
         return (
             <div className="container-fluid">
                 <div className={classnames("ui middle", "AddPhotos")}>
+                    <ProgressBar />
                     <Dimmer active={this.state.loading}>
                         <Loader size='massive'>Get photos...</Loader>
                     </Dimmer>
-                    <Grid columns={2} doubling>
-                        <Grid.Column>
+                    <Grid textAlign="center">
+                        <Grid.Row centered>
                             <h1 className="CompleteTitle">Add photos</h1>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <ProgressBar />
-                        </Grid.Column>
+                        </Grid.Row>
                     </Grid>
-                    <DividerC vertically={false}/>
+                    <Divider hidden />
+                    <Divider hidden />
+                    <div className="shapeAddPhotos"></div>
                     <Grid columns={2} doubling textAlign="center">
                         <Grid.Column>
                             <Image className="ShadowImage"
@@ -150,6 +151,7 @@ class AddPhotos extends React.Component {
                     </Grid>
                         <UploadPreview data={this.state.previewTab} />
                         <Grid>
+                            <Divider hidden />
                             <Divider hidden />
                         <Grid.Row centered>
                             <Icon className="EditProfilArrow"

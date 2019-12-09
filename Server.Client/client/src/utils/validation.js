@@ -9,7 +9,7 @@ export default {
         return re.test(password);
     },
     validateUsername: function(username) {
-        let re = /^(?=.{4,15}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
+        let re = /^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$/;
         return re.test(username)
     },
     validateFirstName: function(name) {

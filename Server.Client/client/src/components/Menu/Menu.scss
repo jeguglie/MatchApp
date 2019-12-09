@@ -1,0 +1,12 @@
+.Menu {
+  background-color: #da3870 !important;
+  .active.item {
+    background: #691a33 !important;
+  }
+  border-radius: 0 !important;
+}
+.Logo{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

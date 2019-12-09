@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Matcha - ServerClient.iml" filepath="$PROJECT_DIR$/.idea/Matcha - ServerClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Components/containers/.idea/containers.iml" filepath="$PROJECT_DIR$/../Components/containers/.idea/containers.iml" />
     </modules>
   </component>
 </project>
