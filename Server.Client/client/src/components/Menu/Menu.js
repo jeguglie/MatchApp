@@ -92,7 +92,9 @@ class NavbarMenu extends React.Component {
                         name='/logout'
                         active={activeItem === '/logout'}
                         onClick={this.disconnect} >
-                        <Icon name='logout' />
+                        <Icon
+                            name='log out'
+                        />
                         <span className="itemMenu">Log out</span>
                     </Menu.Item>
                 </div>
@@ -102,7 +104,7 @@ class NavbarMenu extends React.Component {
     render(){
         const { activeItem } = this.state
         return(
-                <Menu inverted icon='labeled' stackable size={"medium"} className="Menu">
+                <Menu inverted icon='labeled' stackable size="small" className="Menu">
                     {this.renderRedirect()}
 
                     <Menu.Item className="Logo">

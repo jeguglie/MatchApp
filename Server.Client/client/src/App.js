@@ -4,6 +4,7 @@ import Aux from './hoc/Aux';
 import Profil from "./containers/Profil/Profil";
 import Dashboard from "./components/Dashboard/Dashboard.js";
 import Signup from "./components/Signup/Signup.js";
+import Wall from './containers/Wall/Wall';
 import Login from "./components/Login/Login";
 import {Divider, Container} from "semantic-ui-react";
 import withAuth from "./utils/withAuth";
@@ -18,6 +19,7 @@ class App extends Component {
                 <Menu />
                 <Container fluid>
                     <Switch>
+                        <Route exact path="/wall" component={Wall} />
                         <Route exact path="/" component={withAuth(Profil)} />
                         <Route exact path="/dashboard" component={withAuth(Dashboard)} />
                         <Route exact path="/signup" component={Signup} />
