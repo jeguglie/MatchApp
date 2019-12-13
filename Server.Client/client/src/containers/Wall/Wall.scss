@@ -1,0 +1,79 @@
+
+input[type="range"]::-webkit-slider-thumb {
+   -webkit-appearance: none;
+   background: rgb(219, 54, 110);
+   border-radius: 50rem;
+   height: 1.5em;
+   width: 1.5em;
+ }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 50rem;
+  border-color: rgba(0, 0, 0, 0.1);
+  padding: 3px 5px;
+  width: 100%;
+}
+
+.DistanceRangeContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  white-space: nowrap;
+  margin-bottom: 1.2em;
+}
+
+.DistanceRangeTitle {
+  color: white;
+  font-family: "Open Sans" , sans-serif;
+  font-weight: 400;
+  font-size: 1.5em;
+  margin: 0;
+
+}
+
+.filterContainer {
+  padding: 2em;
+
+}
+
+.input-range__track {
+  height: 1rem;
+}
+
+.input-range__slider {
+  height: 1.2rem;
+  width: 1.2rem;
+  margin-top: -1.05rem;
+  background: #db366e;
+  border: none;
+}
+.input-range__label--value {
+  top: -2.6rem;
+  font-family: "Open Sans", sans-serif ;
+}
+
+.input-range__label--min, .input-range__label--max {
+  bottom: -1.8rem;
+  font-family: "Open Sans", sans-serif ;
+}
+
+.input-range__label--max {
+  right: 1rem;
+}
+
+.input-range__track--active {
+  background: #181818;
+}
+
+.input-range__label--min {
+  left: 0.8rem;
+}
+
+.UsersMiniCard {
+  display: flex;
+  justify-content: space-between;
+  padding: 1em;
+}

@@ -30,7 +30,7 @@ class App extends Component {
                     <Divider hidden />
                     <Divider hidden />
                 </Container>
-                <FooterMatchApp />
+                {/*<FooterMatchApp />*/}
             </Aux>
         );
     }

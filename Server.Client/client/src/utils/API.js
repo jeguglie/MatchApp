@@ -129,5 +129,15 @@ export default {
                 headers: headers
             }
         )
+    },
+    getUsers: (distanceRange, ageRange, popularityRange) => {
+        return axios.post(
+            `${burl}/getUsers`,
+            {distanceRange, ageRange, popularityRange},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
     }
 };

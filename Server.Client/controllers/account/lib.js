@@ -352,8 +352,8 @@ async function signup(req, res) {
         // Get user_id
         const userID = await getUserId(email);
         // Create Profil
-        text = 'INSERT INTO profile(user_id, lastName, firstName) VALUES($1, $2, $3)';
-        values = [userID, lastname, firstname];
+        text = 'INSERT INTO profile(user_id, lastName, firstName, likes) VALUES($1, $2, $3, $4)';
+        values = [userID, lastname, firstname, 0];
         await pool.query(text, values);
         // Insert Complete
         text = 'INSERT INTO user_complete(complete_basics, user_id) VALUES($1, $2)';
@@ -365,6 +365,7 @@ async function signup(req, res) {
         return res.status(200).json({});
 
     } catch (error) {
+        console.log(error);
         warnings.warnings.push("Catch error");
         return res.status(500).json({ warnings });
     }
@@ -649,6 +650,7 @@ async function deleteInterest(req, res){
         });
     }
 }
+
 
 exports.login = login;
 exports.signup = signup;

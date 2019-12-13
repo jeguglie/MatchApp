@@ -8,7 +8,8 @@ const addphotos = require('./controllers/account/addphotos.js');
 const multer = require('multer');
 const DIR = './public/';
 const withAuth = require('./middleware');
-const cors = require('cors');
+const faker = require('./controllers/account/faker');
+const match = require('./controllers/account/match');
 
 // Multer file upload
 const storage = multer.diskStorage({
@@ -68,6 +69,8 @@ app.post('/getUserInterests', withAuth, account.getUserInterests);
 app.post('/getComplete', withAuth, account.getComplete);
 app.post('/deleteInterest', withAuth, account.deleteInterest);
 app.post('/deleteImage', withAuth, addphotos.deleteImage);
+app.get('/faker', faker.matchAppFaker);
+app.post('/getUsers', withAuth, match.getUsers);
 
 
 const port = 3000;

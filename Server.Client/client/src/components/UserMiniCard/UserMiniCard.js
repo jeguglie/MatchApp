@@ -1,51 +1,90 @@
 import React from 'react';
-import { Grid, Image, Icon } from 'semantic-ui-react';
+import { Card, Grid, Image, Icon } from 'semantic-ui-react';
+import equal from 'fast-deep-equal';
+
 const DEFAULT_STATE = {
     users: []
 };
+
+const usersMinCard = (props) => {}
+
 class UserMiniCard extends React.Component {
 
-    state = {...DEFAULT_STATE};
-
-    constructor(props) {
+    constructor(props){
         super(props);
-        this.state.users = this.props.users;
+        this.state = {...DEFAULT_STATE};
+    }
+
+    componentDidUpdate(prevProps) {
+        if(!equal(this.props.users, prevProps.users)) {
+            this.setState({users: this.props.users});
+        }
     }
     render() {
         const { users } = this.state;
-            if (users && users.length) {
-                console.log(1);
-                return users.map((user, i) => {
-                    const {img, name, distance} = user;
-                    return (
-                        <div className="CardContainer">
-                            <div className="TopCardContainer">
-                                <Image
-                                    className="ImageCardContainer"
-                                    centered
-                                    src={img}
-                                    key={i}
-                                />
-                            </div>
-                            <div className="BottomCardContainer">
-                                <Grid columns={2} verticalAlign='middle' centered>
-                                    <Grid.Column>
-                                        <Grid.Row>
-                                            <span className="LastnameUserMinCard">{name}</span><br />
-                                            <span className="LastnameUserMinCard">{distance}</span>
-                                        </Grid.Row>
-                                    </Grid.Column>
-                                    <Grid.Column>
-                                        <Grid.Row>
-                                            <Icon circular name='add' color='white' />
-                                        </Grid.Row>
-                                    </Grid.Column>
-                                </Grid>
-                            </div>
-                        </div>
-                    )
-                });
-            }
+        if (users && users.length) {
+            return users.map((user, i) => {
+                const {img_link, firstname, likes, latitude, username} = user;
+                return (
+                    <Grid.Column mobile={16} tablet={8} computer={4}>
+                        <Card fluid className="userMinCard">
+                            <Image
+                                src={img_link}
+                                key={i}
+                                wrapped
+                                ui={false}
+                                size='large' />
+                            <Card.Content>
+                                <Card.Header>{firstname.trim()}</Card.Header>
+                                <Card.Meta>
+                                    <span className='date'>{firstname.trim()}</span>
+                                </Card.Meta>
+                            </Card.Content>
+                            <Card.Content extra>
+                                <a>
+                                    <Icon name='heart' />
+                                    {likes} Likes
+                                </a>
+                            </Card.Content>
+                        </Card>
+                    </Grid.Column>
+                )
+            });
+        }
+        return null;
     }
 }
 export default UserMiniCard;
+//
+// <div className="CardContainer">
+//     <div className="TopCardContainer">
+//         <Image
+//             className="ImageCard"
+//             centered
+//             src={img_link}
+//             key={i}
+//         />
+//     </div>
+//     <Grid
+//         columns={2}
+//         verticalAlign='middle'
+//         centered
+//         className="BottomCardGrid">
+//         <Grid.Column floated='left'>
+//             <Grid.Row>
+//                 <span className="LastnameUserMinCard">{firstname.trim()}</span><br />
+//                 <span className="DistanceUserMinCard">{firstname.trim()}</span>
+//             </Grid.Row>
+//         </Grid.Column>
+//         <Grid.Column  textAlign='right' floated='right' >
+//             <Grid.Row>
+//                 <Icon
+//                     circular
+//                     name='add'
+//                     color='white'
+//                     className='SeeIcon'
+//                 />
+//             </Grid.Row>
+//         </Grid.Column>
+//     </Grid>
+// </div>
