@@ -1,3 +1,7 @@
+.WallContainer {
+  padding: 2em;
+  margin: auto;
+}
 
 input[type="range"]::-webkit-slider-thumb {
    -webkit-appearance: none;
@@ -17,12 +21,18 @@ input[type="range"] {
   width: 100%;
 }
 
+.SegmentFilter {
+  border-radius: 10px !important;
+  padding: 1.5em !important;
+  box-shadow: 4px 5px 12px 0px rgba(0, 0, 0, 0.15) !important;
+}
+
 .DistanceRangeContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   white-space: nowrap;
-  margin-bottom: 1.2em;
+  margin-bottom: 0.7em;
 }
 
 .DistanceRangeTitle {
@@ -34,25 +44,33 @@ input[type="range"] {
 
 }
 
-.filterContainer {
-  padding: 2em;
+.input-range__track--active {
+  background: #db366e;
+}
 
+.RangeTitle {
+  font-family: "Open Sans", sans-serif;
+  font-size: 0.8em;
+  margin-left: 1em;
 }
 
 .input-range__track {
-  height: 1rem;
+  height: 1.2rem;
 }
 
 .input-range__slider {
-  height: 1.2rem;
-  width: 1.2rem;
-  margin-top: -1.05rem;
+
+  height: 1.5rem;
+  width: 1.5rem;
+  margin-top: -1.35rem;
   background: #db366e;
   border: none;
+  box-shadow: -1px 0px 3px #0000003d;
 }
 .input-range__label--value {
   top: -2.6rem;
   font-family: "Open Sans", sans-serif ;
+  display: none;
 }
 
 .input-range__label--min, .input-range__label--max {
@@ -62,18 +80,14 @@ input[type="range"] {
 
 .input-range__label--max {
   right: 1rem;
-}
-
-.input-range__track--active {
-  background: #181818;
+  display: none;
 }
 
 .input-range__label--min {
   left: 0.8rem;
+  display: none;
 }
 
-.UsersMiniCard {
-  display: flex;
-  justify-content: space-between;
-  padding: 1em;
+.IncludeInterestsTitle {
+  font-family: "Open Sans", sans-serif;
 }

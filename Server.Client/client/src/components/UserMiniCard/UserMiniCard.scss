@@ -2,7 +2,7 @@
   background: grey;
   width: 170px;
   height: 220px;
-  border-radius: 8px;
+  border-radius: 10px;
   overflow: hidden !important;
   position: relative;
   margin: 1em;
@@ -37,31 +37,37 @@
   font-family: "Open Sans", sans-serif;
 
 }
-.LastnameUserMinCard {
-  color: #192740;
+
+.MinCardAge {
+  font-size: 0.8em;
+  color: grey;
   font-family: "Open Sans", sans-serif;
-  font-weight: 600;
-  font-size: 1.3em;
+  font-weight: 400;
 }
 
-.SeeIcon {
-  position: relative !important;
-  background: white;
-  &.i.circular.icon {
-    -webkit-box-shadow: 0 0 0 .12em rgb(255, 255, 255) inset;
-    box-shadow:
-            0 0 0 .12em rgb(255, 255, 255) inset;
-    width: 2em !important;
-    height: 2em !important;
-    color: white;
-    background-color: #575757;
-  }
+.content {
+  border-top: none !important;
 }
-
 .userMinCard {
-  box-shadow: 5px 5px 5px rgba(0,0,0,0.3) !important;
+  box-shadow: 4px 5px 12px 0px rgba(0, 0, 0, 0.15) !important;
   border-radius: 10px !important;
   .large.image {
     border-radius: 10px 10px 0 0  !important;
   }
 }
+
+.ui.card > .extra, .ui.cards > .card > .extra {
+  background: #db366e;
+  border-bottom-right-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
+  & a {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-family: "Open Sans", sans-serif !important;
+  }
+}
+
+.header {
+  font-size: 1.4em !important;
+  font-family: "Open Sans", sans-serif !important;
+}
+

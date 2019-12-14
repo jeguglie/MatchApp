@@ -139,5 +139,25 @@ export default {
                 headers: headers
             }
         )
+    },
+    getConnectedUserLocation: () => {
+        return axios.post(
+            `${burl}/getConnectedUserLocation`,
+            {},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
+    checkUserView: () => {
+        return axios.post(
+            `${burl}/checkUserView`,
+            {},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
     }
 };

@@ -1,6 +1,7 @@
-const faker = require('faker');
+const faker = require('faker/locale/fr');
 const Pool = require('pg').Pool;
 const passwordHash = require("password-hash");
+const randomLocation = require('random-location');
 
 const pool = new Pool({
     user: 'jeguglie',
@@ -14,6 +15,14 @@ function calcAge(dateString) {
     var birthday = +new Date(dateString);
     return ~~((Date.now() - birthday) / (31557600000));
 }
+
+const P = {
+    latitude: 48.864710,
+    longitude: -2.346028
+}
+
+const R = 500000 // meters
+
 
 async function matchAppFaker(req, res) {
     try {
@@ -70,6 +79,7 @@ async function matchAppFaker(req, res) {
         // GENERATE USERS PROFILE -------------------------------------
         let gender = ["male", "female"];
         for (let i = 0; i < 1000; i++){
+            const location = randomLocation.randomCirclePoint(P, R)
             const text = 'INSERT INTO profile(user_id, lastname, firstname, gender, interested, country, age, bio, longitude, latitude, likes) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);';
             const values = [
                 i,
@@ -80,8 +90,8 @@ async function matchAppFaker(req, res) {
                 faker.address.country(),
                 calcAge(faker.date.between('1970-01-01T11:25:19.644Z', '2000-01-01T11:25:19.644Z')),
                 faker.random.words(),
-                faker.address.longitude(),
-                faker.address.latitude(),
+                location.longitude,
+                location.latitude,
                 0
             ];
             await pool.query(text, values);

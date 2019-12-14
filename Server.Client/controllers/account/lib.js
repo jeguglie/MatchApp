@@ -651,6 +651,57 @@ async function deleteInterest(req, res){
     }
 }
 
+async function getConnectedUserLocation(req, res) {
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return (res.status(500).json({
+            warnings: ["Can't get user ID, please logout and login"]
+        }));
+    try {
+        let text = 'SELECT longitude, latitude FROM profile WHERE user_id = $1';
+        let values = [userID];
+        let response = await pool.query(text, values);
+        if (typeof response != 'undefined' && typeof response.rows != 'undefined' && response.rows.length)
+            return res.status(200).json({
+                longitude: response.rows[0].longitude,
+                latitude: response.rows[0].latitude
+            });
+        return res.status(400).json({
+            warnings: ["You are not allowed"]
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            warnings: ["Catch error"]
+        });
+    }
+}
+
+async function checkUserView(req, res) {
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return (res.status(500).json({
+            warnings: ["Can't get user ID, please logout and login"]
+        }));
+    try {
+        let text = 'SELECT complete FROM users WHERE user_id = $1';
+        let value = [userID];
+        let response = await pool.query(text, value);
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length)
+            if (response.rows[0].complete >= 40)
+                return res.status(200).json({});
+        return res.status(400).json({
+            warnings: ["Your need to complete your profile"]
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            warnings: ["Catch error"]
+        });
+    }
+}
+
+
 
 exports.login = login;
 exports.signup = signup;
@@ -662,3 +713,5 @@ exports.getUserInterests = getUserInterests;
 exports.getComplete = getComplete;
 exports.deleteInterest = deleteInterest;
 exports.getUserId = getUserId;
+exports.getConnectedUserLocation = getConnectedUserLocation;
+exports.checkUserView = checkUserView;

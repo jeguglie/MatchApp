@@ -19,7 +19,7 @@ class App extends Component {
                 <Menu />
                 <Container fluid>
                     <Switch>
-                        <Route exact path="/wall" component={Wall} />
+                        <Route exact path="/wall" component={withAuth(Wall)} />
                         <Route exact path="/" component={withAuth(Profil)} />
                         <Route exact path="/dashboard" component={withAuth(Dashboard)} />
                         <Route exact path="/signup" component={Signup} />

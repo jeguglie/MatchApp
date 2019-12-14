@@ -69,8 +69,10 @@ app.post('/getUserInterests', withAuth, account.getUserInterests);
 app.post('/getComplete', withAuth, account.getComplete);
 app.post('/deleteInterest', withAuth, account.deleteInterest);
 app.post('/deleteImage', withAuth, addphotos.deleteImage);
-app.get('/faker', faker.matchAppFaker);
 app.post('/getUsers', withAuth, match.getUsers);
+app.post('/getConnectedUserLocation', withAuth, account.getConnectedUserLocation);
+app.post('/checkUserView', withAuth, account.checkUserView)
+app.get('/faker', faker.matchAppFaker);
 
 
 const port = 3000;

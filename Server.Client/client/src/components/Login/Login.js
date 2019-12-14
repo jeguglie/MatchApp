@@ -24,7 +24,7 @@ class Login extends React.Component {
     constructor (props) {
         super(props);
         this.state = {...DEFAULT_STATE};
-        this.warnings = {...DEFAULT_ERRORS}
+        this.warnings = {...DEFAULT_ERRORS};
         this._mounted = false;
     };
 
