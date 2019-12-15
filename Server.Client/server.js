@@ -71,7 +71,8 @@ app.post('/deleteInterest', withAuth, account.deleteInterest);
 app.post('/deleteImage', withAuth, addphotos.deleteImage);
 app.post('/getUsers', withAuth, match.getUsers);
 app.post('/getConnectedUserLocation', withAuth, account.getConnectedUserLocation);
-app.post('/checkUserView', withAuth, account.checkUserView)
+app.post('/checkUserView', withAuth, account.checkUserView);
+app.post('/getUserIdProfile', withAuth, account.getUserIdProfile);
 app.get('/faker', faker.matchAppFaker);
 
 

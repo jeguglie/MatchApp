@@ -159,5 +159,15 @@ export default {
                 headers: headers
             }
         )
+    },
+    getUserIdProfile: (userId) => {
+        return axios.post(
+            `${burl}/getUserIdProfile`,
+            {userId},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
     }
 };

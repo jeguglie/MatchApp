@@ -14,113 +14,102 @@ async function getUsers(req, res){
         return (res.status(500).json({
             warnings: ["Can't get user ID, please logout and login"]
         }));
-    try {
-        // Get filter
-        let gender = undefined;
-        let interested = undefined;
-        const popularityRange = req.body.popularityRange;
-        const distanceRange = req.body.distanceRange;
-        const ageRange = req.body.ageRange;
 
-        // Get connected user gender and interested
+    // Get filter options ---------------------------
+    const {popularityRange, distanceRange, ageRange } = req.body;
+    try {
+
+
+        // Interested and Gender of connected user
         let text = 'SELECT gender, interested FROM profile WHERE user_id = $1;';
         let values = [userID];
         let response = await pool.query(text, values);
-        if (response && response.rows.length){
-            gender = response.rows[0].gender;
-            interested = response.rows[0].interested;
-        }
-        else {
-            return res.status(500)  .json({
-                warnings: ["Your are not authorized to access this page"]
-            })
-        }
-        // Filter other user by gender and what are they interested
-        // Filter other user by birthday
-        text = 'SELECT * FROM profile P INNER JOIN pictures IMG ON P.user_id = IMG.user_id WHERE IMG.img_order = 0 ' +
-            'AND interested = $1 AND gender = $2 AND age >= $3 AND age <= $4 AND likes >= $5 AND likes <= $6';
-        values = [gender, interested, ageRange.min, ageRange.max, popularityRange.min, popularityRange.max];
-        response = await pool.query(text, values);
-        let users = response.rows;
-        // Add list interests per USER
-        // GET LOCATION
+        if (response && response.rows.length) {
+            const {gender, interested} = response.rows[0];
+            // First filter on BDD with AGE - POPULARITY
+            text = 'SELECT * FROM profile P INNER JOIN pictures IMG ON P.user_id = IMG.user_id WHERE IMG.img_order = 0 ' +
+                'AND interested = $1 AND gender = $2 AND age >= $3 AND age <= $4 AND likes >= $5 AND likes <= $6';
+            values = [gender, interested, ageRange.min, ageRange.max, popularityRange.min, popularityRange.max];
+            response = await pool.query(text, values);
+            let users = response.rows;
 
-        users = users.map( (user) = async(user) =>{
-            text = 'SELECT * FROM user_interests WHERE user_id = $1';
-                values = [user.user_id];
-                let fetchInterest = await pool.query(text, values);
-                return Object.assign(user, {interests: fetchInterest.rows});
-            });
-        Promise.all(users)
-            .catch(() => {return res.status(500).json({})})
-            .then((users) = async(users) =>{
-                let userLocation = {
-                    longitude: null,
-                    latitude: null,
-                };
-                let text = 'SELECT longitude, latitude FROM profile WHERE user_id = $1';
-                let values = [userID];
-                let response = await pool.query(text, values);
-                if (typeof response != 'undefined' && typeof response.rows != 'undefined' && response.rows.length) {
-                    userLocation.longitude = response.rows[0].longitude;
-                    userLocation.latitude = response.rows[0].latitude;
-                }
-                users.map((user) => {
-                    let distance = Math.round(getDistanceFromLatLonInKm(
-                        userLocation.latitude,
-                        userLocation.longitude,
-                        user.latitude,
-                        user.longitude));
-                    return Object.assign(user,{distance:  distance});
-                });
-                // Filter distance
-                users = users.filter(user => user.distance <= distanceRange);
-                // Sort distance
-                users.sort((a, b) => {
-                    if(a.distance === b.distance) {
-                        // If two elements have same number, then the one who has larger rating.average wins
-                        return b.likes - a.likes;
-                    } else {
-                        // If two elements have different number, then the one who has larger number wins
-                        return a.distance - b.distance;
-                    }
-                });
-
-                // Get connected user interests
+            // Map all users and assign interests list
+            users = users.map((user) = async(user) =>{
                 text = 'SELECT * FROM user_interests WHERE user_id = $1';
-                values = [userID];
+                values = [user.user_id];
                 response = await pool.query(text, values);
-                let usersCinterests = response.rows;
+                return Object.assign(user, {interests: response.rows});
+            });
+            Promise.all(users).catch(() => { return res.status(500).json({}) })
+                .then((users) = async(users) => {
+                    let userLocation = {
+                        longitude: 0,
+                        latitude: 0,
+                    };
+                    // Get connected user location
+                    text = 'SELECT longitude, latitude FROM profile WHERE user_id = $1';
+                    values = [userID];
+                    response = await pool.query(text, values);
+                    if (typeof response != 'undefined' && typeof response.rows != 'undefined' && response.rows.length) {
+                        userLocation.longitude = response.rows[0].longitude;
+                        userLocation.latitude = response.rows[0].latitude;
+                    }
+                    // Get connected user interests
+                    text = 'SELECT * FROM user_interests WHERE user_id = $1';
+                    values = [userID];
+                    response = await pool.query(text, values);
+                    let usersCinterests = response.rows;
 
-                for (let i = 0; i < users.length; i++){
-                    Object.assign(users[i], {points: 0});
-                    for (let j = 0; j < users[i].interests.length; j++){
-                        usersCinterests.map(e => {
-                            if (e.interest_id === users[i].interests[j].interest_id) {
-                                users[i].points += 10;
-                            }
-                        })
+                    // Insert distance of each users and filter by distanceRange ------------------------------------
+                    users.map((user) => {
+                        let distance = Math.round(getDistanceFromLatLonInKm(userLocation.latitude, userLocation.longitude, user.latitude, user.longitude));
+                        // Insert point per distance
+                        Object.assign(user, {points: 0 - (distance / 10)});
+                        return Object.assign(user,{distance:  distance});
+                    });
+                    users = users.filter(user => user.distance <= distanceRange);
+
+                    // Add point if filtered users have same interests
+                    for (let i = 0; i < users.length; i++){
+                        for (let j = 0; j < users[i].interests.length; j++){
+                            // Map interests tab on user and add point
+                            let nbInterests = 0;
+                            usersCinterests.map(e => {
+                                if (e.interest_id === users[i].interests[j].interest_id)
+                                    nbInterests += 1;
+                                if (j + 1 === users[i].interests.length)
+                                    users[i].points += fibonacci(nbInterests);
+                            })
+                        }
                     }
-                }
-                users.sort((a, b) => {
-                    if(a.points === b.points) {
-                        // If two elements have same number, then the one who has larger rating.average wins
-                        return b.likes - a.likes;
-                    } else {
-                        // If two elements have different number, then the one who has larger number wins
-                        return a.points - b.points;
-                    }
-                });
-                return res.status(200).json({
-                    users: users,
-                });
-            })
+                    // Sort users by point
+                    users.sort(function (a, b) {
+                        if (b.points === a.points)
+                            return b.likes - a.likes
+                        return b.points - a.points;
+                    });
+                    return res.status(200).json({
+                        users: users,
+                    });
+                })
+        }
+        else
+            return res.status(500).json({
+                warnings: ["Please complete your profile"]
+            });
+
     } catch(error) {
         console.log(error);
         return res.status(500).json({
             warnings: ["Error server"]
         })
     }
+}
+function fibonacci(nbr) {
+    if (nbr < 2) {
+        return nbr;
+    }
+    return fibonacci(nbr - 1) + fibonacci(nbr - 2);
 }
 
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {

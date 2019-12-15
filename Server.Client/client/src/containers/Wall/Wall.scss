@@ -1,5 +1,5 @@
 .WallContainer {
-  padding: 2em;
+  padding: 3em;
   margin: auto;
 }
 
@@ -88,6 +88,54 @@ input[type="range"] {
   display: none;
 }
 
+.RowImages {
+  & img {
+    box-shadow: 7px 7px 34px rgba(0,0,0,0.2);
+    border-radius: 10px !important;
+  }
+}
+
+.CardModal {
+  border-radius: 10px !important;
+}
+.BioSegment {
+  margin: 2.5rem !important;
+  color: grey !important;
+  font-weight: bold;
+  background-color: #ebebeb !important;
+  border-radius: 10px !important;
+}
+
+.Cardtitle {
+  font-weight: bold;
+  color: #3e3e3e;
+  font-size: 1.2em !important;
+
+}
+
 .IncludeInterestsTitle {
   font-family: "Open Sans", sans-serif;
+}
+
+.CardHeader {
+  background: #db366e !important;
+  color: white !important;
+  border: none !important;
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+}
+
+.CardHeaderTitle {
+  font-size: 2.9em !important;
+  font-family: "Open Sans", sans-serif !important;
+}
+
+.ModalProfilView {
+  padding: 2em !important;
+  border-radius: 10px !important;
+}
+
+.actions {
+  background-color: transparent !important;
+  border: none !important;
 }

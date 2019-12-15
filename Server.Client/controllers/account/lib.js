@@ -484,7 +484,7 @@ async function addInterests(req, res) {
     if (userID === null)
         return (res.status(500));
     // Get interest
-    const regex = new RegExp('[^A-Za-z0-9]');
+    const regex = new RegExp('/(^|\\B)#(?![0-9_]+\\b)([a-zA-Z0-9_]{1,30})(\\b|\\r)/g');
     const interest = req.body.interest.trim();
     // Check value
     let warnings = [];
@@ -701,7 +701,62 @@ async function checkUserView(req, res) {
     }
 }
 
-
+async function getUserIdProfile(req, res) {
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return (res.status(500).json({
+            warnings: ["Can't get user ID, please logout and login"]
+        }));
+    try {
+        let userIDprofile = req.body.userId;
+        console.log(userIDprofile);
+        let text = 'SELECT * FROM profile WHERE user_id = $1';
+        let values = [userIDprofile];
+        let response = await pool.query(text, values);
+        console.log(response.rows);
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length){
+            let user = response.rows[0];
+            // Get user interests IDs
+            text = 'SELECT interest_id FROM user_interests WHERE user_id = $1';
+            values = [userIDprofile];
+            response = await pool.query(text, values);
+            if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length){
+                let intereststab = [];
+                let interestsIDtab = response.rows;
+                // Add interests to tab
+                for (let i = 0; i < interestsIDtab.length; i++){
+                    text = 'SELECT interest FROM interests WHERE id = $1';
+                    values = [interestsIDtab[i].interest_id];
+                    response = await pool.query(text, values);
+                    intereststab.push(response.rows[0].interest);
+                }
+                // Add interests tab to user
+                Object.assign(user, {interests: intereststab});
+                // Get user img
+                text = 'SELECT img_link FROM pictures WHERE user_id = $1 ORDER BY img_order ASC';
+                values = [userIDprofile];
+                response = await pool.query(text, values);
+                let imgtab = [];
+                for (let i = 0; i < response.rows.length; i++)
+                    imgtab.push(response.rows[i].img_link);
+                // Add imgtab to user
+                Object.assign(user, {imgs: imgtab});
+                return res.status(200).json({
+                    user: user
+                });
+            }
+            else
+                throw new Error(response);
+        }
+        else
+            throw new Error(response);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            warnings: ["Catch error"]
+        });
+    }
+}
 
 exports.login = login;
 exports.signup = signup;
@@ -715,3 +770,4 @@ exports.deleteInterest = deleteInterest;
 exports.getUserId = getUserId;
 exports.getConnectedUserLocation = getConnectedUserLocation;
 exports.checkUserView = checkUserView;
+exports.getUserIdProfile = getUserIdProfile;

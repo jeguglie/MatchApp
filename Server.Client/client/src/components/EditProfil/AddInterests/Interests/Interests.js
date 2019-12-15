@@ -25,7 +25,6 @@ class Interests extends React.Component {
                                    onClick={() => this.props.deleteInterest({data, i})}><strong>#</strong>{data}</Label>
                         )
                     })}
-                    <Divider />
                     <Divider hidden />
                 </Label.Group>
             </div>

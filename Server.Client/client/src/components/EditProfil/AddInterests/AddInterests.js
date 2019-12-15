@@ -101,7 +101,7 @@ class AddInterests extends Component {
         if (data.key === 'Enter') {
             console.log(1);
             // Regex for interest
-            const regex = new RegExp('[^A-Za-z0-9]');
+            const regex = new RegExp('/(^|\\B)#(?![0-9_]+\\b)([a-zA-Z0-9_]{1,30})(\\b|\\r)/g');
             let new_interest = data.target.value;
             let interests = this.state.interests;
             let warnings = [];

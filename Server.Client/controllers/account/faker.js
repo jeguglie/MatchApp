@@ -26,6 +26,7 @@ const R = 500000 // meters
 
 async function matchAppFaker(req, res) {
     try {
+        faker.seed(2000);
         // CLEAN DATABASE ---------------------------------------------
         let texts = [
             "DELETE FROM users WHERE 1 = 1;",
@@ -64,7 +65,9 @@ async function matchAppFaker(req, res) {
         }
         // GENERATE USERS INTERESTS -----------------------------------
         for (let i = 0; i < 1000; i++) {
+            let tab = [];
             for (let j = 0; j < 30; j++) {
+                let randomInterests = Math.floor(Math.random() * 2000);
                 const text = 'INSERT INTO user_interests(user_id, interest_id) VALUES ($1, $2);';
                 const values = [i, Math.floor(Math.random() * 2000) + 1];
                 await pool.query(text, values);

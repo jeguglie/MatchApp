@@ -3,16 +3,41 @@ import UserMiniCard from "../../components/UserMiniCard/UserMiniCard";
 import API from './../../utils/API';
 import InputRange from 'react-input-range';
 import Interests from "../../components/EditProfil/AddInterests/Interests/Interests";
-import {Search, Dimmer, Loader, Grid, Rail, Segment, Divider, Checkbox} from "semantic-ui-react";
+import {
+    Header,
+    Image,
+    Modal,
+    Dimmer,
+    Loader,
+    Grid,
+    Rail,
+    Segment,
+    Divider,
+    Checkbox,
+    Portal,
+    Label,
+    Icon
+} from "semantic-ui-react";
 import 'react-input-range/lib/css/index.css';
 import Button from "semantic-ui-react/dist/commonjs/elements/Button";
 import _ from "lodash";
 
 const DEFAULT_STATE = {
+    user: {
+        lastname: '',
+        firstname: '',
+        interests: [],
+        gender: [],
+        interested: [],
+        imgs: [],
+        country: '',
+        bio: '',
+        age: '',
+        likes: ''
+    },
+    showModal: false,
+    userIdFocus: 0,
     clear: false,
-    isLoading: false,
-    value: '',
-    results: [],
     users: [],
     warnings: [],
     loading: false,
@@ -27,48 +52,23 @@ const DEFAULT_STATE = {
         max: 50,
     }
 };
-
-const DEFAULT_STATE_SEARCH = {
-    "isLoading": false,
-    "results": [],
-    "value": ""
-};
-// Store data results BDD of interest here
-let DATA = [];
-
 class Wall extends React.Component {
 
     state = {...DEFAULT_STATE};
     componentDidMount = async() => {
 
         this.setState({loading: true});
-        // Get interests
-        API.getInterests()
-            .then(response => {
-                DATA = response.data.results;
-            })
-            .catch(error => {
-                if (this._mounted)
-                    this.setState({warnings: error.response.data.warnings})
-            });
         // Check if user can view users
         await API.checkUserView()
-            .then(res => {
-                if (res.status === 200)
-                    this.canView = true;
-                else
-                    this.canView = false;
-            })
-            .catch(err => {
-                this.canView = false;
-            });
-        if (this.canView === false)
-            this.props.history.push('/');
+            .then(res => { this.canView = res.status === 200 })
+            .catch(() => { this.props.history.push('/') });
+        if(!this.canView)
+            this.props.history.push('/')
         await this.searchMatch();
-
         this.setState({loading: false});
     };
 
+    // Filter
     handleChange = async(value, id) => {
         if (id === "distanceRange")
             this.setState({distanceRange: value});
@@ -78,6 +78,7 @@ class Wall extends React.Component {
             this.setState({popularityRange: value});
     };
 
+    // Search button handle
     searchMatch = async() => {
         this.setState({loading: true});
         const {distanceRange, ageRange, popularityRange } = this.state;
@@ -92,69 +93,88 @@ class Wall extends React.Component {
                 if(typeof error.response !== 'undefined')
                     this.setState({warnings : error.response.data.warnings})
             });
-
         this.setState({users: users});
         this.setState({loading: false});
 
     };
 
-    // Add interests
-    // Semantic UI Search
-    handleResultSelect = (e, { result }) => this.setState({ value: result.title.trim() })
-    handleSearchChange = (e, { value }) => {
-        this.setState({ isLoading: true, value });
-
-        setTimeout(async () => {
-            if (this.state.value.length < 1)
-                return this.setState(DEFAULT_STATE_SEARCH);
-            const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
-            const isMatch = (result) => re.test(result.title)
-
-            this.setState({
-                isLoading: false,
-                results: _.filter(DATA, isMatch).slice(0,3),
+    // Cliked user handle
+    clickedUser = async(userIdFocus) => {
+        await API.getUserIdProfile(userIdFocus)
+            .then(res => {
+                if (res.status === 200){
+                    this.setState({
+                        user: res.data.user,
+                        userIdFocus: userIdFocus,
+                        showModal: true
+                    });
+                    console.log(res.data.user);
+                }
             })
-        }, 300)
     };
-    handleKeyDown = async (data) => {
-        if (data.key === 'Enter') {
-            console.log(1);
-            // Regex for interest
-            const regex = new RegExp('[^A-Za-z0-9]');
-            let new_interest = data.target.value;
-            let interests = this.state.interests;
-            let warnings = [];
-            if (!new_interest || new_interest.length < 2)
-                warnings.push("Your interest must contain between 2 and 20 characters");
-            if (regex.test(new_interest))
-                warnings.push("Your interest is not valid. Only letter and numeric value is accepted");
-            if (warnings.length < 1) {
-                await API.addInterests(new_interest)
-                    .then(response => {
-                        if(response.status === 200 && this._mounted) {
-                            interests.push(new_interest);
-                            this.setState({interests: interests, warnings: response.data.warnings, value: ''})
-                        }
-                    })
-                    .catch((error) => {
-                        this._mounted
-                        && this.setState({warnings: error.response.data.warnings})
-                    })
-            } else
-                this.setState({ warnings });
-        }
-    };
-
-
+    handleClose = () => {
+        this.setState({ userIdFocus: null, showModal: false})
+    }
     render() {
-        const { users, loading, distanceRange, ageRange, popularityRange, interests, isLoading, value, results } = this.state;
+        const { user, showModal, users, loading, distanceRange, ageRange, popularityRange, interests } = this.state;
+
             return (
                 <div className="WallContainer">
+                    <Modal
+                        dimmer={"blurring"}
+                        size={'tiny'}
+                        open={showModal}
+                        onClose={this.handleClose}
+                        className="CardModal">
+                        <Modal.Header className="CardHeader"><h1 className="CardHeaderTile"> {user.firstname} {user.lastname}, <strong>{user.age}</strong></h1></Modal.Header>
+                        <Modal.Content  className="ModalProfilView" >
+                            <Modal.Header></Modal.Header>
+                            <Divider hidden/>
+                                <Grid centered columns={2}>
+                                    <Grid.Column className="RowImages">
+                                        <Image rounded size='medium' src={user.imgs[0]} />
+                                    </Grid.Column>
+                                    <Grid.Row className="RowImages" centered columns={user.imgs.length}>
+                                        {user.imgs.map((img, i) => {
+                                            if (i > 0)
+                                                return (
+                                                    <Grid.Column>
+                                                        <Image rounded size='small' src={user.imgs[i]}/>
+                                                    </Grid.Column>
+                                                )
+                                        })}
+                                    </Grid.Row>
+                                </Grid>
+                            <Divider hidden />
+                            <Modal.Description>
+                                <Segment  className="BioSegment" textAlign="center" inverted>
+                                    <p>{user.bio}</p>
+                                </Segment>
+                                <Label.Group size='small'>
+                                    <p />
+                                    {user.interests.map((data, i) => {
+                                        return (
+                                            <Label className="interestLabel"
+                                                   id={i}
+                                                   key={i}
+                                                   data={data}>
+                                                <strong>#</strong>{data}</Label>
+                                        )
+                                    })}
+                                    <Divider hidden />
+                                </Label.Group>
+                            </Modal.Description>
+                        </Modal.Content>
+                            <Icon
+                                className="ButtonLike"
+                                icon='heart'
+                            />
+                    </Modal>
                     <Dimmer active={loading}>
                         <Loader size='massive'/>
                     </Dimmer>
-                    <Grid centered stackable>
-                        <Grid.Column floadted='left' textAlign='left' mobile={16} tablet={6} computer={4} >
+                    <Grid centered columns={'equal'} stackable>
+                        <Grid.Column mobile={16} tablet={6} computer={6} largeScreen={4} widescreen={3}>
                             <Segment inverted className="SegmentFilter">
                             <div className="filterContainer">
                                 <Grid.Row>
@@ -216,19 +236,6 @@ class Wall extends React.Component {
                                         interests={interests}
                                         deleteInterest={this.deleteInterest} />
                                 </Grid.Row>
-                                <Grid.Row centered>
-                                    <Search
-                                        fluid
-                                        icon={"hashtag"}
-                                        onKeyDown={this.handleKeyDown}
-                                        size="small"
-                                        loading={isLoading}
-                                        onResultSelect={this.handleResultSelect}
-                                        onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
-                                        results={results}
-                                        value={value}
-                                        showNoResults={false} />
-                                </Grid.Row>
                                 <Divider hidden/>
                                 <Grid.Row>
                                     <Button
@@ -239,9 +246,15 @@ class Wall extends React.Component {
                             </div>
                         </Segment>
                     </Grid.Column>
-                            <Grid.Column mobile={16} tablet={8} computer={10}>
-                                        <Grid centered stackable columns={this.state.users.length} >
-                                            <UserMiniCard users={users} />
+                            <Grid.Column>
+                                {/*<Segment inverted>*/}
+                                {/*</Segment>*/}
+                                {/*<Divider hidden/>*/}
+                                        <Grid stackable  >
+                                            <UserMiniCard
+                                                users={users}
+                                                clickedUser={this.clickedUser}
+                                            />
                                         </Grid>
                             </Grid.Column>
                     </Grid>

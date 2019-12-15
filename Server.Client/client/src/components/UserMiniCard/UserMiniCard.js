@@ -24,10 +24,12 @@ class UserMiniCard extends React.Component {
         const { users } = this.state;
         if (users && users.length) {
             return users.map((user, i) => {
-                const {img_link, firstname, likes, distance, age} = user;
+                const {user_id, img_link, firstname, likes, distance, points,  age} = user;
                 return (
-                    <Grid.Column mobile={16} tablet={8} computer={4}>
-                        <Card className="userMinCard">
+                    <Grid.Column key={i} mobile={4} tablet={8} computer={4} largeScreen={4} widescreen={2}>
+                        <Card
+                            className="userMinCard"
+                            onClick={() => this.props.clickedUser(user_id)}>
                             <Image
                                 src={img_link}
                                 key={i}
@@ -37,7 +39,8 @@ class UserMiniCard extends React.Component {
                             <Card.Content>
                                 <Card.Header>{firstname}<span className="MinCardAge">, {age}</span></Card.Header>
                                 <Card.Meta>
-                                    <span className='date'>{distance} <strong>km</strong></span>
+                                    <span className='date'>{Math.round(distance)} <strong>km</strong></span>
+                                    <span className='date'>{points} <strong>Points</strong></span>
                                 </Card.Meta>
                             </Card.Content>
                             <Card.Content extra>
