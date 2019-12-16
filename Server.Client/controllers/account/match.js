@@ -28,8 +28,8 @@ async function getUsers(req, res){
             const {gender, interested} = response.rows[0];
             // First filter on BDD with AGE - POPULARITY
             text = 'SELECT * FROM profile P INNER JOIN pictures IMG ON P.user_id = IMG.user_id WHERE IMG.img_order = 0 ' +
-                'AND interested = $1 AND gender = $2 AND age >= $3 AND age <= $4 AND likes >= $5 AND likes <= $6';
-            values = [gender, interested, ageRange.min, ageRange.max, popularityRange.min, popularityRange.max];
+                'AND P.interested = $1 AND P.gender = $2 AND P.age >= $3 AND P.age <= $4 AND P.likes >= $5 AND P.likes <= $6 AND P.user_id <> $7';
+            values = [gender, interested, ageRange.min, ageRange.max, popularityRange.min, popularityRange.max, userID];
             response = await pool.query(text, values);
             let users = response.rows;
 
@@ -87,6 +87,13 @@ async function getUsers(req, res){
                         if (b.points === a.points)
                             return b.likes - a.likes
                         return b.points - a.points;
+                    });
+                    users.map((user) => {
+                        delete(user.interests);
+                        delete(user.longitude);
+                        delete(user.latitude);
+                        delete(user.img_order);
+                        delete(user.points);
                     });
                     return res.status(200).json({
                         users: users,

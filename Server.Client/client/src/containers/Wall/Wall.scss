@@ -102,7 +102,7 @@ input[type="range"] {
   margin: 2.5rem !important;
   color: grey !important;
   font-weight: bold;
-  background-color: #ebebeb !important;
+  background-color: #f6f6f6 !important;
   border-radius: 10px !important;
 }
 
@@ -115,6 +115,23 @@ input[type="range"] {
 
 .IncludeInterestsTitle {
   font-family: "Open Sans", sans-serif;
+  background: none !important;
+  color: white !important;
+  & label {
+    color: white !important;
+    font-family: "Open Sans" , sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 1.5em !important;
+    margin: 0 !important;
+  }
+}
+
+.ButtonSearch {
+  text-align: center !important;
+  & #search {
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
 }
 
 .CardHeader {
@@ -125,6 +142,10 @@ input[type="range"] {
   border-top-right-radius: 10px !important;
 }
 
+.ModalCard {
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+}
 .CardHeaderTitle {
   font-size: 2.9em !important;
   font-family: "Open Sans", sans-serif !important;
@@ -138,4 +159,21 @@ input[type="range"] {
 .actions {
   background-color: transparent !important;
   border: none !important;
+}
+
+.CardUserActions {;
+  & .segments {
+    border: none !important;
+    box-shadow: none !important;
+  }
+  & #like {
+    background: #db366e !important;
+    color: white;
+    border-radius: 10px;
+  }
+  & #hide {
+    background: #132033 !important;
+    color: white;
+    border-radius: 10px;
+  }
 }

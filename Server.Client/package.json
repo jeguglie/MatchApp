@@ -24,8 +24,10 @@
     "password-hash": "^1.2.2",
     "pg": "^7.12.1",
     "random-location": "^1.1.2",
+    "react-infinite-scroller": "^1.2.4",
     "react-input-range": "^1.3.0",
     "simple-file-upload": "^0.7.0",
+    "socket.io": "^2.3.0",
     "styled-components": "^4.4.1",
     "uuid": "latest"
   },

@@ -11,12 +11,14 @@ import withAuth from "./utils/withAuth";
 import Menu from './components/Menu/Menu'
 import FooterMatchApp from './components/Footer/Footer'
 import './App.scss';
+import Notifications from "./components/Notifications/Notifications";
 
 class App extends Component {
     render() {
         return (
             <Aux>
                 <Menu />
+                <Notifications />
                 <Container fluid>
                     <Switch>
                         <Route exact path="/wall" component={withAuth(Wall)} />
