@@ -6,13 +6,12 @@ const multer = require('multer');
 const withAuth = require('./utils/middleware');
 const app = express();
 const DIR = './public/';
-const io = require('socket.io')();
 const account = require('./controllers/account/lib.js');
 const addphotos = require('./controllers/account/addphotos.js');
 const faker = require('./controllers/account/faker');
 const match = require('./controllers/account/match');
 const port = 3000;
-// Multer file upload
+const io = require('socket.io')();
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, DIR);
@@ -44,8 +43,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use('/public', express.static('public'));
-
-
 app.get('/checkToken', withAuth, function(req, res) {
     res.sendStatus(200);
 });
@@ -54,7 +51,6 @@ app.get('/logout', (req, res) => {
     res.sendStatus(200);
 
 });
-
 app.post('/login', account.login);
 app.post('/signup', account.signup);
 app.post('/getEditProfilValues', withAuth, account.getEditProfilValues);
@@ -72,5 +68,21 @@ app.post('/getConnectedUserLocation', withAuth, account.getConnectedUserLocation
 app.post('/checkUserView', withAuth, account.checkUserView);
 app.post('/getUserIdProfile', withAuth, account.getUserIdProfile);
 app.get('/faker', faker.matchAppFaker);
+
+const users = [];
+
+io.use(withAuth);
+io.on('connection', (client) => {
+    users.push(client.id);
+    console.log(users);
+    client.on('subscribeToTimer', (interval) => {
+        console.log('client is subscribing to timer with interval ', interval);
+        setInterval(() => {
+            client.emit('timer', new Date());
+        }, interval);
+    });
+});
+
+io.listen(8000);
 
 app.listen(port, 'localhost', () => console.log(`Listening on port ${port}`));

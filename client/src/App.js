@@ -9,6 +9,7 @@ import { Container } from "semantic-ui-react";
 import withAuth from "./utils/withAuth";
 import Menu from './components/Menu/Menu'
 import './App.scss';
+import Notifications from "./components/Notifications/Notifications";
 
 class App extends Component {
 
@@ -16,6 +17,7 @@ class App extends Component {
         return (
             <Aux>
                 <Menu />
+                <Notifications />
                 <Container fluid>
                     <Switch>
                         <Route exact path="/wall" component={withAuth(Wall)} />
