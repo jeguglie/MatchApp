@@ -1,17 +1,17 @@
-body,html {
+body {
   background-color: #e9e9e9;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
   "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  margin: 0;
-  padding: 0;
-  height: 100%;
 }
+
+
 // Login - Signup
 @import './components/Login/Login.scss';
-@import './components/Signup/SignupStyle.scss';
+@import './components/Signup/Signup.scss';
+
 // EditProfil
 @import './components/EditProfil/EditProfil.scss';
 @import './components/EditProfil/AddPhotos/AddPhotos.scss';
@@ -21,9 +21,14 @@ body,html {
 @import './components/EditProfil/AddInterests/AddInterests';
 @import './components/EditProfil/AddInterests/Interests/Interests';
 @import './components/EditProfil/Location/Location';
-@import './containers/Profil/Profil';
+
 // Menu
 @import './components/Menu/Menu';
+
 // Wall
 @import './containers/Wall/Wall';
 @import './components/UserMiniCard/UserMiniCard';
+@import './components/ModalUser/ModalUser';
+
+// Footer
+@import './containers/Footer/Footer';

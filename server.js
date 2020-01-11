@@ -7,11 +7,19 @@ const withAuth = require('./utils/middleware');
 const app = express();
 const DIR = './public/';
 const account = require('./controllers/account/lib.js');
+const wallActions = require('./controllers/account/userWallActions.js');
 const addphotos = require('./controllers/account/addphotos.js');
 const faker = require('./controllers/account/faker');
 const match = require('./controllers/account/match');
 const port = 3000;
-const io = require('socket.io')();
+const cookie = require('cookie');
+const http = require('http');
+const socketIO = require('socket.io');
+const server = http.createServer(app);
+const io = socketIO(server);
+const jwt = require('jsonwebtoken');
+const secret = 'mysecretsshhh';
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, DIR);
@@ -67,22 +75,52 @@ app.post('/getUsers', withAuth, match.getUsers);
 app.post('/getConnectedUserLocation', withAuth, account.getConnectedUserLocation);
 app.post('/checkUserView', withAuth, account.checkUserView);
 app.post('/getUserIdProfile', withAuth, account.getUserIdProfile);
+app.post('/userLike', withAuth, wallActions.userLike);
 app.get('/faker', faker.matchAppFaker);
 
-const users = [];
 
-io.use(withAuth);
-io.on('connection', (client) => {
-    users.push(client.id);
-    console.log(users);
-    client.on('subscribeToTimer', (interval) => {
-        console.log('client is subscribing to timer with interval ', interval);
-        setInterval(() => {
-            client.emit('timer', new Date());
-        }, interval);
-    });
+// Store connected users
+let userslist = [];
+
+// Notifications
+io.on('connection', socket => {
+    // Get cookies
+    let cookief = socket.handshake.headers.cookie;
+    if (cookief) {
+        let cookies = cookie.parse(cookief);
+        // Check Auth
+        if (cookies && typeof cookies.token != "undefined") {
+            jwt.verify(cookies.token, secret, async (err, decoded) => {
+                if (!err) {
+                    let email = decoded.email;
+                    // Get User ID
+                    let userID = await account.getUserId(email);
+                    if (userID) {
+                        // Store userID and socketID
+                        if (!userslist.length)
+                            userslist.push({userID: userID, socketID: socket.id});
+                        else {
+                            let find = false;
+                            userslist.map((data) => {
+                                if (data.userID === userID) {
+                                    find = true;
+                                    data.socketID = socket.id;
+                                }
+                            });
+                            // If userID not match, then add it to userlists
+                            if (!find)
+                                userslist.push({userID: userID, socketID: socket.id});
+                        }
+                    }
+                }
+            });
+        }
+    }
+    console.log('connected');
+    io.on('disconnect', socket => {
+        console.log('disconnected');
+    })
 });
 
-io.listen(8000);
-
+server.listen(3002, () => console.log(`Listening on port 3002`));
 app.listen(port, 'localhost', () => console.log(`Listening on port ${port}`));

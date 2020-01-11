@@ -2,32 +2,74 @@
   background: none !important;
 }
 .Menu {
-  padding: 1em;
+  font-family: "Open Sans", sans-serif !important;
     box-shadow: 0px 13px 47px rgba(0, 0, 0, 0.44) !important;
     background-color: #191919 !important;
-    .active.item {
+    .activeItem {
       background: #db366e !important;
       border-radius: 10px;
     }
-  .item  {
-    border-radius: 10px;
-  }
+    .nav-link {
+      padding: 10px !important;
+      margin: 2px !important;
+      color: white !important;
+      & .activeItem {
+        background: #db366e !important;
+      }
+      &:hover {
+        background-color: #db366e !important;
+        border-radius: 10px !important;
+      }
+    }
+    .item  {
+      border-radius: 10px;
+    }
     & a, & .ui.inverted.menu .item:before {
       background: none !important;
-      font-weight: 700 !important;
       font-size: 1.1em !important;
     }
     border-radius: 0 !important;
     margin-bottom: 2em !important;
   }
-  .Logo, .Items home{
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+
+  .MenuLink {
+    text-align: center;
+    display: flex;
+  }
+
+  .ConnectionNav {
+    text-align: left;
+    #loginButton {
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+    }
+
+    #signupButton {
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+    }
 
   }
 
+.activeItemButton {
+  background-color: #db366e !important;
+}
 
+.bootstrap-iso .navbar-toggler {
+  background-color: white !important;
+}
+
+.bootstrap-iso .btn-outline-primary {
+  color: white !important;
+  border-radius: 10px !important;
+  border: 2px solid  #db366e !important;
+}
+
+.bootstrap-iso .btn-outline-primary:hover {
+  color: white !important;
+  background-color: #db366e !important;
+  border-color: #db366e !important;
+}
 
   .NavbarLogo {
     -webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,0.15)) !important;

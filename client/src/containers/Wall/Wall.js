@@ -4,10 +4,10 @@ import API from './../../utils/API';
 import InputRange from 'react-input-range';
 import InfiniteScroll from 'react-infinite-scroller';
 import Interests from "../../components/EditProfil/AddInterests/Interests/Interests";
-import {Image, Modal, Dimmer, Loader, Grid, Segment, Divider, Checkbox, Label} from "semantic-ui-react";
+import {Dimmer, Loader, Grid, Segment, Divider, Checkbox} from "semantic-ui-react";
 import 'react-input-range/lib/css/index.css';
 import Button from "semantic-ui-react/dist/commonjs/elements/Button";
-
+import ModalUser from '../../components/ModalUser/ModalUser';
 
 const DEFAULT_STATE = {
     user: {
@@ -45,18 +45,35 @@ const DEFAULT_STATE = {
 class Wall extends React.Component {
 
     state = {...DEFAULT_STATE};
-    componentDidMount = async() => {
 
+    componentDidMount = async() => {
+        this._mounted = true;
         this.setState({loading: true});
         // Check if user can view users
         await API.checkUserView()
             .then(res => { this.canView = res.status === 200 })
             .catch(() => { this.props.history.push('/') });
         if(!this.canView)
-            this.props.history.push('/')
+            this.props.history.push('/');
+        await API.getUserInterests()
+            .then(response => {
+                if (typeof response.data.interests !== "undefined"){
+                    if (this._mounted)
+                        this.setState({interests: response.data.interests})
+                    console.log(response.data.interests);
+                }
+            })
+            .catch(error => {
+                if (this._mounted)
+                    this.setState({warnings: error.response.data.warnings})
+            });
         await this.searchMatch();
         this.setState({loading: false});
     };
+
+    componentWillUnmount() {
+        this._mounted = false;
+    }
 
     // Filter
     handleChange = async(value, id) => {
@@ -105,7 +122,6 @@ class Wall extends React.Component {
                         userIdFocus: userIdFocus,
                         showModal: true
                     });
-                    console.log(res.data.user);
                 }
             })
     };
@@ -125,65 +141,9 @@ class Wall extends React.Component {
     }
     render() {
         const { hasMoreContent, user, showModal, users, loading, distanceRange, ageRange, popularityRange, interests } = this.state;
-        const ModalUser = () => {
-            return (
-                <Modal
-                    dimmer={"blurring"}
-                    size={'tiny'}
-                    open={showModal}
-                    onClose={this.handleClose}
-                    className="ModalCard">
-                    <Modal.Header className="CardHeader"><h1 className="CardHeaderTile"> {user.firstname} {user.lastname}, <strong>{user.age}</strong></h1></Modal.Header>
-                    <Modal.Content  className="ModalProfilView" >
-                        <Modal.Header></Modal.Header>
-                        <Divider hidden/>
-                        <Grid centered columns={2}>
-                            <Grid.Column className="RowImages">
-                                <Image rounded size='medium' src={user.imgs[0]} />
-                            </Grid.Column>
-                            <Grid.Row className="RowImages" centered columns={user.imgs.length}>
-                                {user.imgs.map((img, i) => {
-                                    if (i > 0)
-                                        return (
-                                            <Grid.Column>
-                                                <Image rounded size='small' src={user.imgs[i]}/>
-                                            </Grid.Column>
-                                        )
-                                })}
-                            </Grid.Row>
-                        </Grid>
-                        <Modal.Description>
-                            <Segment  className="BioSegment" textAlign="center" inverted>
-                                <p>{user.bio}</p>
-                            </Segment>
-                                <Segment className="CardUserActions" basic textAlign="center">
-                                    <Button.Group>
-                                        <Button size='huge' id="like">Like</Button>
-                                        <Button.Or text='or' />
-                                        <Button size='huge' id="hide" positive>Hide</Button>
-                                    </Button.Group>
-                                </Segment>
-                            <Divider hidden/>
-                            <Label.Group size='small'>
-                                <p />
-                                {user.interests.map((data, i) => {
-                                    return (
-                                        <Label className="interestLabel"
-                                               id={i}
-                                               key={i}
-                                               data={data}>
-                                            <strong>#</strong>{data}</Label>
-                                    )
-                                })}
-                            </Label.Group>
-                        </Modal.Description>
-                    </Modal.Content>
-                </Modal>
-            )
-        }
             return (
                 <div className="WallContainer">
-                    <ModalUser />
+                    <ModalUser showModal={showModal} user={user} handleClose={this.handleClose} userInterests={interests} />
                     <Dimmer active={loading}>
                         <Loader size='massive'/>
                     </Dimmer>
@@ -245,10 +205,6 @@ class Wall extends React.Component {
                                         <Checkbox label='Include my interests' defaultChecked />
                                 </Grid.Row>
                                 <Divider />
-                                <Grid.Row centered>
-                                    <Interests
-                                        interests={interests} />
-                                </Grid.Row>
                                 <Grid.Row className="ButtonSearch">
                                     <Button
                                         id="search"

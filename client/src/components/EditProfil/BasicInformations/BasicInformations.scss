@@ -1,4 +1,8 @@
-.BasicInformations{
+.BasicInfosContainer {
+  position: static !important;
+}
+
+.BasicInformations {
   padding: 4em;
   max-width: 800px;
   background-color:  #db366e;
@@ -6,16 +10,42 @@
   overflow: hidden !important;
   position: relative !important;
   z-index: 1;
-  margin: auto;
-  box-shadow: 0px 13px 47px rgba(0, 0, 0, 0.3);
+  margin: 4em auto;
+  box-shadow: 0 13px 47px rgba(0, 0, 0, 0.3);
 }
 
-.DropdownBasic{
-  .ui.fluid.dropdown {
-    margin-left: 0.5em !important;
-    margin-right: 0.5em !important;
+.BasicInfosForm {
+  & .field {
+    padding-top: 0.25em !important;
+    padding-bottom: 0.25em !important;
   }
+  &.ui.form .field .dropdown:not i {
+    font-size: 1.3em !important;
+    color: grey !important;
+  }
+  & .ui.form input::placeholder {
+    color: #a2a2a2 !important;
+  }
+  input, .selection , textarea, .ui.fluid.dropdown {
+    border-radius: 15px !important;
+    border: none !important;
+    font-family: "Open Sans", sans-serif !important;
+    font-size: 1.3em !important;
+    color: #4f384f !important;
+    font-weight: 700;
+    background: linear-gradient(-150deg, white, #eaeaea) !important;
+    box-shadow: 4px 4px 1px rgba(0,0,0,0.1) !important;
+  }
+
+  & label {
+    color: rgba(255, 255, 255, 0.6) !important;
+    text-transform: none;
+  }
+
+
 }
+
+// ---------------------
 
 .shapeBasicsInfos {
   top: -608px;

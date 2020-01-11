@@ -26,7 +26,6 @@ async function signup(req, res) {
         w_cpassword: '',
         warnings: [],
     };
-    console.log(1);
     if (!validate.validateEmail(email))
        warnings.w_email = "Please enter a valid email.";
     if (!validate.validatePassword(password))
@@ -417,6 +416,7 @@ async function checkUserView(req, res) {
         });
     }
 }
+
 
 async function getUserIdProfile(req, res) {
     const userID = await getUserId(res.locals.email);

@@ -94,13 +94,13 @@ class Signup extends React.Component {
     };
 
     render() {
-        const {w_firstname, w_lastname, w_email, w_password, w_username, w_cpassword, loading} = this.state;
+        const {warnings, w_firstname, w_lastname, w_email, w_password, w_username, w_cpassword, loading} = this.state;
         return (
-        <Container className="signupModal">
+        <Container className="SignupModal">
+            <div className="shapeSignup"></div>
             <Dimmer active={loading}>
                 <Loader size='massive'>Create your account...</Loader>
             </Dimmer>
-            <div className="shapeSignup"></div>
             <Divider hidden />
             <Image className="img-fluid"
                    src="/img/MatchApp-Logo.png"
@@ -109,101 +109,103 @@ class Signup extends React.Component {
                    centered/>
            <Grid textAlign="center">
                <Grid.Row centered>
-                   <div className="signupWarnings">
-                       <Warnings data={this.state.warnings.warnings} />
+                   <div className="SignupWarnings">
+                       <Warnings data={warnings} />
                    </div>
                </Grid.Row>
            </Grid>
-            <Divider hidden />
             <Container textAlign='center'>
-                <h1 className="signuph1">Create an account</h1>
+                <h1 className="SignupTitle">Create an account</h1>
             </Container>
             <Divider hidden />
-            <Form className="signupForm">
-                <Form.Group widths='equal'>
-                        <Form.Input
-                            error={w_firstname.length > 0 ? w_firstname : null}
-                            label="First Name"
-                            id="firstname"
-                            icon='user'
-                            iconPosition='left'
-                            autoFocus
-                            onChange={this.handleChange}
-                            size="huge"
-                            placeholder="First Name"
-                            autoComplete="off" />
-                        <Form.Input
-                            error={w_lastname.length > 0 ? w_lastname : null}
-                            label="Last Name"
-                            id="lastname"
-                            icon='user'
-                            iconPosition='left'
-                            onChange={this.handleChange}
-                            size="huge"
-                            placeholder="Last Name"
-                            autoComplete="off" />
-                </Form.Group>
-                <Form.Group widths='equal' onSubmit={this.send}>
-                    <Form.Input
-                        error={w_email.length > 0 ? w_email : null}
-                        label="Email"
-                        id="email"
-                        icon='mail'
-                        iconPosition='left'
-                        onChange={this.handleChange}
-                        size="huge"
-                        placeholder="Email"
-                        autoComplete="off" />
-                    <Form.Input
-                        error={w_username.length > 0 ? w_username : null}
-                        label="Choose a username"
-                        id="username"
-                        icon='user circle'
-                        iconPosition='left'
-                        onChange={this.handleChange}
-                        size="huge"
-                        placeholder="Choose a username"
-                        autoComplete="off" />
-                </Form.Group>
-                <Form.Group widths='equal'>
-                    <Form.Input
-                        error={w_password.length > 0 ? w_password : null}
-                        label="Password"
-                        icon='lock'
-                        iconPosition='left'
-                        id="password"
-                        onChange={this.handleChange}
-                        type="password"
-                        size="huge"
-                        placeholder="Password" />
-                    <Form.Input
-                        error={w_cpassword.length > 0 ? w_cpassword : null}
-                        label="Confirm Password"
-                        icon='lock'
-                        iconPosition='left'
-                        id="cpassword"
-                        onChange={this.handleChange}
-                        type="password"
-                        size="huge"
-                        placeholder="Confirm Password" />
-                </Form.Group>
-                <Divider hidden />
-                <Grid textAlign="center">
-                    <Grid.Row centered>
-                        <Button
-                            className="signupButton"
-                            loading={this.state.loading}
-                            size='huge'
-                            type="submit"
-                            onClick={this.send}>Register
-                        </Button>
-                    </Grid.Row>
-                </Grid>
-                <Divider hidden />
-            </Form>
+            <Grid className="SignupFormContainer">
+                <Grid.Row centered>
+                    <Form>
+                        <Form.Group widths='equal'>
+                                <Form.Input
+                                    error={w_firstname.length > 0 ? w_firstname : null}
+                                    label="First Name"
+                                    id="firstname"
+                                    icon='user'
+                                    iconPosition='left'
+                                    autoFocus
+                                    onChange={this.handleChange}
+                                    size="huge"
+                                    placeholder="First Name"
+                                    autoComplete="off" />
+                                <Form.Input
+                                    error={w_lastname.length > 0 ? w_lastname : null}
+                                    label="Last Name"
+                                    id="lastname"
+                                    icon='user'
+                                    iconPosition='left'
+                                    onChange={this.handleChange}
+                                    size="huge"
+                                    placeholder="Last Name"
+                                    autoComplete="off" />
+                        </Form.Group>
+                        <Form.Group widths='equal' onSubmit={this.send}>
+                            <Form.Input
+                                error={w_email.length > 0 ? w_email : null}
+                                label="Email"
+                                id="email"
+                                icon='mail'
+                                iconPosition='left'
+                                onChange={this.handleChange}
+                                size="huge"
+                                placeholder="Email"
+                                autoComplete="off" />
+                            <Form.Input
+                                error={w_username.length > 0 ? w_username : null}
+                                label="Choose a username"
+                                id="username"
+                                icon='user circle'
+                                iconPosition='left'
+                                onChange={this.handleChange}
+                                size="huge"
+                                placeholder="Choose a username"
+                                autoComplete="off" />
+                        </Form.Group>
+                        <Form.Group widths='equal'>
+                            <Form.Input
+                                error={w_password.length > 0 ? w_password : null}
+                                label="Password"
+                                icon='lock'
+                                iconPosition='left'
+                                id="password"
+                                onChange={this.handleChange}
+                                type="password"
+                                size="huge"
+                                placeholder="Password" />
+                            <Form.Input
+                                error={w_cpassword.length > 0 ? w_cpassword : null}
+                                label="Confirm Password"
+                                icon='lock'
+                                iconPosition='left'
+                                id="cpassword"
+                                onChange={this.handleChange}
+                                type="password"
+                                size="huge"
+                                placeholder="Confirm Password" />
+                        </Form.Group>
+                        <Divider hidden />
+                        <Grid textAlign="center">
+                            <Grid.Row centered>
+                                <Button
+                                    className="SignupButton"
+                                    loading={loading}
+                                    size='huge'
+                                    type="submit"
+                                    onClick={this.send}>Register
+                                </Button>
+                            </Grid.Row>
+                        </Grid>
+                    </Form>
+                </Grid.Row>
+            </Grid>
             <Grid textAlign="center">
                 <Grid.Row centered>
-                    <div className="signupNoAccount">
+                    <div className="SignupNoAccount">
                         <p>Have an account ? <a href="/login">Log in</a></p>
                     </div>
                 </Grid.Row>

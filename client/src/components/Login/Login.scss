@@ -5,45 +5,32 @@
   display: inline-flex;
   justify-content: center;
   background-color:  #db366e;
-  width: 700px !important;
-  margin-top : 3em;
+  width: 400px !important;
+  margin: 4em auto;
   padding-left: 4em !important;
   padding-right: 4em !important;
-
   border-radius: 20px;
   overflow: hidden;
   position: relative;
   z-index: 1;
 }
 
-
-/*INPUT*/
 .loginForm {
-  .ui.grid>.column:not(.row) {
-    padding: 0.3rem !important;
+  input, .selection , textarea{
+    border-radius: 15px !important;
+    border: none !important;
+    font-family: "Open Sans", sans-serif !important;
+    font-size: 1em !important;
+    color: #4f384f !important;
+    font-weight: 700;
+    background: linear-gradient(-150deg, white, #eaeaea) !important;
+    box-shadow: 4px 4px 1px rgba(0,0,0,0.1) !important;
   }
-  input {
-    color:  #5a5a5a !important;
-    background-color: white !important;
-    border: 2px solid white !important;
-    border-radius: 20px !important;
-  }
-  input::placeholder {
-    color:  #5a5a5a !important;
-    opacity: 0.7 !important;
-  }
-  i {
-    color: #5a5a5a !important;
+  & input::placeholder {
+    color: #a2a2a2 !important;
   }
 }
 
-.inputUser i {
-  color: #a2a2a2 !important;
-  opacity: 1 !important;
-}
-
-
-/*TEXT*/
 .loginNoAccount  a {
   color: white;
   font-weight: bold;
@@ -55,6 +42,7 @@
   margin-bottom: 40px;
   margin-top: -30px;
 }
+
 .loginWarnings {
   display: flex;
   flex-direction: column;
@@ -78,17 +66,14 @@
   font-size: 1em;
 }
 
-
 .loginForgot {
   margin-top: -15px;
 }
 
 .loginButton {
-
   background-color: white !important;
   color: #fc3372 !important;
   border-radius: 20px !important;
-
   &:hover, &:active, &:focus {
     box-shadow: -1px 5px 5px -2px rgba(0,0,0,0.2) !important;
     background-color: white !important;
@@ -97,7 +82,7 @@
   }
 }
 
-/*SHAPES*/
+// ------------------------
 .shape {
   top: -608px;
   border-radius: 31% 69% 32% 68% / 36% 44% 56% 64%;
@@ -105,7 +90,7 @@
   height: 1523px;
   position: absolute;
   background-image: linear-gradient(-82deg, #ffffff 0%, #4c4c4c 100%);
-  right: 249px;
+  right: 189px;
   z-index: -1;
   mix-blend-mode: darken;
   transform: rotate(-155deg);
@@ -114,73 +99,27 @@
 }
 
 @media only screen and (min-width: 350px) and (max-width: 450px){
-  .shape {
-    right: 100px !important;
+  .loginModal {
+    width: 400px !important;
   }
+  .shape {
+      right: 100px !important;
+    }
 }
 @media only screen and (min-width: 450px) and (max-width: 767px){
-  .shape {
-    right: 300px !important;
+  .loginModal {
+    width: 200px !important;
   }
+  .shape {
+      right: 300px !important;
+    }
 }
 
 @media only screen and (max-width: 767px){
-  .loginModal{
-    width: 300px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 4em !important;
-    padding-right: 4em !important;
+  .loginModal {
+    width: 400px !important;
   }
-  .shape {
-    right: 150px;
-  }
-}
-
-@media only screen and (max-width: 991px) and (min-width: 768px){
-  .loginModal{
-    width: 500px !important;
-    padding-left: 4em !important;
-    padding-right: 4em !important;
-  }
-}
-
-@media only screen and (max-width: 1199.98px) and (min-width: 992px){
-  .loginModal{
-    width: 500px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 4em !important;
-    padding-right: 4em !important;
-  }
-}
-
-
-
-@media only screen and (min-width: 1200px){
-  .loginModal{
-    width: 500px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 4em !important;
-    padding-right: 4em !important;
-  }
-  .shape {
-    top: -608px;
-    border-radius: 31% 69% 32% 68% / 36% 44% 56% 64%;
-    width: 1551px;
-    height: 1523px;
-    position: absolute;
-    background-image: linear-gradient(-82deg,
-            #ffffff 0%,
-            #4c4c4c 100%);
-    right: 269px;
-    z-index: -1;
-    mix-blend-mode: darken;
-    transform: rotate(-155deg);
-    box-shadow: 11px 3px 5px 5px
-    rgba(0, 0, 0, 0.5);
-    mix-blend-mode: darken;
-    opacity: 0.3;
-  }
+   .shape {
+      right: 190px !important;
+    }
 }

@@ -159,63 +159,62 @@ class AddInterests extends Component {
                 size="medium"/>
         );
         return(
-            <div className="container-fluid">
-                <div className={classnames("ui middle", "AddInterests")}>
-                    <ProgressBar />
-                    <Dimmer active={this.state.loading}>
-                        <Loader size='massive'/>
-                    </Dimmer>
-
-                    <div className="shapeAddInterests"></div>
-                    <Grid verticalAlign={"middle"}>
-                        {this.showWarnings(warnings)}
-                        <Grid.Row centered>
-                            <Interests
-                                interests={interests}
-                                deleteInterest={this.deleteInterest} />
-                        </Grid.Row>
-                    </Grid>
+            <div className="AddInterests">
+                <ProgressBar />
+                <Dimmer active={this.state.loading}>
+                    <Loader size='massive'/>
+                </Dimmer>
+                <div className="shapeAddInterests"></div>
+                <Grid verticalAlign={"middle"}>
+                    {this.showWarnings(warnings)}
+                    <Grid.Row centered>
+                        <Interests
+                            interests={interests}
+                            deleteInterest={this.deleteInterest} />
+                    </Grid.Row>
+                </Grid>
+                <Divider hidden />
+                <Grid verticalAlign="middle" className="TellOthersBox">
                     <Divider hidden />
-                    <Grid verticalAlign={"middle"} className="TellOthersBox">
-                        <Divider hidden />
-                        <Grid.Row centered>
-                            <h1 className="InterestsTitle">Tell others what do you like</h1>
-                        </Grid.Row>
-                        <Grid.Row centered className="TextInfoInterestsRow">
-                            <p className="TextInfoInterests">Choose an existing interest increase your chances of match!</p>
-                        </Grid.Row>
-                        <Grid.Row centered>
-                            <Search
-                                icon={"hashtag"}
-                                onKeyDown={this.handleKeyDown}
-                                size="huge"
-                                loading={isLoading}
-                                onResultSelect={this.handleResultSelect}
-                                onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
-                                results={results}
-                                value={value}
-                                showNoResults={false} />
-                        </Grid.Row>
-                        <Divider hidden />
-                    </Grid>
+                    <Grid.Row centered>
+                        <h1 className="InterestsTitle">
+                            Tell others what do you like
+                        </h1>
+                    </Grid.Row>
+                    <Grid.Row centered className="TextInfoInterestsRow">
+                        <p className="TextInfoInterests">Choose an existing interest increase your chances of match!</p>
+                    </Grid.Row>
+                    <Grid.Row centered>
+                        <Search
+                            icon="hashtag"
+                            onKeyDown={this.handleKeyDown}
+                            size="huge"
+                            loading={isLoading}
+                            onResultSelect={this.handleResultSelect}
+                            onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
+                            results={results}
+                            value={value}
+                            showNoResults={false} />
+                    </Grid.Row>
                     <Divider hidden />
-                    <Divider hidden />
-                    <Divider hidden />
-                    <Grid>
-                        <Grid.Row centered>
-                            <Icon
-                                className="EditProfilArrow"
-                                name='arrow alternate circle left outline'
-                                size="huge"
-                                onClick={this.props.prevsection}/>
-                            <Icon
-                                className="EditProfilArrow"
-                                name='arrow alternate circle right outline'
-                                size="huge"
-                                onClick={this.props.nextsection}/>
-                        </Grid.Row>
-                    </Grid>
-                </div>
+                </Grid>
+                <Divider hidden />
+                <Divider hidden />
+                <Divider hidden />
+                <Grid>
+                    <Grid.Row centered>
+                        <Icon
+                            className="EditProfilArrow"
+                            name='arrow circle left'
+                            size="huge"
+                            onClick={this.props.prevsection}/>
+                        <Icon
+                            className="EditProfilArrow"
+                            name='arrow circle right'
+                            size="huge"
+                            onClick={this.props.nextsection}/>
+                    </Grid.Row>
+                </Grid>
             </div>
             )
 

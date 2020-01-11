@@ -106,62 +106,60 @@ class AddPhotos extends React.Component {
                 size="medium"/>
         );
         return (
-            <div className="container-fluid">
-                <div className={classnames("ui middle", "AddPhotos")}>
-                    <ProgressBar />
-                    <Dimmer active={this.state.loading}>
-                        <Loader size='massive' />
-                    </Dimmer>
-                    <Grid textAlign="center">
+            <div className="AddPhotos">
+                <ProgressBar />
+                <Dimmer active={this.state.loading}>
+                    <Loader size='massive' />
+                </Dimmer>
+                <Grid textAlign="center">
+                    <Grid.Row centered>
+                        <h1 className="CompleteTitle">Add photos</h1>
+                    </Grid.Row>
+                </Grid>
+                <Divider hidden />
+                <Divider hidden />
+                <div className="shapeAddPhotos"></div>
+                <Grid columns={2} doubling textAlign="center">
+                    <Grid.Column>
+                        <Image className="ShadowImage"
+                               src={this.state.coverImage}
+                               size='medium'
+                               centered
+                               rounded bordered />
+                    </Grid.Column>
+                    <Grid.Column>
                         <Grid.Row centered>
-                            <h1 className="CompleteTitle">Add photos</h1>
+                        <FileUpload
+                            handleSaveFinished={this.handleSaveFinished}
+                            savePhotos={this.state.savePhotos}
+                            showPreview={this.showPreview}
+                            setWarnings={this.setWarnings}
+                            handleImageUpload={this.handleImageUpload} />
                         </Grid.Row>
-                    </Grid>
-                    <Divider hidden />
-                    <Divider hidden />
-                    <div className="shapeAddPhotos"></div>
-                    <Grid columns={2} doubling textAlign="center">
-                        <Grid.Column>
-                            <Image className="ShadowImage"
-                                   src={this.state.coverImage}
-                                   size='medium'
-                                   centered
-                                   rounded bordered />
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Grid.Row centered>
-                            <FileUpload
-                                handleSaveFinished={this.handleSaveFinished}
-                                savePhotos={this.state.savePhotos}
-                                showPreview={this.showPreview}
-                                setWarnings={this.setWarnings}
-                                handleImageUpload={this.handleImageUpload} />
-                            </Grid.Row>
-                                <Container fluid textAlign="center">
-                                    <div className="loginWarnings WarningsUpload">
-                                        <Warnings data={this.state.warnings}/>
-                                    </div>
-                                </Container>
-                            <ProfileImgPreview
-                                data={this.state.profileImg}
-                                deleteImage={this.deleteImage}/>
-                        </Grid.Column>
-                    </Grid>
-                        <Grid>
-                            <Divider hidden />
-                            <Divider hidden />
-                        <Grid.Row centered>
-                            <Icon className="EditProfilArrow"
-                                  name='arrow alternate circle left outline'
-                                  size="huge"
-                                  onClick={this.props.prevsection}/>
-                            <Icon className="EditProfilArrow"
-                                  name='arrow alternate circle right outline'
-                                  size="huge"
-                                  onClick={this.props.nextsection}/>
-                        </Grid.Row>
-                    </Grid>
-                </div>
+                            <Container fluid textAlign="center">
+                                <div className="loginWarnings WarningsUpload">
+                                    <Warnings data={this.state.warnings}/>
+                                </div>
+                            </Container>
+                        <ProfileImgPreview
+                            data={this.state.profileImg}
+                            deleteImage={this.deleteImage}/>
+                    </Grid.Column>
+                </Grid>
+                    <Grid>
+                        <Divider hidden />
+                        <Divider hidden />
+                    <Grid.Row centered>
+                        <Icon className="EditProfilArrow"
+                              name='arrow circle left'
+                              size="huge"
+                              onClick={this.props.prevsection}/>
+                        <Icon className="EditProfilArrow"
+                              name='arrow circle right'
+                              size="huge"
+                              onClick={this.props.nextsection}/>
+                    </Grid.Row>
+                </Grid>
             </div>
         )
     }

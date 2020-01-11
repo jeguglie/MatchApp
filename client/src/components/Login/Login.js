@@ -52,10 +52,12 @@ class Login extends React.Component {
                         await API.login(email, password)
                             .then((response) => {
                                 if (typeof response.data !== 'undefined' && typeof response.data.connect !== 'undefined')
-                                    this.props.history.push('/');
+                                    this.props.handleConnected(true);
+                                    console.log(this.props);
+                                    this.props.history.push('/profile');
                             })
                             .catch(error => {
-                                if (typeof error.response.data !== 'undefined' && typeof error.response.data !== 'undefined') {
+                                if (typeof error.response !== 'undefined' && typeof error.response.data !== 'undefined') {
                                     if (this._mounted)
                                         this.setState({w_email: error.response.data.w_email});
                                 }

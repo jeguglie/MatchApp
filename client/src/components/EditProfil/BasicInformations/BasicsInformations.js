@@ -2,12 +2,8 @@ import React from 'react';
 import {Divider, Form, TextArea, Grid, Progress, Icon, Select, Loader, Dimmer} from 'semantic-ui-react';
 import API from "../../../utils/API";
 import VALIDATE from "../../../utils/validation";
-import classnames from 'classnames';
 import Warnings from "../../Warnings/Warnings";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 const countries = VALIDATE.countries;
-
 const genderOptions = [
     { key: 'male', value: 'male', text: 'Male' },
     { key: 'female', value: 'female', text: 'Female' },
@@ -133,7 +129,7 @@ class BasicsInformations extends React.Component {
     };
 
     render() {
-        const {w_firstname, w_lastname, w_gender, w_interested, w_country, w_bio, complete} = this.state;
+        const {loading, warnings, w_firstname, w_lastname, w_gender, w_interested, w_country, w_bio, complete} = this.state;
         const ProgressBar = () => (
             <Progress
                 percent={complete}
@@ -142,21 +138,21 @@ class BasicsInformations extends React.Component {
                 size="medium"/>
         );
         const Warnings = () => {
-            if (this.state.warnings && this.state.warnings.length > 0)
+            if (warnings && warnings.length > 0)
                 return (
                     <Grid.Row centered textAlign="center">
                         <div className="loginWarnings">
-                            <Warnings data={this.state.warnings} />
+                            <Warnings data={warnings} />
                         </div>
                     </Grid.Row>
                 )
             else return null
         }
         return (
-            <div className="container-fluid">
-                <div className={classnames("ui middle", "BasicInformations")}>
+            <div className="BasicInfosContainer">
+                <div className="BasicInformations">
                     <ProgressBar />
-                    <Dimmer active={this.state.loading}>
+                    <Dimmer active={loading}>
                         <Loader size='massive'/>
                     </Dimmer>
                     <Grid textAlign="center">
@@ -172,7 +168,7 @@ class BasicsInformations extends React.Component {
                     </Grid>
                     <Grid columns={1} doubling>
                         <Grid.Column>
-                            <Form className="formEdit">
+                            <Form className="BasicInfosForm">
                                 <Form.Group widths='equal'>
                                     <Form.Input
                                         error={w_lastname.length > 0 ? w_lastname : null}
@@ -252,7 +248,7 @@ class BasicsInformations extends React.Component {
                         <Divider hidden />
                         <Grid.Row centered>
                             <Icon className="EditProfilArrow"
-                                  name='arrow alternate circle right outline'
+                                  name='arrow circle right'
                                   size="huge"
                                   onClick={this.handleSave}/>
                         </Grid.Row>

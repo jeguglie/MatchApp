@@ -18,7 +18,8 @@ const R = 500000 // meters
 
 async function matchAppFaker(req, res) {
     try {
-        faker.seed(2000);
+        console.log("Clean Database");
+        faker.seed(4000);
         // CLEAN DATABASE ---------------------------------------------
         let texts = [
             "DELETE FROM users WHERE 1 = 1;",
@@ -31,13 +32,21 @@ async function matchAppFaker(req, res) {
         ];
         texts.map(async (request) => { await pool.query(request) });
 
-        // GENERATE 2000 INTERESTS ------------------------------------
+        // GENERATE 4000 INTERESTS ------------------------------------
         // RESET SEQUENCE
         let text = 'ALTER SEQUENCE interests_id_seq RESTART WITH 1';
         await pool.query(text);
         for (let i = 0; i < 4000; i++) {
-            const text = 'INSERT INTO interests(interest) VALUES ($1);';
-            await pool.query(text, [faker.random.word()]);
+            console.log("Add " + i + " interests");
+            let interest = faker.random.word();
+            let text = 'SELECT * FROM interests WHERE interest = $1 LIMIT 1';
+            let response = await pool.query(text, [interest]);
+            if (response.rows && response.rows.length)
+                continue;
+            else {
+                text = 'INSERT INTO interests(interest) SELECT $1 ON CONFLICT DO NOTHING';
+                await pool.query(text, [interest]);
+            }
         }
 
         // GENERATE 500 USERS -----------------------------------------
@@ -45,6 +54,7 @@ async function matchAppFaker(req, res) {
         text = 'ALTER SEQUENCE users_user_id_seq RESTART WITH 1';
         await pool.query(text);
         for (let i = 0; i < 1000; i++) {
+            console.log("Add " + i + " users");
             const text = 'INSERT INTO users(username, email, password, complete, active) VALUES ($1, $2, $3, $4, $5);';
             const values = [
                 faker.internet.userName(),
@@ -56,17 +66,20 @@ async function matchAppFaker(req, res) {
             await pool.query(text, values);
         }
         // GENERATE USERS INTERESTS -----------------------------------
+        text = 'SELECT * FROM INTERESTS WHERE 1 = 1';
+        let response = await pool.query(text);
+        let maxMathRandom = response.rows.length;
         for (let i = 0; i < 1000; i++) {
-            let tab = [];
+            console.log("Add interests for user " + i);
             for (let j = 0; j < 30; j++) {
-                let randomInterests = Math.floor(Math.random() * 2000);
                 const text = 'INSERT INTO user_interests(user_id, interest_id) VALUES ($1, $2);';
-                const values = [i, Math.floor(Math.random() * 2000) + 1];
+                const values = [i, Math.floor(Math.random() * maxMathRandom) + 1];
                 await pool.query(text, values);
             }
         }
         // GENERATE USERS COMPLETE  -----------------------------------
         for (let i = 0; i < 1000; i++) {
+            console.log("Generate user complete " + i + " of 1000");
             const text = 'INSERT INTO user_complete(complete_basics, complete_photos, complete_interets, user_id) VALUES ($1, $2, $3, $4);';
             const values = [30, 40, 30, i];
             await pool.query(text, values);
@@ -74,6 +87,7 @@ async function matchAppFaker(req, res) {
         // GENERATE USERS PROFILE -------------------------------------
         let gender = ["male", "female"];
         for (let i = 0; i < 1000; i++){
+            console.log("Generate user profile " + i + " of 1000");
             const location = randomLocation.randomCirclePoint(P, R)
             const text = 'INSERT INTO profile(user_id, lastname, firstname, gender, interested, country, age, bio, longitude, latitude, likes) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);';
             const values = [
@@ -96,6 +110,7 @@ async function matchAppFaker(req, res) {
         text = 'ALTER SEQUENCE pictures_img_id_seq RESTART WITH 1';
         await pool.query(text);
         for (let i = 0; i < 1000; i++) {
+            console.log("Generate user pictures " + i + " of 1000");
             for (let j = 0; j < 5; j++) {
                 const text = 'INSERT INTO pictures(img_link, user_id, img_order) VALUES ($1, $2, $3)';
                 const values = [faker.image.avatar(), i, j];
@@ -104,9 +119,8 @@ async function matchAppFaker(req, res) {
         }
 
         // GENERATE LIKES
-        console.log(5);
+        console.log("Generate likes...");
         for (let i = 0; i < 20000; i++) {
-            console.log(i);
             let text = 'INSERT INTO user_likes(user_id_like, user_id_liked) VALUES ($1, $2)';
             let user_id_like = Math.floor(Math.random() * 1000) + 1;
             let user_id_liked = Math.floor(Math.random() * 1000) + 1;

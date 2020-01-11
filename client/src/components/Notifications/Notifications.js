@@ -1,23 +1,21 @@
 import React from 'react';
-import { subscribeToTimer } from '../../utils/socket';
+import openSocket from 'socket.io-client';
+const  socket = openSocket('http://localhost:3002');
 
 class Notifications extends React.Component {
 
-    state = {
-        timestamp: 'no timestamp yet'
-    };
+    constructor() {
+        super();
+    }
 
-    constructor(props) {
-        super(props);  subscribeToTimer((err, timestamp) => this.setState({
-            timestamp
-        }));
+    componentDidMount() {
+        socket.on('like')
     }
 
     render() {
         return (
             <div className="App">
                 <p className="App-intro">
-                    This is the timer value: {this.state.timestamp}
                 </p>
             </div>
         );

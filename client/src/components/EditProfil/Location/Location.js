@@ -99,12 +99,12 @@ class Location extends React.Component {
                         <Grid.Row centered >
                             <Icon
                                 className="EditProfilArrow"
-                                name='arrow alternate circle left outline'
+                                name='arrow circle left'
                                 size="huge"
                                 onClick={prevsection}/>
                             <Icon
                                 className="EditProfilArrow"
-                                name='arrow alternate circle right outline'
+                                name='arrow circle right'
                                 size="huge"
                                 onClick={nextsection}/>
                         </Grid.Row>

@@ -1,11 +1,3 @@
-.EditProfil {
-  padding: 5em;
-  margin-left: 5em;
-  margin-right: 5em;
-  background-color: #db366e;
-  border-radius: 20px !important;
-}
-
 .CompleteTitle {
   color: white;
   font-size: 2.8em;
@@ -18,60 +10,16 @@
   background: linear-gradient(-90deg, #110b1f, #192740) !important;
 }
 
-.ui.progress .bar{
-  background: #4f384f;
-  border-radius: 15px !important;
-  border: 2px solid white;
-  transition: all 500ms ease-out;
-}
-
-.progress {
-  color: white !important;
-  transition : all 3s ease-in-out;
-}
-
 .ui.progress {
   background: white !important;
   border-radius: 15px !important;
   transition : all 3s ease-in-out;
 }
 
-.ui.form .field>label {
-  display: block;
-  margin: 0 0 .28571429rem 0;
-  color: rgba(255, 255, 255, 0.6) !important;
-  font-size: .92857143em;
-  text-transform: none;
-}
-
-.formEdit {
-  .field {
-    padding-top: 0.25em !important;
-    padding-bottom: 0.25em !important;
-  }
-  &.ui.form .field .dropdown:not i {
-    font-size: 1.3em !important;
-    color: grey !important;
-  }
-  .ui.form input::placeholder {
-    color: #a2a2a2 !important;
-  }
-  input, .selection , textarea{
-    border-radius: 15px !important;
-    border: none !important;
-    font-family: "Open Sans", sans-serif !important;
-    font-size: 1.3em !important;
-    color: #4f384f !important;
-    font-weight: 700;
-    background: linear-gradient(-150deg, white, #eaeaea) !important;
-    box-shadow: 4px 4px 1px rgba(0,0,0,0.1) !important;
-  }
-}
-
 .EditProfilArrow {
   transition: all ease-in-out 0.15s;
   color: #ffffff !important;
-  font-size: 6em !important;
+  font-size: 5em !important;
   transform: scale(1) !important;
   &:hover {
     transform: scale(1.2) !important;

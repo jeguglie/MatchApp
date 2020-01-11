@@ -169,5 +169,15 @@ export default {
                 headers: headers
             }
         )
+    },
+    userLike: (userLikedID) => {
+        return axios.post(
+            `${burl}/userLike`,
+            {userLikedID},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
     }
 };

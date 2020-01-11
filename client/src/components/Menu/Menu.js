@@ -124,19 +124,19 @@ class NavbarMenu extends React.Component {
                         </Menu.Item>
                         <Menu.Item
                             name='/'
-                            active={activeItem === '/'}
+                            active={activeItem === '/profile'}
                             onClick={this.handleItemClick} >
                             <Icon name='user' />
                             <span className="itemMenu">Profile</span>
                         </Menu.Item>
-                        <Menu.Item
-                            name='/messages'
-                            active={activeItem === '/messages'}
-                            onClick={this.handleItemClick}>
-                            <Icon name='conversation' />
-                            <span className="itemMenu">Messages</span>
-                        </Menu.Item>
                     </Menu.Menu>
+                    <Menu.Item
+                        name='/messages'
+                        active={activeItem === '/messages'}
+                        onClick={this.handleItemClick}>
+                        <Icon name='conversation' />
+                        <span className="itemMenu">Messages</span>
+                    </Menu.Item>
                     <Menu.Item
                         name='/notifications'
                         active={activeItem === '/notifications'}
