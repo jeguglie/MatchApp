@@ -7,6 +7,8 @@ import { Redirect } from 'react-router-dom';
 import classnames from 'classnames';
 import { withRouter } from 'react-router';
 import Aux from "../../hoc/Aux";
+import openSocket from 'socket.io-client';
+const socket = openSocket('http://localhost:3002');
 
 class NavbarBootstrap extends React.Component {
 
@@ -25,8 +27,6 @@ class NavbarBootstrap extends React.Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState){
-        console.log("nextprops--> :" + nextProps.isConnected);
-        console.log("prevState--> :" + prevState.connected);
         if (nextProps.isConnected !== prevState.connected)
             return { connected: nextProps.isConnected};
         if(nextProps.location.pathname !== prevState.activeItem)
@@ -53,6 +53,7 @@ class NavbarBootstrap extends React.Component {
                 if (res.status === 200) {
                     this.props.handleConnected(false);
                     this.props.history.push('/login');
+                    socket.emit("logout");
                 } else {
                     const error = new Error(res.error);
                     throw error;

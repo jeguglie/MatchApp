@@ -426,11 +426,9 @@ async function getUserIdProfile(req, res) {
         }));
     try {
         let userIDprofile = req.body.userId;
-        console.log(userIDprofile);
         let text = 'SELECT * FROM profile WHERE user_id = $1';
         let values = [userIDprofile];
         let response = await pool.query(text, values);
-        console.log(response.rows);
         if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length){
             let user = response.rows[0];
             // Get user interests IDs
@@ -462,11 +460,7 @@ async function getUserIdProfile(req, res) {
                     user: user
                 });
             }
-            else
-                throw new Error(response);
         }
-        else
-            throw new Error(response);
     } catch (error) {
         console.log(error);
         return res.status(500).json({

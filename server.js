@@ -82,8 +82,7 @@ app.get('/faker', faker.matchAppFaker);
 // Store connected users
 let userslist = [];
 
-// Notifications
-io.on('connection', socket => {
+function pushUserSocket(socket){
     // Get cookies
     let cookief = socket.handshake.headers.cookie;
     if (cookief) {
@@ -101,12 +100,12 @@ io.on('connection', socket => {
                             userslist.push({userID: userID, socketID: socket.id});
                         else {
                             let find = false;
-                            userslist.map((data) => {
-                                if (data.userID === userID) {
+                            for (let i = 0; i < userslist.length; i++){
+                                if (userslist[i].userID === userID) {
                                     find = true;
-                                    data.socketID = socket.id;
+                                    userslist[i].socketID = socket.id;
                                 }
-                            });
+                            }
                             // If userID not match, then add it to userlists
                             if (!find)
                                 userslist.push({userID: userID, socketID: socket.id});
@@ -116,10 +115,61 @@ io.on('connection', socket => {
             });
         }
     }
-    console.log('connected');
-    io.on('disconnect', socket => {
-        console.log('disconnected');
-    })
+}
+
+function deleteUserSocket(socket){
+    // Get cookies
+    let cookief = socket.handshake.headers.cookie;
+    if (cookief) {
+        let cookies = cookie.parse(cookief);
+        // Check Auth
+        if (cookies && typeof cookies.token != "undefined") {
+            jwt.verify(cookies.token, secret, async (err, decoded) => {
+                if (!err) {
+                    let email = decoded.email;
+                    // Get User ID
+                    let userID = await account.getUserId(email);
+                    if (userID) {
+                        for (let i = 0; i < userslist.length; i++){
+                            if (userslist[i].userID === userID) {
+                                userslist.splice(i, 1);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+}
+
+// Notifications
+io.sockets.on('connection', socket => {
+    pushUserSocket(socket);
+    socket.on("userlogin", () => {
+        pushUserSocket(socket);
+        console.log("user login : " + socket.id)
+        console.log(userslist);
+    });
+    socket.on('logout', () => {
+        if (typeof socket.handshake !== "undefined" && typeof socket.handshake.headers !== "undefined" && typeof socket.handshake.headers.cookie !== "undefined")
+            deleteUserSocket(socket);
+    });
+    // socket.on('disconnect', () => {
+    //     if (typeof socket.handshake !== "undefined" && typeof socket.handshake.headers !== "undefined" && typeof socket.handshake.headers.cookie !== "undefined")
+    //         deleteUserSocket(socket);
+    // });
+    socket.on('like', (userID) => {
+        for (let i = 0; i < userslist.length; i++){
+            if (userslist[i].userID === userID) {
+                let socketID = userslist[i].socketID;
+                io.sockets.to(socketID).emit('sendlike', userID );
+
+            }
+        }
+
+    });
+    console.log(userslist);
+
 });
 
 server.listen(3002, () => console.log(`Listening on port 3002`));

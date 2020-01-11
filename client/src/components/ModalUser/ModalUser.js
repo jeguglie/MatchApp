@@ -3,17 +3,18 @@ import Button from "semantic-ui-react/dist/commonjs/elements/Button";
 import React from "react";
 import classnames from 'classnames';
 import API from './../../utils/API';
+import openSocket from 'socket.io-client';
+const  socket = openSocket('http://localhost:3002');
 
 class ModalUser extends React.Component {
 
     constructor(props){
         super(props);
     }
-
     userLike = async() => {
-        await API.userLike(this.props.user_id)
-            .then()
+        socket.emit("like", this.props.user.user_id);
 }
+
 
     render() {
         const {user, userInterests } = this.props;

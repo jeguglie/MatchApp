@@ -60,7 +60,6 @@ class Wall extends React.Component {
                 if (typeof response.data.interests !== "undefined"){
                     if (this._mounted)
                         this.setState({interests: response.data.interests})
-                    console.log(response.data.interests);
                 }
             })
             .catch(error => {

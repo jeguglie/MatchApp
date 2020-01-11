@@ -1,22 +1,26 @@
 import React from 'react';
 import openSocket from 'socket.io-client';
-const  socket = openSocket('http://localhost:3002');
+import ModalUserLike from "./ModalUserLike/ModalUserLike";
 
 class Notifications extends React.Component {
 
-    constructor() {
-        super();
-    }
-
+    state = {
+        userID: null,
+    };
     componentDidMount() {
-        socket.on('like')
+        this.socket = openSocket('http://localhost:3002');
+        this.socket.on("sendlike", (userID) => {
+            this.setState({userID: userID})
+            console.log(userID);
+        })
     }
 
+    handleClose = () => {this.setState({userID: null})};
     render() {
+        const { userID } = this.state;
         return (
-            <div className="App">
-                <p className="App-intro">
-                </p>
+            <div className="Notifications">
+                <ModalUserLike userID={userID} handleClose={this.handleClose}/>
             </div>
         );
     }

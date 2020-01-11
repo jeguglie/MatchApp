@@ -3,6 +3,8 @@ import Warnings from "../Warnings/Warnings";
 import VALIDATE from '../../utils/validation';
 import API from "../../utils/API";
 import {Container, Image, Form, Button, Dimmer, Loader, Divider} from 'semantic-ui-react';
+import openSocket from 'socket.io-client';
+const socket = openSocket('http://localhost:3002');
 
 const DEFAULT_STATE = {
     email: "",
@@ -53,8 +55,8 @@ class Login extends React.Component {
                             .then((response) => {
                                 if (typeof response.data !== 'undefined' && typeof response.data.connect !== 'undefined')
                                     this.props.handleConnected(true);
-                                    console.log(this.props);
                                     this.props.history.push('/profile');
+                                    socket.emit("userlogin");
                             })
                             .catch(error => {
                                 if (typeof error.response !== 'undefined' && typeof error.response.data !== 'undefined') {
