@@ -2,13 +2,17 @@ import React from 'react';
 import {Divider, Form, TextArea, Grid, Progress, Icon, Select, Loader, Dimmer} from 'semantic-ui-react';
 import API from "../../../utils/API";
 import VALIDATE from "../../../utils/validation";
-import Warnings from "../../Warnings/Warnings";
 const countries = VALIDATE.countries;
+const age = VALIDATE.age;
 const genderOptions = [
     { key: 'male', value: 'male', text: 'Male' },
-    { key: 'female', value: 'female', text: 'Female' },
+    { key: 'female', value: 'female', text: 'Female' }
 ];
-
+const interestedOptions = [
+    { key: 'male', value: 'male', text: 'Male' },
+    { key: 'female', value: 'female', text: 'Female' },
+    { key: 'other', value: 'other', text: 'Other' },
+];
 
 const DEFAULT_STATE = {
     lastname: "",
@@ -20,9 +24,11 @@ const DEFAULT_STATE = {
     email: "",
     birthday: "",
     save: false,
+    age: '',
     loading: false,
     complete: 0,
     w_lastname: '',
+    w_age: '',
     w_firstname: '',
     w_gender: '',
     w_interested: '',
@@ -31,6 +37,7 @@ const DEFAULT_STATE = {
 };
 
 const DEFAULT_ERRORS = {
+    w_age: '',
     w_lastname: '',
     w_firstname: '',
     w_gender: '',
@@ -43,17 +50,19 @@ class BasicsInformations extends React.Component {
 
     constructor(props) {
         super(props);
+        this._mounted = false;
         this.state = {...DEFAULT_STATE};
         this.state.complete = this.props.complete;
         // Set key for countries
         this.countries = countries;
+        this.age = age;
+        this.age = this.age.map((item, index) => ({key: index, text: item.value, value: item.value }));
         this.countries = this.countries.map((item, index) => ({key: index, text: item.value, value: item.value }));
         // Set default errors
         this.warnings = {...DEFAULT_ERRORS};
     }
 
     componentWillUnmount() {
-        this.setState({save: false, loading: false});
         this._mounted = false;
     }
 
@@ -64,72 +73,81 @@ class BasicsInformations extends React.Component {
     }
 
 
-    async componentDidMount() {
+    componentDidMount = async() => {
         this._mounted = true;
-        this.setState({loading: true});
+        this._mounted && this.setState({loading: true});
+        this._mounted && this.setState({complete: this.props.complete});
         await this.props.getcomplete();
-        this.setState({complete: this.props.complete});
-            await API.getEditProfilValues()
-                .then((response) => {
-                        if (typeof response.data.findProfil !== 'undefined')
-                            if (this._mounted === true)
-                                this.setState({...response.data.findProfil});
-                    })
-                .catch((error) => {
-                    if (typeof error.response !== 'undefined'
-                        && typeof error.response.data !== 'undefined' && typeof error.response.data.warnings !== 'undefined')
-                        if(this._mounted === true)
-                            this.setState({...error.response.data.warnings});
-                })
-            this.setState({loading: false});
-        }
+        await API.getEditProfilValues()
+            .then((response) => {
+                if (typeof response.data.findProfil !== 'undefined')
+                    if (this._mounted === true)
+                        this._mounted && this.setState({...response.data.findProfil});
+            })
+            .catch((error) => {
+                if (typeof error.response !== 'undefined'
+                    && typeof error.response.data !== 'undefined' && typeof error.response.data.warnings !== 'undefined')
+                    if (this._mounted === true)
+                        this._mounted && this.setState({...error.response.data.warnings});
+            })
+        this._mounted && this.setState({loading: false});
+    }
 
     handleSave = async() => {
         if (this._mounted) {
             this.warnings = {...DEFAULT_ERRORS};
             // Check country
             let detectCountry = false;
+            let detectAge  = false;
             this.countries.forEach((data) => {
                 if (data.value === this.state.country) {
                     detectCountry = true;
                     return;
                 }
             });
+            this.age.forEach((data) => {
+                if (data.value === this.state.age) {
+                    detectAge = true;
+                    return;
+                }
+            });
             // let detectCountry = this.countries.some(data => data.value === this.state.country);
             if (!detectCountry)
                 this.warnings.w_country = "Please select a valid country";
+            if (!detectAge)
+                this.warnings.w_age = "Please select your age";
             if (!VALIDATE.validateFirstName(this.state.lastname))
                 this.warnings.w_lastname = "Only characters are allowed for your lastname. Must contain between 3 and 13 characters";
             if (!VALIDATE.validateFirstName(this.state.firstname))
                 this.warnings.w_firstname = "Only characters are allowed for your first name. Must contain between 3 and 13 characters";
-            if (this.state.interested !== "male" && this.state.interested !== "female")
+            if (this.state.interested !== "male" && this.state.interested !== "female" && this.state.interested !== "other")
                 this.warnings.w_interested = "Please select a valid interest option";
-            if (this.state.gender !== "male" && this.state.gender !== "female")
+            if (this.state.gender !== "male" && this.state.gender !== "female" && this.state.interested !== "other")
                 this.warnings.w_gender = "Please select a valid gender option";
             if (this.state.bio && this.state.bio.length > 90)
                 this.warnings.w_bio = "Your bio is too long, please use 90 maximum characters. You have " + this.state.bio.length;
             if (!VALIDATE.checkWarnings(this.warnings) === true) {
                 await API.updateEditProfilValues(this.state)
                     .then(() => {
-                        this.setState({loading: false}, () => {
+                        this._mounted && this.setState({loading: false}, () => {
                             this.props.nextsection();
                         });
                     })
                     .catch(error => {
                         if (typeof error.response !== 'undefined'
                             && typeof error.response.data !== 'undefined' && typeof error.response.data.warnings !== 'undefined')
-                            this.setState({...error.response.data.warnings});
+                            this._mounted && this.setState({...error.response.data.warnings});
                     });
             } else
-                this.setState({...this.warnings});
+                this._mounted && this.setState({...this.warnings});
         }
     };
     handleChange = (e, { value, id }) => {
-        this.setState({ [id]: value, ["w_" + id]: ''});
+        this._mounted && this.setState({ [id]: value, ["w_" + id]: ''});
     };
 
     render() {
-        const {loading, warnings, w_firstname, w_lastname, w_gender, w_interested, w_country, w_bio, complete} = this.state;
+        const {loading, w_age, w_firstname, w_lastname, w_gender, w_interested, w_country, w_bio, complete} = this.state;
         const ProgressBar = () => (
             <Progress
                 percent={complete}
@@ -137,17 +155,6 @@ class BasicsInformations extends React.Component {
                 indicating
                 size="medium"/>
         );
-        const Warnings = () => {
-            if (warnings && warnings.length > 0)
-                return (
-                    <Grid.Row centered textAlign="center">
-                        <div className="loginWarnings">
-                            <Warnings data={warnings} />
-                        </div>
-                    </Grid.Row>
-                )
-            else return null
-        }
         return (
             <div className="BasicInfosContainer">
                 <div className="BasicInformations">
@@ -162,13 +169,19 @@ class BasicsInformations extends React.Component {
                     </Grid>
                     <div className="shapeBasicsInfos"></div>
                     <Divider hidden />
-                    <Grid>
-                        <Grid.Row centered className="DatePickerBasics">
-                        </Grid.Row>
-                    </Grid>
                     <Grid columns={1} doubling>
                         <Grid.Column>
                             <Form className="BasicInfosForm">
+                                <Form.Field
+                                    error={w_age.length > 0 ? w_age : null}
+                                    id="age"
+                                    control={Select}
+                                    value={this.state.age.toString()}
+                                    options={this.age}
+                                    label="Select your age"
+                                    placeholder='Your Age'
+                                    onChange={this.handleChange}
+                                />
                                 <Form.Group widths='equal'>
                                     <Form.Input
                                         error={w_lastname.length > 0 ? w_lastname : null}
@@ -206,7 +219,7 @@ class BasicsInformations extends React.Component {
                                         id="interested"
                                         control={Select}
                                         value={this.state.interested}
-                                        options={genderOptions}
+                                        options={interestedOptions}
                                         label="Interested by "
                                         placeholder='Interested by'
                                         onChange={this.handleChange}

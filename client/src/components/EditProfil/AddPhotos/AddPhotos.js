@@ -1,6 +1,5 @@
 import React from 'react';
 import {Grid, Progress, Image, Divider, Icon, Container, Dimmer, Loader} from 'semantic-ui-react';
-import classnames from 'classnames';
 import FileUpload from "../../fileUpload/fileUpload";
 import Warnings from '../../../components/Warnings/Warnings';
 import ProfileImgPreview from '../../../components/EditProfil/AddPhotos/Preview/loadCurrentPictures/loadPreviewImages';
@@ -13,6 +12,7 @@ const DEFAULT_STATE = {
     previewTab: [],
     warnings: [],
     loading: false,
+    complete: 0,
 };
 
 
@@ -20,6 +20,7 @@ class AddPhotos extends React.Component {
     constructor(props) {
         super(props);
         this.state = ({...DEFAULT_STATE});
+        this.state.complete = this.props.complete;
         this.state.coverImage = "https://react.semantic-ui.com/images/wireframe/white-image.png";
         this.handleImageUpload = this.handleImageUpload.bind(this);
     }
@@ -45,6 +46,12 @@ class AddPhotos extends React.Component {
         this.setState({...DEFAULT_STATE});
     }
 
+    componentDidUpdate = async(props, state) =>{
+        if (props.complete !== state.complete)
+            if ( this._mounted )
+                this.setState({complete: props.complete})
+    };
+
     // Warnings for errors during upload or file
     setWarnings = (data) => this.setState({warnings: data});
     // Load preview tab for loadPreview Component
@@ -52,12 +59,13 @@ class AddPhotos extends React.Component {
     // Update Top image preview
     updateImages = () => {
         if(this.state.profileImg.length > 0)
-            this.setState({coverImage: "http://localhost:3000/" + this.state.profileImg[0].img_link});
+            this.setState({coverImage: this.state.profileImg[0].img_link});
         else
             this.setState({coverImage : "https://react.semantic-ui.com/images/wireframe/white-image.png"});
 
     }
     async handleImageUpload () {
+        this.props.getcomplete();
         try {
             const { data } = await API.getPhotos();
             if (data.profileImg.length > 0)
@@ -80,13 +88,15 @@ class AddPhotos extends React.Component {
         let {profileImg} = this.state;
         profileImg.map((img_data, index) => {
             if(img_data.img_id === imgID)
-                this.removeElement(profileImg, index)
+                return this.removeElement(profileImg, index)
+            return null;
         });
         this.setState({profileImg: profileImg});
         this.updateImages();
+        this.props.getcomplete();
         await API.deleteImage(imgID)
             .then(response => {
-                if (response.status === 300)
+                if (response.status === 200)
                     if (this._mounted) {
                         this.setState({warnings: response.data.warnings});
                         this.removeElement(this.state.profileImg, key);
@@ -100,7 +110,7 @@ class AddPhotos extends React.Component {
     render() {
         const ProgressBar = () => (
             <Progress
-                percent={this.props.complete}
+                percent={this.state.complete}
                 progress
                 indicating
                 size="medium"/>

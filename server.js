@@ -11,14 +11,12 @@ const wallActions = require('./controllers/account/userWallActions.js');
 const addphotos = require('./controllers/account/addphotos.js');
 const faker = require('./controllers/account/faker');
 const match = require('./controllers/account/match');
-const port = 3000;
+const port = 5000;
 const cookie = require('cookie');
-const http = require('http');
-const socketIO = require('socket.io');
-const server = http.createServer(app);
-const io = socketIO(server);
+const io = require('socket.io')();
 const jwt = require('jsonwebtoken');
 const secret = 'mysecretsshhh';
+const pool = require('./utils/queries');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -59,8 +57,16 @@ app.get('/logout', (req, res) => {
     res.sendStatus(200);
 
 });
+app.post('/reportuserhide', withAuth, account.reportuserhide);
+app.post('/reportuserfake', withAuth, account.reportuserfake);
+app.post('/reportuser', withAuth, account.reportuser);
 app.post('/login', account.login);
 app.post('/signup', account.signup);
+app.post('/userforgot', account.userforgot);
+app.post('/changepassword', account.changepassword);
+app.post('/changemyemail', withAuth, account.changemyemail);
+app.post('/activeaccount', account.activeaccount);
+app.post('/updategeolocate', withAuth, account.updategeolocate);
 app.post('/getEditProfilValues', withAuth, account.getEditProfilValues);
 app.post('/updateEditProfilValues', withAuth, account.updateEditProfilValues);
 app.post('/user-profile', upload.single('file'), withAuth, addphotos.uploadPhoto);
@@ -76,6 +82,10 @@ app.post('/getConnectedUserLocation', withAuth, account.getConnectedUserLocation
 app.post('/checkUserView', withAuth, account.checkUserView);
 app.post('/getUserIdProfile', withAuth, account.getUserIdProfile);
 app.post('/userLike', withAuth, wallActions.userLike);
+app.post('/checkUserLike', withAuth, wallActions.checkUserLike);
+app.post('/wallvisit', withAuth, wallActions.wallvisit);
+app.post('/deletenotif', withAuth, account.deletenotif);
+app.get('/getNotifications', withAuth, account.getNotifications);
 app.get('/faker', faker.matchAppFaker);
 
 
@@ -117,6 +127,20 @@ function pushUserSocket(socket){
     }
 }
 
+async function getUserIDFromSocketEmitter(socket) {
+    let cookief = socket.handshake.headers.cookie;
+    let userID = null;
+    if (cookief) {
+        let cookies = cookie.parse(cookief);
+        if (cookies && typeof cookies.token != "undefined")
+            userID = await jwt.verify(cookies.token, secret, async (err, decoded) => {
+                if (!err)
+                    return await account.getUserId(decoded.email);
+            });
+    }
+    return userID;
+}
+
 function deleteUserSocket(socket){
     // Get cookies
     let cookief = socket.handshake.headers.cookie;
@@ -131,9 +155,8 @@ function deleteUserSocket(socket){
                     let userID = await account.getUserId(email);
                     if (userID) {
                         for (let i = 0; i < userslist.length; i++){
-                            if (userslist[i].userID === userID) {
+                            if (userslist[i].userID === userID)
                                 userslist.splice(i, 1);
-                            }
                         }
                     }
                 }
@@ -142,35 +165,64 @@ function deleteUserSocket(socket){
     }
 }
 
+// Check if destination user for notification is ONLINE
+function findSocketID(userID){
+    for (let i = 0; i < userslist.length; i++){
+        if (userslist[i].userID === userID) {
+            return userslist[i].socketID;
+        }
+    }
+    return null;
+}
+
+async function usercansendnotif(userIDsending, userIDreceive){
+    try {
+        let text = 'SELECT * FROM user_hide WHERE user_id = $1 AND user_id_reported = $2';
+        let values = [userIDreceive, userIDsending];
+        let response = await pool.query(text, values);
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length)
+            return false;
+        return true
+    } catch(e){
+        return false;
+    }
+}
+
 // Notifications
 io.sockets.on('connection', socket => {
     pushUserSocket(socket);
+    console.log(socket.id);
     socket.on("userlogin", () => {
         pushUserSocket(socket);
-        console.log("user login : " + socket.id)
-        console.log(userslist);
     });
     socket.on('logout', () => {
         if (typeof socket.handshake !== "undefined" && typeof socket.handshake.headers !== "undefined" && typeof socket.handshake.headers.cookie !== "undefined")
             deleteUserSocket(socket);
     });
-    // socket.on('disconnect', () => {
-    //     if (typeof socket.handshake !== "undefined" && typeof socket.handshake.headers !== "undefined" && typeof socket.handshake.headers.cookie !== "undefined")
-    //         deleteUserSocket(socket);
-    // });
-    socket.on('like', (userID) => {
-        for (let i = 0; i < userslist.length; i++){
-            if (userslist[i].userID === userID) {
-                let socketID = userslist[i].socketID;
-                io.sockets.to(socketID).emit('sendlike', userID );
-
-            }
+    socket.on('like', async(userID) => {
+        let socketID = findSocketID(userID);
+        if (socketID){
+            let userIDemitter = await getUserIDFromSocketEmitter(socket);
+            if (userIDemitter && await usercansendnotif(userIDemitter, userID))
+                io.sockets.to(socketID).emit('like:receive like', {userID: userID, userIDemitter: userIDemitter});
+                io.sockets.to(socketID).emit('getnotif', {userID: userID, userIDemitter: userIDemitter});
         }
 
     });
-    console.log(userslist);
-
+    socket.on('wall:visit', async(userID) => {
+        let socketID = findSocketID(userID);
+        if (socketID){
+            let userIDemitter = await getUserIDFromSocketEmitter(socket);
+            if (userIDemitter && await usercansendnotif(userIDemitter, userID)) {
+                io.sockets.to(socketID).emit('wall:visit', {userID: userID, userIDemitter: userIDemitter});
+                io.sockets.to(socketID).emit('getnotif', {userID: userID, userIDemitter: userIDemitter});
+                console.log('send to :' + socketID);
+                console.log(userslist);
+            }
+        }
+    })
 });
-
-server.listen(3002, () => console.log(`Listening on port 3002`));
+const portio = 8000;
+io.listen(portio);
+console.log('Listening on port ', portio);
 app.listen(port, 'localhost', () => console.log(`Listening on port ${port}`));

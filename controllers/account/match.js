@@ -12,7 +12,6 @@ async function getUsers(req, res){
     const {popularityRange, distanceRange, ageRange } = req.body;
     try {
 
-
         // Interested and Gender of connected user
         let text = 'SELECT gender, interested FROM profile WHERE user_id = $1;';
         let values = [userID];
@@ -26,8 +25,22 @@ async function getUsers(req, res){
             response = await pool.query(text, values);
             let users = response.rows;
 
+            // // Get hided users and remove them
+            // text = 'SELECT * FROM user_hide WHERE user_id = $1';
+            // values = [userID];
+            // response = await pool.query(text, values);
+            // let hidedusers = [];
+            // if (typeof response != 'undefined' && typeof response.rows != 'undefined' && response.rows.length){
+            //     response.rows.map(obj => {
+            //         return hidedusers.push(obj.user_id_reported);
+            //     });
+            //     console.log(hidedusers);
+            // }
+            // users = users.filter(obj => word.length > 6);
             // Map all users and assign interests list
             users = users.map((user) = async(user) =>{
+                // if (hidedusers.find(userID => user.user_id === userID))
+                //     return null;
                 text = 'SELECT * FROM user_interests WHERE user_id = $1';
                 values = [user.user_id];
                 response = await pool.query(text, values);

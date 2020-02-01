@@ -3,7 +3,10 @@ import {Button, Segment, Grid, Progress, Icon, Loader, Dimmer, Divider} from 'se
 import VALIDATE from "../../../utils/validation";
 import LocationComponent from "./LocationComponent/LocationComponent";
 import SimpleMap from "./Map/Map";
-import PlacesWithStandaloneSearchBox from "./SearchBoxGoogleMap/SearchBoxGoogleMap";
+import API from '../../../utils/API';
+import { store } from 'react-notifications-component';
+
+// import PlacesWithStandaloneSearchBox from "./SearchBoxGoogleMap/SearchBoxGoogleMap";
 
 const DEFAULT_STATE = {
     loading: false,
@@ -17,7 +20,7 @@ class Location extends React.Component {
         super(props);
         this.state = {...DEFAULT_STATE};
         this.state.complete = this.props.complete;
-        // Bin for location REF
+        // Bind for location REF
         this.getInnerRef = this.getInnerRef.bind(this);
         this.getLocation = this.getLocation.bind(this);
     }
@@ -36,16 +39,34 @@ class Location extends React.Component {
         this.innerRef = ref;
 
     };
-    getLocation = () => {
+    getLocation = async() => {
         this.innerRef && this.innerRef.getLocation();
         this.setState({innerRef: this.innerRef});
+        await API.updategeolocate(this.innerRef.state.coords.latitude, this.innerRef.state.coords.longitude)
+            .then (response => {
+                if (response.status === 200){
+                    store.addNotification({
+                        title: 'Your position was successfully updated',
+                        message: "Start to match !",
+                        type: "success",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 10000,
+                            onScreen: true
+                        }
+                    });
+                }
+            })
+            .catch(e => console.log(e));
     };
 
 
 
-
     render() {
-        const { getInnerRef, getLocation } = this;
+        const {getInnerRef, getLocation } = this;
         const {complete, loading} = this.state;
         const {prevsection, nextsection} = this.props;
         return (
@@ -85,14 +106,12 @@ class Location extends React.Component {
                             className="buttonLastStep"
                             size="big"
                             content='Geolocate my position' />
-                        <Divider
-                            horizontal
-                            className="DividerLastStep">
-                            <span>
-                                Or set custom location
-                            </span>
-                        </Divider>
-                        <PlacesWithStandaloneSearchBox />
+                        <Divider horizontal id={"ordivider"}>Or</Divider>
+                        <Button
+                            onClick={this.props.useCustomAddress}
+                            className="buttonLastStep"
+                            size="big"
+                            content='Use a custom address' />
                     </Segment>
                     <Grid>
                         <Divider hidden />
@@ -115,8 +134,3 @@ class Location extends React.Component {
     }
 }
 export default Location;
-// {/*<Input*/}
-// {/*    size="big"*/}
-// {/*    icon='search'*/}
-// {/*    iconPosition='left'*/}
-// {/*    placeholder='Search location' />*/}

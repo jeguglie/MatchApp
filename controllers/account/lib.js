@@ -2,6 +2,19 @@ const jwt = require("jsonwebtoken");
 const passwordHash = require("password-hash");
 const pool = require('./../../utils/queries');
 const validate = require('../../utils/validation');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+const secret = 'mysecretsshhh';
+
+
+let transport = nodemailer.createTransport({
+    host: 'smtp.mailtrap.io',
+    port: 2525,
+    auth: {
+        user: 'dbbd9d0a415229',
+        pass: 'd4ef0a653fe03c'
+    }
+});
 
 async function getUserId(email){
     let text = 'SELECT user_id FROM users WHERE email = $1';
@@ -12,6 +25,205 @@ async function getUserId(email){
     } catch (error) {
         return null;
     }
+    return null;
+}
+
+async function getNotifications(req, res){
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return res.status(500).json({
+            warnings: ["User ID not found, please logout and login."]
+        });
+    let notifications = [];
+    try {
+        let text = 'SELECT * FROM notifications N INNER JOIN profile P ON N.user_id_emitter = P.user_id INNER JOIN pictures PI ON PI.user_id = P.user_id WHERE N.user_id_notified = $1 AND img_order = $2';
+        let value = [userID, 0];
+        let response = await pool.query(text, value);
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length){
+           response.rows.map(obj => {
+               let object = new Object();
+               Object.assign(object, {type: obj.type});
+               Object.assign(object, {user_id: obj.user_id_emitter});
+               Object.assign(object, {date: obj.date});
+               Object.assign(object, {img_link: obj.img_link});
+               Object.assign(object, {firstname: obj.firstname});
+               Object.assign(object, {notif_id: obj.id_notif});
+               notifications.push(object);
+           })
+        }
+        return res.status(200).json({notifications: notifications});
+    }catch(e){
+        return res.status(500).json({
+            warnings: ["Server error"]
+        });
+    }
+}
+
+async function reportuserhide(req, res){
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return res.status(500).json({
+            warnings: ["User ID not found, please logout and login."]
+        });
+    const {user_id_reported} = req.body;
+    try {
+        let text = 'SELECT * FROM user_hide WHERE user_id = $1 AND user_id_reported = $2';
+        let values = [userID, user_id_reported];
+        let response = await pool.query(text, values);
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length)
+            return res.status(200).json({});
+        else {
+            text = 'INSERT INTO user_hide(user_id, user_id_reported) VALUES ($1, $2)';
+            values = [userID, user_id_reported];
+            await pool.query(text, values);
+        }
+        return res.status(200).json({});
+    }
+    catch(e){
+        return res.status(500).json({
+            warnings: ["Server error"]
+        });
+    }
+}
+
+async function reportuser(req, res){
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return res.status(500).json({
+            warnings: ["User ID not found, please logout and login."]
+        });
+    const {user_id_reported} = req.body;
+    try {
+        let text = 'SELECT * FROM user_report WHERE user_id = $1 AND user_id_reported = $2';
+        let values = [userID, user_id_reported];
+        let response = await pool.query(text, values);
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length)
+            return res.status(200).json({});
+        else {
+            text = 'INSERT INTO user_report(user_id, user_id_reported) VALUES ($1, $2)';
+            values = [userID, user_id_reported];
+            await pool.query(text, values);
+        }
+        return res.status(200).json({});
+    }
+    catch(e){
+        return res.status(500).json({
+            warnings: ["Server error"]
+        });
+    }
+}
+
+async function reportuserfake(req, res){
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return res.status(500).json({
+            warnings: ["User ID not found, please logout and login."]
+        });
+    const {user_id_reported} = req.body;
+    try {
+        let text = 'SELECT * FROM user_fake WHERE user_id = $1 AND user_id_reported = $2';
+        let values = [userID, user_id_reported];
+        let response = await pool.query(text, values);
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length)
+            return res.status(200).json({});
+        else {
+            text = 'INSERT INTO user_fake(user_id, user_id_reported) VALUES ($1, $2)';
+            values = [userID, user_id_reported];
+            await pool.query(text, values);
+        }
+        return res.status(200).json({});
+    }
+    catch(e){
+        return res.status(500).json({
+            warnings: ["Server error"]
+        });
+    }
+}
+async function updatetotalcomplete(userID){
+    try {
+        let text = 'SELECT * FROM user_complete WHERE user_id = $1';
+        let value = [userID];
+        let response = await pool.query(text, value);
+        let complete = 0;
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length){
+            console.log(response.rows);
+                complete =  response.rows[0].complete_basics + response.rows[0].complete_photos + response.rows[0].complete_interets;
+                text = 'UPDATE users SET complete = $1 WHERE user_id = $2';
+                value = [complete, userID];
+                await pool.query(text, value);
+        }
+        return;
+    }catch (e){
+        console.log(e);
+        return;
+    }
+}
+
+async function updatetotalinterests(userID){
+    try {
+        let text = 'SELECT * FROM user_interests WHERE user_id = $1';
+        let value = [userID];
+        let response = await pool.query(text, value);
+        let number = 0;
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length)
+            if (response.rows.length > 29)
+                number = 30;
+            else
+                number = response.rows.length;
+        text = 'UPDATE user_complete SET complete_interets = $1 WHERE user_id = $2';
+        value = [number, userID];
+        await pool.query(text, value);
+        updatetotalcomplete(userID);
+        return (1);
+
+    }catch (e){
+        return (0);
+    }
+}
+
+async function deletenotif(req, res){
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return res.status(500).json({
+            warnings: ["User ID not found, please logout and login."]
+        });
+    try {
+        let id_notif = req.body.id_notif;
+        let text = 'SELECT * FROM notifications WHERE user_id_notified = $1 AND id_notif = $2';
+        let values = [userID, id_notif];
+        let response = await pool.query(text, values);
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length){
+            let text = 'DELETE FROM notifications WHERE user_id_notified = $1 AND id_notif = $2';
+            let values = [userID, id_notif];
+            await pool.query(text, values);
+        }
+        return res.status(200).json({});
+
+    }catch (e){
+        console.log(e);
+        return res.status(500).json({warnings: ["Server error"]});
+    }
+}
+
+async function updategeolocate(req, res){
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return res.status(500).json({
+            warnings: ["User ID not found, please logout and login."]
+        });
+    const { latitude, longitude } = req.body;
+    const regex = new RegExp('^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$');
+    if (regex.test(latitude) || regex.test(longitude))
+        return res.status(400).json({});
+    try {
+        let text = 'UPDATE profile SET latitude = $1, longitude = $2, geolocate = $3 WHERE user_id = $4';
+        let values = [latitude, longitude, 1, userID];
+        await pool.query(text, values);
+        return res.status(200).json({});
+    } catch(e) {
+        return res.status(500).json({});
+    }
+
 }
 
 async function signup(req, res) {
@@ -61,29 +273,58 @@ async function signup(req, res) {
                 warnings: warnings
             });
         // Create User
-        text = 'INSERT INTO users(email, username, password) VALUES($1, $2, $3)';
-        values = [email, username, passwordHash.generate(password)];
+        // Create mail token
+        let token = ((+new Date) + Math.random()* 100).toString(32);
+        let hashtoken = crypto.createHash('md5').update(token).digest("hex");
+        text = 'INSERT INTO users(email, username, password, tokenmail) VALUES($1, $2, $3, $4)';
+        values = [email, username, passwordHash.generate(password), hashtoken];
         await pool.query(text, values);
         // Get user_id
         const userID = await getUserId(email);
         // Create Profil
-        text = 'INSERT INTO profile(user_id, lastName, firstName, likes) VALUES($1, $2, $3, $4)';
-        values = [userID, lastname, firstname, 0];
+        text = 'INSERT INTO profile(user_id, lastName, firstName, likes, geolocate, usecustomaddress, interested) VALUES($1, $2, $3, $4, $5, $6, $7)';
+        values = [userID, lastname, firstname, 0, 0, 0, 'other'];
         await pool.query(text, values);
         // Insert Complete
         text = 'INSERT INTO user_complete(complete_basics, user_id) VALUES($1, $2)';
         values = [10, userID];
         await pool.query(text, values);
-        const secret = 'mysecretsshhh';
-        const payload = { email };
-        const token = jwt.sign(payload, secret, {
-            expiresIn: '1h',
+        // Send mail activation
+        const message = {
+            from: 'matcha@app.com',
+            to: email,
+            subject: 'Activate your account',
+            text: 'Hello !\nHere is the link to confirm your account http://localhost:3000/login/'+hashtoken,
+        };
+        transport.sendMail(message, function(err, info) {
+            if (err) console.log(err)
+            else console.log(info);
         });
         return res.status(200).json({});
 
     } catch (error) {
         warnings.warnings.push("Catch error");
         return res.status(500).json({ warnings });
+    }
+}
+
+async function activeaccount(req, res){
+    const { token } = req.body;
+    try {
+        if (token && token.length) {
+            let text = 'SELECT * FROM users WHERE tokenmail = $1';
+            let value = [token];
+            let response = await pool.query(text, value);
+            if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length && response.rows[0].tokenmail === token) {
+                text = 'UPDATE users SET tokenmail = NULL, active = 1';
+                await pool.query(text);
+                res.status(200).json({});
+            } else
+                res.status(400).json({});
+        }
+    }
+    catch (e){
+        return res.status(400).json({});
     }
 }
 
@@ -96,23 +337,42 @@ async function login(req, res) {
         const text = 'SELECT * FROM users WHERE email = $1';
         const values = [email];
         const response = await pool.query(text, values);
-        if (!response.rows || response.rows.length < 1) {
-            return res.status(401).json({
-                w_email: "Wrong email or password"
-            });
-        }
-        if (!passwordHash.verify(password, response.rows[0].password))
-            return res.status(401).json({
-                w_email: "Wrong email or password"
-            });
-        else {
-            const secret = 'mysecretsshhh';
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length) {
+            if (response.rows[0].active === 0) {
+                let text = 'UPDATE users SET tokenmail = $1 WHERE email = $2';
+                let token = ((+new Date) + Math.random()* 100).toString(32);
+                let hashtoken = crypto.createHash('md5').update(token).digest("hex");
+                let values = [hashtoken, email];
+                const message = {
+                    from: 'matcha@app.com',
+                    to: email,
+                    subject: 'Activate your account',
+                    text: 'Hello !\nHere is the link to confirm your account http://localhost:3000/login/'+hashtoken,
+                };
+                transport.sendMail(message, function(err, info) {
+                    if (err) console.log(err)
+                    else console.log(info);
+                });
+                pool.query(text, values);
+                return res.status(401).json({
+                    w_emailconfirm: true,
+                });
+            }
+            if (!passwordHash.verify(password, response.rows[0].password))
+                return res.status(401).json({
+                    w_email: "Wrong email or password"
+                });
             const payload = { email };
             const token = jwt.sign(payload, secret, {
                 expiresIn: '1h',
             });
             res.cookie('token', token, { httpOnly: true, path: '/', domain: 'localhost' });
             return res.status(200).json({connect: true});
+        }
+        else {
+                return res.status(401).json({
+                    w_email: "Wrong email or password"
+                });
         }
     }
     catch (error) {
@@ -137,6 +397,7 @@ async function getEditProfilValues(req, res) {
             return res.status(500).json({ warnings: ["Profile not found, please logout and login"]});
         else {
             response.rows[0].email = res.locals.email;
+            response.rows[0].age =  response.rows[0].age.toString();
             return res.status(200).json({ findProfil: response.rows[0] })
         }
     } catch (e) {
@@ -146,35 +407,186 @@ async function getEditProfilValues(req, res) {
     }
 }
 
+async function changemyemail(req, res){
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return (res.status(500).json({
+            warnings: ["User not found. Please logout and login."]
+        }));
+    const {email, emailconfirm } = req.body;
+    const warnings = {
+        w_email: '',
+        w_emailconfirm: '',
+        warnings: [],
+    };
+    let errors = false;
+    // VALIDATION
+    if (!validate.validateEmail(email))
+        warnings.w_email = "Must be a valid email";
+    if (!validate.validateEmail(emailconfirm))
+        warnings.w_emailconfirm = "Must be a valid email";
+    if (email.localeCompare(email) !== 0)
+        warnings.w_emailconfirm = "Emails does not match.";
+    if (Object.values(warnings).map((data) => {
+        if (data.length > 0)
+            errors = true;
+    }))
+    if (errors === true)
+        return res.status(400).json({
+            warnings: warnings
+        });
+    try {
+        let text = 'UPDATE users SET email = $1 WHERE user_id = $2';
+        let value = [email, userID];
+        await pool.query(text, value);
+        res.clearCookie('token');
+        return res.status(200).json({})
+    }
+    catch (e){
+        console.log(e);
+        return res.status(400).json({
+            warnings: "Error. Please restart your session."
+        })
+    }
+}
+
+async function changepassword(req, res){
+    const {token, password, passwordconfirm } = req.body;
+    const warnings = {
+        w_password: '',
+        w_cpassword: '',
+        warnings: [],
+    };
+    let errors = false;
+    let text = 'SELECT * FROM users WHERE tokenmail = $1';
+    let value = [token];
+    // VALIDATION
+    if (!validate.validatePassword(password))
+        warnings.w_password = "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters.";
+    if (passwordconfirm.localeCompare(password) !== 0)
+        warnings.w_cpassword = "Password does not match.";
+    if (Object.values(warnings).map((data) => {
+        if (data.length > 0)
+            errors = true;
+    }))
+    if (errors === true)
+        return res.status(400).json({
+            warnings: warnings
+        });
+    let hashpassword = passwordHash.generate(password);
+    try {
+        let response = await pool.query(text, value);
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length) {
+            if (response.rows[0].tokenmail === token) {
+                let text = 'UPDATE users SET password = $1, tokenmail = $2';
+                let value = [hashpassword, null];
+                await pool.query(text, value);
+                return res.status(200).json({})
+            }
+        }
+        else {
+            const token = req.cookies.token;
+            if (!token) {
+                return res.status(400).json({
+                    warnings: "Token is invalid"
+                })
+            } else {
+                let connected = { bool: false, mail : '' };
+                jwt.verify(token, secret, function(err, decoded) {
+                    if (!err) {
+                        connected = true;
+                        connected.mail = decoded.email;
+                    }
+                });
+                if (connected.bool === true && connected.mail.length)
+                    text = 'UPDATE users SET password = $1 WHERE email = $2';
+                    value = [hashpassword, connected.mail];
+                    pool.query(text, value);
+                    return res.status(200).json({})
+            }
+            return res.status(400).json({
+                warnings: "Token is invalid"
+            })
+        }
+    }
+    catch (e){
+        return res.status(400).json({
+            warnings: "Token is invalid"
+        })
+    }
+}
+
+async function userforgot(req, res){
+    const { email } = req.body;
+    let text = 'SELECT * FROM users WHERE email = $1 AND active = $2';
+    let value = [email, 1];
+    let response = await pool.query(text, value);
+    if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length){
+        let text = 'UPDATE users SET tokenmail = $1 WHERE email = $2';
+        let token = ((+new Date) + Math.random()* 100).toString(32);
+        let hashtoken = crypto.createHash('md5').update(token).digest("hex");
+        let values = [hashtoken, email];
+        const message = {
+            from: 'matcha@app.com',
+            to: email,
+            subject: 'Forgot Password',
+            text: 'Hello !\nHere is the link to reset your password http://localhost:3000/forgotpassword/'+hashtoken,
+        };
+        transport.sendMail(message, function(err, info) {
+            if (err)
+                console.log(err)
+            else
+                console.log(info);
+        });
+        pool.query(text, values);
+        res.status(200).json({
+            success: "A password reset email has just been sent",
+        })
+    }
+    else {
+        return (res.status(400).json({
+            warnings: "Mail does not exist",
+        }))
+    }
+
+
+}
+
 async function updateEditProfilValues(req, res) {
     const userID = await getUserId(res.locals.email);
     if (userID === null)
         return (res.status(500).json({
             warnings: ["User not found. Please logout and login."]
         }));
-    const {lastname, firstname, interested, country, gender, bio} = req.body.state;
+    const {lastname, firstname, interested, age, country, gender, bio} = req.body.state;
 
     // Check DATA -------------------------------------------------------
-    let valid = false;
+    let valid = true;
     let find = false;
+    let findage = false;
     let total = 25;
-    if (!validate.validateFirstName(lastname) || !validate.validateFirstName(lastname) ||
-        ((interested !== "male" && interested !== "female")) || ((gender !== "male" || gender !== "female")))
-                valid = true;
+    if (!validate.validateFirstName(lastname) || !validate.validateFirstName(firstname))
+        valid = false;
+    if (interested !== 'male' && interested !== 'female' && interested !== 'other')
+        valid = false;
     validate.countries.map((data) => {
         if (data.value === country)
             return find = true
     });
+    validate.age.map((data) => {
+        if (data.value === age)
+            return findage = true
+    });
     if ((typeof bio !== 'undefined' && bio) && (bio.length < 3 && bio.length > 90))
-        valid = false;
-    if (!find || !valid)
+        valid = true;
+    if (!find || !findage || !valid)
         return (res.status(409)).json({
             warnings: ["Wrong input was sent. Please send valid data."]
         });
     try {
         // Save DATA -------------------------------------------------------
-        let text = 'UPDATE profile SET lastname = $1, firstname = $2, interested = $3, country = $4, gender = $5, bio = $6 WHERE user_id = $7';
-        let values = [lastname, firstname, interested, country, gender, bio, userID]
+        let text = 'UPDATE profile SET lastname = $1, firstname = $2, interested = $3, country = $4, gender = $5, bio = $6, age = $7 WHERE user_id = $8';
+        let values = [lastname, firstname, interested, country, gender, bio, parseInt(age), userID]
         await pool.query(text, values);
 
         // Set Complete
@@ -185,6 +597,7 @@ async function updateEditProfilValues(req, res) {
         await pool.query(text, values);
 
         // Send complete for increase bar
+        await updatetotalcomplete(userID);
         return res.status(200).json({
             complete: total
         });
@@ -251,6 +664,7 @@ async function addInterests(req, res) {
             text = 'INSERT INTO user_interests(user_id, interest_id) VALUES ($1, $2)';
             values = [userID, interestID];
             await pool.query(text, values);
+            await updatetotalinterests(userID);
             return res.status(200).json({
                 warnings: ["Your interest \""+interest+"\" was successfully added"]
             });
@@ -259,7 +673,6 @@ async function addInterests(req, res) {
             warnings: ["Error when trying to get interest ID"]
         });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({
             warnings: ["Server error"]
         });
@@ -268,11 +681,15 @@ async function addInterests(req, res) {
 
 
 async function getInterests(req, res){
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return (res.status(500));
     try {
         let text = 'SELECT interest FROM interests';
         let response = await pool.query(text);
         if (response.rows && response.rows.length > 1) {
             const transformed = response.rows.map(({ interest}) => ({ "title": interest.trim()}));
+            await updatetotalinterests(userID);
             return res.status(200).json({
                 results: transformed,
             });
@@ -352,6 +769,7 @@ async function deleteInterest(req, res){
             text = 'DELETE FROM user_interests WHERE user_id = $1 AND interest_id = $2';
             values = [userID, response.rows[0].interest_id];
             await pool.query(text,values);
+            await updatetotalinterests(userID);
             return res.status(200).json({
                 warnings: ["Your interest \""+data+"\" was successfully removed"]
             });
@@ -404,7 +822,7 @@ async function checkUserView(req, res) {
         let value = [userID];
         let response = await pool.query(text, value);
         if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length)
-            if (response.rows[0].complete >= 40)
+            if (response.rows[0].complete >= 38)
                 return res.status(200).json({});
         return res.status(400).json({
             warnings: ["Your need to complete your profile"]
@@ -416,6 +834,7 @@ async function checkUserView(req, res) {
         });
     }
 }
+
 
 
 async function getUserIdProfile(req, res) {
@@ -469,8 +888,19 @@ async function getUserIdProfile(req, res) {
     }
 }
 
+exports.updatetotalcomplete = updatetotalcomplete;
 exports.login = login;
+exports.deletenotif = deletenotif;
+exports.getNotifications = getNotifications;
+exports.reportuserhide = reportuserhide;
+exports.reportuser = reportuser;
+exports.reportuserfake = reportuserfake;
+exports.changemyemail = changemyemail;
 exports.signup = signup;
+exports.activeaccount= activeaccount;
+exports.updategeolocate = updategeolocate;
+exports.userforgot = userforgot;
+exports.changepassword = changepassword;
 exports.getEditProfilValues = getEditProfilValues;
 exports.updateEditProfilValues = updateEditProfilValues;
 exports.addInterests = addInterests;

@@ -22,7 +22,7 @@ export default class FileUpload extends React.Component {
         else {
             const formData = new FormData();
             formData.append('file', file);
-            const {data} = await axios.post("http://localhost:3000/user-profile", formData, {withCredentials: 'true'});
+            const {data} = await axios.post("http://localhost:5000/user-profile", formData, {withCredentials: 'true'});
             if (data.warnings)
                 this.props.setWarnings(data.warnings);
         }

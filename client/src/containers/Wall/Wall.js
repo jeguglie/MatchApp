@@ -3,7 +3,6 @@ import UserMiniCard from "../../components/UserMiniCard/UserMiniCard";
 import API from './../../utils/API';
 import InputRange from 'react-input-range';
 import InfiniteScroll from 'react-infinite-scroller';
-import Interests from "../../components/EditProfil/AddInterests/Interests/Interests";
 import {Dimmer, Loader, Grid, Segment, Divider, Checkbox} from "semantic-ui-react";
 import 'react-input-range/lib/css/index.css';
 import Button from "semantic-ui-react/dist/commonjs/elements/Button";
@@ -40,15 +39,25 @@ const DEFAULT_STATE = {
     popularityRange: {
         min: 0,
         max: 50,
-    }
+    },
+    liked: false,
 };
 class Wall extends React.Component {
 
-    state = {...DEFAULT_STATE};
+    constructor(props){
+        super(props);
+        this.state = {...DEFAULT_STATE};
+        this._mounted = false;
+        this.s_wallvisit = this.s_wallvisit.bind(this);
+        console.log(this.props.test);
+    }
 
+    s_wallvisit(userIdFocus){
+        this.props.sWallvisit(userIdFocus);
+    }
     componentDidMount = async() => {
         this._mounted = true;
-        this.setState({loading: true});
+        this._mounted && this.setState({loading: true});
         // Check if user can view users
         await API.checkUserView()
             .then(res => { this.canView = res.status === 200 })
@@ -59,15 +68,15 @@ class Wall extends React.Component {
             .then(response => {
                 if (typeof response.data.interests !== "undefined"){
                     if (this._mounted)
-                        this.setState({interests: response.data.interests})
+                        this._mounted && this.setState({interests: response.data.interests})
                 }
             })
             .catch(error => {
                 if (this._mounted)
-                    this.setState({warnings: error.response.data.warnings})
+                    this._mounted && this.setState({warnings: error.response.data.warnings})
             });
         await this.searchMatch();
-        this.setState({loading: false});
+        this._mounted && this.setState({loading: false});
     };
 
     componentWillUnmount() {
@@ -77,16 +86,16 @@ class Wall extends React.Component {
     // Filter
     handleChange = async(value, id) => {
         if (id === "distanceRange")
-            this.setState({distanceRange: value});
+            this._mounted && this.setState({distanceRange: value});
         else if (id === "ageRange")
-            this.setState({ageRange: value});
+            this._mounted && this.setState({ageRange: value});
         else if (id === "popularityRange")
-            this.setState({popularityRange: value});
+            this._mounted && this.setState({popularityRange: value});
     };
 
     // Search button handle
     searchMatch = async() => {
-        this.setState({loading: true});
+        this._mounted && this.setState({loading: true});
         const {distanceRange, ageRange, popularityRange } = this.state;
         let users = [];
         // Get users
@@ -97,52 +106,73 @@ class Wall extends React.Component {
             })
             .catch(error => {
                 if(typeof error.response !== 'undefined')
-                    this.setState({warnings : error.response.data.warnings})
+                    this._mounted && this.setState({warnings : error.response.data.warnings})
             });
         let nextUsers = 0;
         if(users.length > 20)
            nextUsers = users.slice(21);
-        this.setState({
+        this._mounted && this.setState({
             nextUsers: nextUsers,
             users: users.slice(0, 21),
             hasMoreContent: users.length > 20
         });
-        this.setState({loading: false});
+        this._mounted && this.setState({loading: false});
 
     };
 
+
     // Cliked user handle
     clickedUser = async(userIdFocus) => {
+        // Send notification
+        this.s_wallvisit(userIdFocus);
+        API.wallvisit(userIdFocus);
+        await API.checkUserLike(userIdFocus)
+            .then(response => {
+                if (response.status === 200 && typeof response.data.liked != 'undefined')
+                    this._mounted && this.setState({liked: response.data.liked});
+            })
+            .catch(e => console.log(e));
         await API.getUserIdProfile(userIdFocus)
             .then(res => {
                 if (res.status === 200){
-                    this.setState({
+                    this._mounted && this.setState({
                         user: res.data.user,
                         userIdFocus: userIdFocus,
                         showModal: true
                     });
                 }
+            });
+    };
+    userLike = async(userIdFocus) => {
+        await API.userLike(userIdFocus)
+            .then(response => {
+                if (response.status === 200 && typeof response.data.liked != 'undefined') {
+                    this._mounted && this.setState({liked: response.data.liked});
+                    // Socket
+                    if (response.data.liked === true)
+                        this.props.s_like(userIdFocus);
+                }
             })
+            .catch(err => console.log(err));
     };
     handleClose = () => {
-        this.setState({ userIdFocus: null, showModal: false})
-    }
-
+        this._mounted && this.setState({ userIdFocus: null, showModal: false, liked: false})
+    };
     handleBottomPage = () => {
         const { nextUsers, users } = this.state;
         if (nextUsers.length){
             for (let i = 0; i < nextUsers.length && i <= 20; i++)
                 users.push(nextUsers[i]);
-            this.setState({users: users, nextUsers: nextUsers.slice(21)});
+            this._mounted && this.setState({users: users, nextUsers: nextUsers.slice(21)});
         }
         else
-            this.setState({hasMoreContent: false});
+            this._mounted && this.setState({hasMoreContent: false});
     }
     render() {
-        const { hasMoreContent, user, showModal, users, loading, distanceRange, ageRange, popularityRange, interests } = this.state;
+        const { hasMoreContent, user, liked, showModal, users, loading, distanceRange, ageRange, popularityRange, interests } = this.state;
             return (
                 <div className="WallContainer">
-                    <ModalUser showModal={showModal} user={user} handleClose={this.handleClose} userInterests={interests} />
+                    <ModalUser showModal={showModal} user={user} liked={liked} userLike={this.userLike} handleClose={this.handleClose} userInterests={interests} />
                     <Dimmer active={loading}>
                         <Loader size='massive'/>
                     </Dimmer>

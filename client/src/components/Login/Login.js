@@ -3,8 +3,7 @@ import Warnings from "../Warnings/Warnings";
 import VALIDATE from '../../utils/validation';
 import API from "../../utils/API";
 import {Container, Image, Form, Button, Dimmer, Loader, Divider} from 'semantic-ui-react';
-import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:3002');
+import { store } from 'react-notifications-component';
 
 const DEFAULT_STATE = {
     email: "",
@@ -33,8 +32,59 @@ class Login extends React.Component {
         this._mounted = false;
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this._mounted = true;
+        this.params = this.props.match.params;
+        if (this.params.token){
+            await API.activeaccount(this.params.token)
+                .then (response => {
+                    if (response.status === 200){
+                        store.addNotification({
+                            title: 'Account validation',
+                            message: 'Your account was successfully activated. You can now log in.',
+                            type: "success",
+                            insert: "top",
+                            container: "top-right",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 10000,
+                                onScreen: true
+                            }
+                        });
+                    }
+                    else
+                        store.addNotification({
+                            title: 'Error validation',
+                            message: 'Token or mail are not valids.',
+                            type: "warning",
+                            insert: "top",
+                            container: "top-right",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 10000,
+                                onScreen: true
+                            }
+                        });
+                })
+                .catch(error => {
+                    store.addNotification({
+                        title: 'Error validation',
+                        message: 'Token or mail are not valids.',
+                        type: "warning",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 10000,
+                            onScreen: true
+                        }
+                    });
+                });
+            this.props.history.push('/login');
+        }
     }
 
     send = async() => {
@@ -56,12 +106,27 @@ class Login extends React.Component {
                                 if (typeof response.data !== 'undefined' && typeof response.data.connect !== 'undefined')
                                     this.props.handleConnected(true);
                                     this.props.history.push('/profile');
-                                    socket.emit("userlogin");
+                                    this.props.s_userlogin();
                             })
                             .catch(error => {
                                 if (typeof error.response !== 'undefined' && typeof error.response.data !== 'undefined') {
-                                    if (this._mounted)
+                                    if (this._mounted) {
                                         this.setState({w_email: error.response.data.w_email});
+                                        if (error.response.data.w_emailconfirm)
+                                            store.addNotification({
+                                                title: 'Account not active',
+                                                message: 'A confirmation link was sent to your mail',
+                                                type: "warning",
+                                                insert: "top",
+                                                container: "top-right",
+                                                animationIn: ["animated", "fadeIn"],
+                                                animationOut: ["animated", "fadeOut"],
+                                                dismiss: {
+                                                    duration: 10000,
+                                                    onScreen: true
+                                                }
+                                            });
+                                    }
                                 }
                             });
                     } else if (this._mounted)
@@ -80,6 +145,9 @@ class Login extends React.Component {
         this.setState({[event.target.id]: event.target.value});
     }
 
+    handleClickForgot = () => {
+
+    }
 
     render() {
         const {loading, w_email, w_password} = this.state;
@@ -134,7 +202,10 @@ class Login extends React.Component {
                     <Divider hidden />
                     <div className="loginNoAccount">
                         <p className="loginForgot">
-                            <a href="/signup"><strong>Forgot password ?</strong></a>
+                            <a  href="/forgotpassword"
+                               >
+                                <strong>Forgot password ?</strong>
+                            </a>
                         </p>
                         <p>No account ? <a href="/signup">Register</a></p>
                     </div>

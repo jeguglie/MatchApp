@@ -6,22 +6,23 @@ import AddInterests from "./AddInterests/AddInterests";
 import Location from "./Location/Location";
 
 
-const DEFAULT_SATE = {
+const DEFAULT_STATE = {
     section: 1,
     complete: 0,
 };
 
 class EditProfil extends React.Component {
-    state = DEFAULT_SATE;
 
-    handleNext = () => {
-        this.setState({section: this.state.section + 1});
-    }
-    handlePrev = () => {
-        this.setState({section: this.state.section - 1});
-    }
+    constructor(props){
+        super(props);
+        this.state = DEFAULT_STATE;
+        this._mounted = false;
 
-    async componentDidMount() {
+    }
+    handleNext = () => {this.setState({section: this.state.section + 1}) };
+    handlePrev = () => {this.setState({section: this.state.section - 1}) };
+
+    componentDidMount() {
         this._mounted = true;
         this.getComplete();
     }
@@ -33,12 +34,14 @@ class EditProfil extends React.Component {
     getComplete = async() => {
         await API.getComplete()
             .then ((response) => {
-                    if (this._mounted)
-                        this.setState({complete: response.data.complete});
-                })
+                this._mounted && this.setState({complete: response.data.complete});
+            })
             .catch((error) => {
                 console.log(error);
             })
+    };
+    useCustomAddress = () => {
+        this.props.history.push('/usecustomaddress');
     };
 
     render(){
@@ -71,7 +74,8 @@ class EditProfil extends React.Component {
                 <Location
                     prevsection={this.handlePrev}
                     complete={this.state.complete}
-                    getcomplete={this.getComplete} />
+                    getcomplete={this.getComplete}
+                    useCustomAddress={this.useCustomAddress}/>
             );
         }
 

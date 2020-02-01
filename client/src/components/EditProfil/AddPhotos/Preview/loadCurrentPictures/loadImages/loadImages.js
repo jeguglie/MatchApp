@@ -12,7 +12,7 @@ const LoadImages = (props) => {
                 <Grid.Column key={key} mobile={8} tablet={6} computer={6}>
                         <Image
                             className="ImagePreview"
-                            src={"http://localhost:3000/" + item.img_link}
+                            src={item.img_link}
                             rounded
                             fluid
                             label={{ as: 'a', corner: 'right', icon: 'close' , onClick: () => deleteImage(item.img_id, key) }}

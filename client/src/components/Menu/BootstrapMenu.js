@@ -1,30 +1,38 @@
 import React from 'react';
-import { ButtonToolbar, Navbar, Button, Nav, ButtonGroup } from 'react-bootstrap';
+import { ButtonToolbar, Navbar, Button, Nav, ButtonGroup, NavDropdown} from 'react-bootstrap';
 import '../../Assets/global-styles/bootstrap-iso.css';
 import { Icon } from "semantic-ui-react";
-import API from "../../utils/API";
-import { Redirect } from 'react-router-dom';
 import classnames from 'classnames';
 import { withRouter } from 'react-router';
 import Aux from "../../hoc/Aux";
-import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:3002');
+import API from '../../utils/API';
+import io from 'socket.io-client'; // The default import should be called io.
 
 class NavbarBootstrap extends React.Component {
 
-    state = {
-        activeItem: '',
-        redirect: '',
-        connected: false,
-    };
-
     constructor(props){
         super(props);
+        this.state = {
+            activeItem: '',
+            redirect: '',
+            connected: false,
+            notifNb: 0,
+        };
+        this._mounted = false;
+        this.socket = io('http://localhost:8000');
     }
 
-    componentDidMount() {
-        this.setState({activeItem: this.props.location.pathname, connected: this.props.isConnected});
-    }
+    componentDidMount = async() => {
+        this._mounted = true;
+        this._mounted && this.setState({activeItem: this.props.location.pathname, connected: this.props.isConnected});
+        this.socket.on("getnotif", () => { this._mounted && this.setState((prevState) => ( {notifNb: prevState.notifNb + 1} )) });
+        await API.getNotifications()
+            .then(res => {
+                if (res.status === 200)
+                    this._mounted && this.setState({notifNb: res.data.notifications.length})
+            })
+            .catch(e => console.log(e));
+    };
 
     static getDerivedStateFromProps(nextProps, prevState){
         if (nextProps.isConnected !== prevState.connected)
@@ -42,7 +50,7 @@ class NavbarBootstrap extends React.Component {
         this.props.history.push(redirect);
     };
     disconnect = () => {
-        fetch('http://localhost:3000/logout', {
+        fetch('http://localhost:5000/logout', {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -53,7 +61,7 @@ class NavbarBootstrap extends React.Component {
                 if (res.status === 200) {
                     this.props.handleConnected(false);
                     this.props.history.push('/login');
-                    socket.emit("logout");
+                    this.props.s_logout();
                 } else {
                     const error = new Error(res.error);
                     throw error;
@@ -97,15 +105,72 @@ class NavbarBootstrap extends React.Component {
             )
         }
     };
+
+    showMenu = () => {
+        const { activeItem, notifNb } = this.state;
+        const navDropdownTitle = (
+            <Aux>
+                <Icon size='large' name='user'/>
+                <span className="itemMenu">Profile</span>
+            </Aux>
+        );
+        if (this.state.connected === true)
+            return (
+                <Nav className='mr-auto'>
+                    <Nav.Link
+                        className={activeItem === '/' ? "activeItem" : null}
+                        onClick={() => this.handleItemClick(null, "/")}>
+                        <Icon size='large' name='gratipay' />
+                        <span className="itemMenu">Wall</span>
+                    </Nav.Link>
+                    <NavDropdown
+                        title={navDropdownTitle}
+                        className={activeItem === '/profile' ? "activeItem" : null}>
+                        <NavDropdown.Item
+                            onClick={() => this.handleItemClick(null, "/profile")}>
+                            Edit my profile
+                        </NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item
+                            onClick={() => this.handleItemClick(null, "/changepassword")}>
+                            Edit my password
+                        </NavDropdown.Item>
+                        <NavDropdown.Item
+                            onClick={() => this.handleItemClick(null, "/changemail")}>
+                            Edit my mail
+                        </NavDropdown.Item>
+
+                    </NavDropdown>
+                    <Nav.Link
+                        className={activeItem === '/messages' ? "activeItem" : null}
+                        redirect='messages'
+                        onClick={() => this.handleItemClick(null, "/messages")}>
+                        <Icon size='large' name='conversation' />
+                        <span className="itemMenu">Messages</span>
+                    </Nav.Link>
+                    <Nav.Link
+                        className={activeItem === '/notifications' ? "activeItem" : null}
+                        id='/notifications'
+                        onClick={() => this.handleItemClick(null, "/notifications")}>
+                        <Icon size='large' name='bell' />
+                        <div class="badgecontainernotif">
+                            <span className="itemMenu">Notifications</span>
+                            {notifNb > 0 ? <span class="badgenotif">{notifNb}</span> : null}
+                        </div>
+                    </Nav.Link>
+                </Nav>
+            )
+        else
+            return null;
+    }
     render() {
-        const { activeItem } = this.state;
         return (
             <div className='bootstrap-iso'>
                 <div className="Menu">
                     <Navbar sticky="top" collapseOnSelect expand="sm">
                         <Navbar.Brand
                             className="ml-3"
-                            id='/wall'>
+                            id='/'>
                             <img
                                 src='./../../img/MatchApp-Logo.png'
                                 height="50"
@@ -113,34 +178,7 @@ class NavbarBootstrap extends React.Component {
                         </Navbar.Brand>
                         <Navbar.Toggle/>
                         <Navbar.Collapse>
-                            <Nav className='mr-auto'>
-                                <Nav.Link
-                                    className={activeItem === '/wall' ? "activeItem" : null}
-                                    onClick={() => this.handleItemClick(null, "/wall")}>
-                                    <Icon size='large' name='gratipay' />
-                                    <span className="itemMenu">Wall</span>
-                                </Nav.Link>
-                                <Nav.Link
-                                    className={activeItem === '/profile' ? "activeItem" : null}
-                                    onClick={() => this.handleItemClick(null, "/profile")}>
-                                    <Icon size='large' name='user' />
-                                    <span className="itemMenu">Profile</span>
-                                </Nav.Link>
-                                <Nav.Link
-                                    className={activeItem === '/messages' ? "activeItem" : null}
-                                    redirect='messages'
-                                    onClick={() => this.handleItemClick(null, "/messages")}>
-                                    <Icon size='large' name='conversation' />
-                                    <span className="itemMenu">Messages</span>
-                                </Nav.Link>
-                                <Nav.Link
-                                    className={activeItem === '/notifications' ? "activeItem" : null}
-                                    id='/notifications'
-                                    onClick={() => this.handleItemClick(null, "/notifications")}>
-                                    <Icon size='large' name='bell' />
-                                    <span className="itemMenu">Notifications</span>
-                                </Nav.Link>
-                            </Nav>
+                            {this.showMenu()}
                             <Nav>
                                 <div className="ConnectionNav m-1">
                                     {this.isConnected()}

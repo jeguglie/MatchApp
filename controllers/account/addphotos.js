@@ -2,6 +2,27 @@ const account = require('./lib.js');
 const pool = require('./../../utils/queries');
 
 
+async function updatetotalimage(userID){
+
+    try {
+        let text = 'SELECT * FROM pictures WHERE user_id = $1';
+        let value = [userID];
+        let response = await pool.query(text, value);
+        let number = 0;
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && typeof response.rows.length)
+            number = response.rows.length;
+        text = 'UPDATE user_complete SET complete_photos = $1 WHERE user_id = $2';
+        value = [number * 5, userID];
+        await pool.query(text, value);
+        await account.updatetotalcomplete(userID);
+        return (1);
+
+    }catch (e){
+        console.log(e);
+        return (0);
+    }
+}
+
 async function uploadPhoto(req, res) {
     const user_id = await account.getUserId(res.locals.email);
     if (user_id === null)
@@ -26,10 +47,12 @@ async function uploadPhoto(req, res) {
             return res.status(200).json({
                 warnings: ["Number limit of images is 5"]
             });
+        let img_order = response.rows.length === 1 ? 0 : response.rows.length + 1;
         // Add image row and image order
         text = 'INSERT INTO pictures(user_id, img_link, img_order) VALUES ($1, $2, $3)';
-        values = [user_id, pathImg, response.rows.length + 1];
+        values = [user_id, 'http://localhost:5000/' + pathImg, img_order];
         await pool.query(text, values);
+        await updatetotalimage(user_id);
         return res.status(200).json({
             warnings: ["Image successfully uploaded"],
             save: true
@@ -55,6 +78,7 @@ async function getPhotos(req, res) {
             return res.status(200).json({
                 profileImg: response.rows
             });
+        await updatetotalimage(user_id);
         return res.status(200).json({
             profileImg: []
         })
@@ -87,6 +111,7 @@ async function deleteImage(req, res) {
         return res.status(200).json({
             warnings: ["Your images was successfully deleted"]
         });
+        await updatetotalimage(user_id);
     } catch (error) {
         return res.status(500).json({
             warnings: ["Error"]

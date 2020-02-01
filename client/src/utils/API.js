@@ -2,9 +2,109 @@ import axios from "axios";
 const headers = {
     "Content-Type": "application/json"
 };
-const burl = "http://localhost:3000";
+const burl = "http://localhost:5000";
 
 export default {
+    reportuser: function(user_id_reported){
+        return axios.post(
+            `${burl}/reportuser`,
+            {
+                user_id_reported
+            },
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        );
+    },
+    deletenotif: function(id_notif){
+        return axios.post(
+            `${burl}/deletenotif`,
+            {
+                id_notif
+            },
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        );
+    },
+    reportuserhide: function(user_id_reported){
+        return axios.post(
+            `${burl}/reportuserhide`,
+            {
+                user_id_reported
+            },
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        );
+    },
+    reportuserfake: function(user_id_reported){
+        return axios.post(
+            `${burl}/reportuserfake`,
+            {
+                user_id_reported
+            },
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        );
+    },
+    updategeolocate: function(latitude, longitude){
+        return axios.post(
+            `${burl}/updategeolocate`,
+            {
+                latitude, longitude
+            },
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        );
+    },
+    changemyemail: function(email, emailconfirm){
+        return axios.post(
+            `${burl}/changemyemail`,
+            {
+                email, emailconfirm
+            },
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        );
+    },
+    activeaccount: function(token){
+        return axios.post(
+            `${burl}/activeaccount`,
+            {
+                token
+            },
+        );
+    },
+    changepassword: function(token, password, passwordconfirm){
+        return axios.post(
+            `${burl}/changepassword`,
+            {
+                token, password, passwordconfirm
+            },
+        {
+                withCredentials: 'true',
+                headers: headers
+            }
+        );
+    },
+    userforgot: function(email) {
+        return axios.post(
+            `${burl}/userforgot`,
+            {
+                email,
+            },
+        );
+    },
     login: function(email, password) {
         return axios.post(
             `${burl}/login`,
@@ -179,5 +279,34 @@ export default {
                 headers: headers
             }
         )
-    }
+    },
+    checkUserLike: (userLikedID) => {
+        return axios.post(
+            `${burl}/checkUserLike`,
+            {userLikedID},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
+    wallvisit: (userIDvisited) => {
+        return axios.post(
+            `${burl}/wallvisit`,
+            {userIDvisited},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
+    getNotifications: () => {
+        return axios.get(
+            `${burl}/getNotifications`,
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
 };

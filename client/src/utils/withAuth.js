@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import API from '../utils/API';
 
-function withAuth(ComponentToProtect) {
+function withAuth(ComponentToProtect, propstring) {
     return class extends React.Component {
         constructor() {
             super();
@@ -29,7 +29,8 @@ function withAuth(ComponentToProtect) {
             if (redirect) {
                 return <Redirect to="/login" />;
             }
-            return <ComponentToProtect {...this.props} />
+            console.log(this.props);
+            return <ComponentToProtect {...this.props} {propstring} />
         }
     }
 }

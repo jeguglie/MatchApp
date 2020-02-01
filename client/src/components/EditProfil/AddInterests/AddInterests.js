@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
 import API from "../../../utils/API";
-import classnames from "classnames";
 import {Grid, Progress, Icon, Divider, Search, Dimmer, Loader} from "semantic-ui-react";
 import Interests from "./Interests/Interests";
 import Warnings from '../../../components/Warnings/Warnings';
@@ -100,7 +99,6 @@ class AddInterests extends Component {
 
     handleKeyDown = async (data) => {
         if (data.key === 'Enter') {
-            console.log(1);
             // Regex for interest
             const regex = new RegExp('/(^|\\B)#(?![0-9_]+\\b)([a-zA-Z0-9_]{1,30})(\\b|\\r)/g');
             let new_interest = data.target.value;

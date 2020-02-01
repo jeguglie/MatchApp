@@ -74,3 +74,19 @@
   .NavbarLogo {
     -webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,0.15)) !important;
   }
+
+
+.badgecontainernotif {
+  display: inline;
+}
+
+.badgenotif {
+  background-color: #db366e;
+  font-size: 0.8em;
+  padding: 0.2em;
+  font-weight: bold;
+  font-family: "Open Sans", sans-serif;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  border-radius: .125rem;
+  margin-left: 0.5rem !important;
+}

@@ -3,6 +3,7 @@ import API from "../../utils/API";
 import {Button, Container, Form, Image, Grid, Divider, Dimmer,Loader} from "semantic-ui-react";
 import Warnings from "../Warnings/Warnings";
 import validate from '../../utils/validation';
+import {store} from "react-notifications-component";
 
 const DEFAULT_STATE = {
     lastname: "",
@@ -63,7 +64,6 @@ class Signup extends React.Component {
             this.warnings.w_lastname = "Please use a valid last name.";
         // Check if warning is set
         if (!validate.checkWarnings(this.warnings)){
-            console.log(33434);
             if(this._mounted)
                 this.setState({loading: true});
             await validate.sleepLoader(1200)
@@ -71,6 +71,19 @@ class Signup extends React.Component {
                     await API.signup(lastname, firstname, email, username, password, cpassword)
                         .then(() => {
                             this.props.history.push('/login');
+                            store.addNotification({
+                                title: 'Confirm your account',
+                                message: "Use the link sent by mail to activate your account",
+                                type: "success",
+                                insert: "top",
+                                container: "top-right",
+                                animationIn: ["animated", "fadeIn"],
+                                animationOut: ["animated", "fadeOut"],
+                                dismiss: {
+                                    duration: 10000,
+                                    onScreen: true
+                                }
+                            });
                         })
                         .catch(error => {
                             if (typeof error.response.data !== 'undefined' && typeof error.response.data.warnings !== 'undefined')
