@@ -28,10 +28,16 @@ class Location extends React.Component {
     async componentDidMount() {
         this.setState({loading: true});
         await VALIDATE.sleepLoader(200);
-        await this.props.getcomplete();
         this.setState({complete: this.props.complete});
         this.setState({loading: false});
     }
+
+    componentDidUpdate = async(props, state) =>{
+        if (props.complete !== state.complete)
+            this._mounted && this.setState({complete: props.complete})
+        if (props.loading !== state.loading)
+            this._mounted && this.setState({loading: props.loading})
+    };
 
     // React geolocate
     innerRef;
@@ -39,36 +45,42 @@ class Location extends React.Component {
         this.innerRef = ref;
 
     };
+    prevSection = () => {
+        this._mounted && this.setState({loading: true});
+        this.props.prevsection();
+    };
+
     getLocation = async() => {
         this.innerRef && this.innerRef.getLocation();
-        this.setState({innerRef: this.innerRef});
-        await API.updategeolocate(this.innerRef.state.coords.latitude, this.innerRef.state.coords.longitude)
-            .then (response => {
-                if (response.status === 200){
-                    store.addNotification({
-                        title: 'Your position was successfully updated',
-                        message: "Start to match !",
-                        type: "success",
-                        insert: "top",
-                        container: "top-right",
-                        animationIn: ["animated", "fadeIn"],
-                        animationOut: ["animated", "fadeOut"],
-                        dismiss: {
-                            duration: 10000,
-                            onScreen: true
-                        }
-                    });
-                }
-            })
-            .catch(e => console.log(e));
+        if (this.innerRef && this.innerRef.state && this.innerRef.state.coords) {
+            this.innerRef && this.setState({innerRef: this.innerRef});
+            await API.updategeolocate(this.innerRef.state.coords.latitude, this.innerRef.state.coords.longitude)
+                .then(response => {
+                    if (response.status === 200) {
+                        store.addNotification({
+                            title: 'Your position was successfully updated',
+                            message: "Start to match !",
+                            type: "success",
+                            insert: "top",
+                            container: "top-right",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 10000,
+                                onScreen: true
+                            }
+                        });
+                    }
+                })
+                .catch(e => console.log(e));
+        }
     };
 
 
 
     render() {
-        const {getInnerRef, getLocation } = this;
+        const {getInnerRef, getLocation, nextSection, prevSection } = this;
         const {complete, loading} = this.state;
-        const {prevsection, nextsection} = this.props;
         return (
                 <div className="Location">
                     <Dimmer active={loading}>
@@ -120,12 +132,7 @@ class Location extends React.Component {
                                 className="EditProfilArrow"
                                 name='arrow circle left'
                                 size="huge"
-                                onClick={prevsection}/>
-                            <Icon
-                                className="EditProfilArrow"
-                                name='arrow circle right'
-                                size="huge"
-                                onClick={nextsection}/>
+                                onClick={prevSection}/>
                         </Grid.Row>
                     </Grid>
                 </div>

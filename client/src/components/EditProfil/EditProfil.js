@@ -9,6 +9,7 @@ import Location from "./Location/Location";
 const DEFAULT_STATE = {
     section: 1,
     complete: 0,
+    loading: false,
 };
 
 class EditProfil extends React.Component {
@@ -19,39 +20,33 @@ class EditProfil extends React.Component {
         this._mounted = false;
 
     }
-    handleNext = () => {this.setState({section: this.state.section + 1}) };
-    handlePrev = () => {this.setState({section: this.state.section - 1}) };
+    handleNext = () => {this.setState({loading: true, section: this.state.section + 1}) };
+    handlePrev = () => {this.setState({loading: true, section: this.state.section - 1}) };
 
-    componentDidMount() {
+    componentDidMount = async() => {
         this._mounted = true;
-        this.getComplete();
+        await API.getComplete()
+            .then ((response) => {
+                this._mounted && this.setState({complete: response.data.complete});
+            })
     }
 
     componentWillUnmount() {
         this._mounted = false;
     }
 
-    getComplete = async() => {
-        await API.getComplete()
-            .then ((response) => {
-                this._mounted && this.setState({complete: response.data.complete});
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-    };
-    useCustomAddress = () => {
-        this.props.history.push('/usecustomaddress');
-    };
+
+    useCustomAddress = () => { this.props.history.push('/usecustomaddress') };
 
     render(){
-        const {section} = this.state;
-            if (section === 1)
-                return (
-                        <BasicsInformations
-                            nextsection={this.handleNext}
-                            complete={this.state.complete}
-                            getcomplete={this.getComplete}/>
+        const {section, loading} = this.state;
+        if (section === 1)
+            return(
+                    <BasicsInformations
+                        nextsection={this.handleNext}
+                        complete={this.state.complete}
+                        getcomplete={this.getComplete}
+                        />
                 );
         else if (section === 2)
             return (
@@ -59,7 +54,8 @@ class EditProfil extends React.Component {
                         prevsection={this.handlePrev}
                         nextsection={this.handleNext}
                         complete={this.state.complete}
-                        getcomplete={this.getComplete} />
+                        getcomplete={this.getComplete}
+                        />
             );
         else if (section === 3)
             return (
@@ -67,7 +63,8 @@ class EditProfil extends React.Component {
                         prevsection={this.handlePrev}
                         nextsection={this.handleNext}
                         complete={this.state.complete}
-                        getcomplete={this.getComplete}/>
+                        getcomplete={this.getComplete}
+                       />
             );
         else if (section === 4)
             return (
@@ -75,7 +72,8 @@ class EditProfil extends React.Component {
                     prevsection={this.handlePrev}
                     complete={this.state.complete}
                     getcomplete={this.getComplete}
-                    useCustomAddress={this.useCustomAddress}/>
+                    useCustomAddress={this.useCustomAddress}
+                    />
             );
         }
 

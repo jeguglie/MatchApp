@@ -27,17 +27,14 @@ class AddPhotos extends React.Component {
 
     async componentDidMount() {
         this._mounted = true;
-        this.setState({loading: true});
-        this.props.getcomplete();
-        await VALIDATE.sleepLoader(200).then(async()=>{
-            await API.getPhotos()
-                .then(response => {
-                    if (response.data.profileImg.length > 0)
-                        this.setState({profileImg: response.data.profileImg}, () => {
-                            this.updateImages();
-                        });
-                })
-        });
+        this._mounted && this.setState({loading: true});
+        await API.getPhotos()
+            .then(response => {
+                if (response.data.profileImg.length > 0)
+                    this._mounted && this.setState({profileImg: response.data.profileImg}, () => {
+                        this.updateImages();
+                    });
+            });
         this.setState({loading: false});
     }
 
@@ -48,9 +45,9 @@ class AddPhotos extends React.Component {
 
     componentDidUpdate = async(props, state) =>{
         if (props.complete !== state.complete)
-            if ( this._mounted )
-                this.setState({complete: props.complete})
+            this._mounted && this.setState({complete: props.complete})
     };
+
 
     // Warnings for errors during upload or file
     setWarnings = (data) => this.setState({warnings: data});
@@ -65,7 +62,6 @@ class AddPhotos extends React.Component {
 
     }
     async handleImageUpload () {
-        this.props.getcomplete();
         try {
             const { data } = await API.getPhotos();
             if (data.profileImg.length > 0)
@@ -77,11 +73,20 @@ class AddPhotos extends React.Component {
         }
     };
     removeElement = (array, index) => {
-        if (index > -1) {
+        if (index > -1)
             array.splice(index, 1);
-        }
         return array;
-    }
+    };
+
+    prevSection = () => {
+        this._mounted && this.setState({loading: true});
+        this.props.prevsection();
+    };
+
+    nextSection = () => {
+        this._mounted && this.setState({loading: true});
+        this.props.nextsection();
+    };
 
     deleteImage = async(data, key) => {
         let imgID = data;
@@ -93,7 +98,6 @@ class AddPhotos extends React.Component {
         });
         this.setState({profileImg: profileImg});
         this.updateImages();
-        this.props.getcomplete();
         await API.deleteImage(imgID)
             .then(response => {
                 if (response.status === 200)
@@ -108,6 +112,7 @@ class AddPhotos extends React.Component {
             })
     }
     render() {
+        const { nextSection, prevSection } = this;
         const ProgressBar = () => (
             <Progress
                 percent={this.state.complete}
@@ -163,11 +168,11 @@ class AddPhotos extends React.Component {
                         <Icon className="EditProfilArrow"
                               name='arrow circle left'
                               size="huge"
-                              onClick={this.props.prevsection}/>
+                              onClick={prevSection}/>
                         <Icon className="EditProfilArrow"
                               name='arrow circle right'
                               size="huge"
-                              onClick={this.props.nextsection}/>
+                              onClick={nextSection}/>
                     </Grid.Row>
                 </Grid>
             </div>

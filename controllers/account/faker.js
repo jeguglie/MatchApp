@@ -28,6 +28,10 @@ async function matchAppFaker(req, res) {
             "DELETE FROM profile WHERE 1 = 1;",
             "DELETE FROM pictures WHERE 1 = 1;",
             "DELETE FROM interests WHERE 1 = 1;",
+            "DELETE FROM notifications WHERE 1 = 1",
+            "DELETE FROM user_fake WHERE 1 = 1",
+            "DELETE FROM user_hide WHERE 1 = 1",
+            "DELETE FROM user_report WHERE 1 = 1",
             "DELETE FROM user_likes WHERE 1 = 1;"
         ];
         texts.map(async (request) => { await pool.query(request) });
@@ -85,11 +89,11 @@ async function matchAppFaker(req, res) {
             await pool.query(text, values);
         }
         // GENERATE USERS PROFILE -------------------------------------
-        let gender = ["male", "female"];
+        let gender = ["male", "female", "other"];
         for (let i = 0; i < 1000; i++){
             console.log("Generate user profile " + i + " of 1000");
             const location = randomLocation.randomCirclePoint(P, R)
-            const text = 'INSERT INTO profile(user_id, lastname, firstname, gender, interested, country, age, bio, longitude, latitude, likes) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);';
+            const text = 'INSERT INTO profile(user_id, lastname, firstname, gender, interested, country, age, bio, longitude, latitude, likes, geolocate, usecustomaddress) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);';
             const values = [
                 i,
                 faker.name.lastName(),
@@ -101,6 +105,8 @@ async function matchAppFaker(req, res) {
                 faker.random.words(),
                 location.longitude,
                 location.latitude,
+                0,
+                0,
                 0
             ];
             await pool.query(text, values);

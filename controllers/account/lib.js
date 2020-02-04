@@ -16,6 +16,21 @@ let transport = nodemailer.createTransport({
     }
 });
 
+async function getNameUserId(userID){
+    try {
+        let text = 'SELECT firstname FROM profile WHERE user_id = $1';
+        let value = [userID];
+        let response = await pool.query(text, value);
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length)
+            return response.rows[0].firstname;
+        else
+            return "";
+    }catch (e){
+        return "";
+    }
+
+}
+
 async function getUserId(email){
     let text = 'SELECT user_id FROM users WHERE email = $1';
     let values = [email];
@@ -36,7 +51,7 @@ async function getNotifications(req, res){
         });
     let notifications = [];
     try {
-        let text = 'SELECT * FROM notifications N INNER JOIN profile P ON N.user_id_emitter = P.user_id INNER JOIN pictures PI ON PI.user_id = P.user_id WHERE N.user_id_notified = $1 AND img_order = $2';
+        let text = 'SELECT * FROM notifications N INNER JOIN profile P ON N.user_id_emitter = P.user_id INNER JOIN pictures PI ON PI.user_id = P.user_id WHERE N.user_id_notified = $1 AND img_order = $2 ORDER BY N.date DESC';
         let value = [userID, 0];
         let response = await pool.query(text, value);
         if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length){
@@ -59,6 +74,27 @@ async function getNotifications(req, res){
     }
 }
 
+async function getNotifNb(req, res){
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return res.status(500).json({
+            warnings: ["User ID not found, please logout and login."]
+        });
+    try {
+        let text = 'SELECT * FROM notifications N INNER JOIN profile P ON N.user_id_emitter = P.user_id INNER JOIN pictures PI ON PI.user_id = P.user_id WHERE N.user_id_notified = $1 AND img_order = $2';
+        let value = [userID, 0];
+        let response = await pool.query(text, value);
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length)
+            return res.status(200).json({notifNb: response.rows.length});
+        else
+            return res.status(200).json({notifNb: 0});
+
+    }catch(e){
+        return res.status(500).json({
+            warnings: ["Server error"]
+        });
+    }
+}
 async function reportuserhide(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
@@ -890,6 +926,7 @@ async function getUserIdProfile(req, res) {
 
 exports.updatetotalcomplete = updatetotalcomplete;
 exports.login = login;
+exports.getNotifNb = getNotifNb;
 exports.deletenotif = deletenotif;
 exports.getNotifications = getNotifications;
 exports.reportuserhide = reportuserhide;
@@ -912,3 +949,4 @@ exports.getUserId = getUserId;
 exports.getConnectedUserLocation = getConnectedUserLocation;
 exports.checkUserView = checkUserView;
 exports.getUserIdProfile = getUserIdProfile;
+exports.getNameUserId = getNameUserId;

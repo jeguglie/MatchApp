@@ -3,44 +3,42 @@
   <component name="ChangeListManager">
     <list default="true" id="c16ee8f9-abb0-4aa0-aae7-867162795261" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apiupdate.tar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/calendargoogle.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/App.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/EditProfil/AddInterests/AddInterests.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/EditProfil/AddInterests/AddInterests.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/EditProfil/AddPhotos/AddPhotos.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/EditProfil/AddPhotos/AddPhotos.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/EditProfil/AddPhotos/Preview/loadCurrentPictures/loadImages/loadImages.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/EditProfil/AddPhotos/Preview/loadCurrentPictures/loadImages/loadImages.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/EditProfil/BasicInformations/BasicsInformations.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/EditProfil/BasicInformations/BasicsInformations.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/EditProfil/EditProfil.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/EditProfil/EditProfil.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/EditProfil/Location/Location.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/EditProfil/Location/Location.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/EditProfil/Location/Location.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/EditProfil/Location/Location.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/EditProfil/Location/SearchBoxGoogleMap/SearchBoxGoogleMap.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/EditProfil/Location/Map/Map.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/EditProfil/Location/Map/Map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ForgotPassword/ForgotPassword.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/ForgotPassword/ForgotPassword.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/Login/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Login/Login.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/Menu/BootstrapMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Menu/BootstrapMenu.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/Menu/Menu.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/Menu/Menu.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Menu/Menu.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/ModalUser/ModalUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/ModalUser/ModalUser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/ModalUser/ModalUser.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/ModalUser/ModalUser.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/Notifications/ModalUserLike/ModalUserLike.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/Notifications/ModalUserLike/ModalUserLike.scss" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/Notifications/Notifications.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Notifications/Notifications.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/Notifications/NotificationsHistory/NotificationsHistory.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Notifications/NotificationsHistory/NotificationsHistory.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/Signup/Signup.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Signup/Signup.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/UserMiniCard/UserMiniCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/UserMiniCard/UserMiniCard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/fileUpload/fileUpload.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/fileUpload/fileUpload.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/containers/Footer/Footer.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Footer/Footer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/UserMiniCard/UserMiniCard.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/UserMiniCard/UserMiniCard.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/containers/Wall/Wall.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Wall/Wall.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/utils/API.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/utils/API.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/utils/socket.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/utils/validation.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/utils/validation.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/utils/withAuth.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/utils/withAuth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/account/addphotos.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/account/addphotos.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/account/faker.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/account/faker.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/account/lib.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/account/lib.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/account/match.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/account/match.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/account/userWallActions.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/account/userWallActions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database.tar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database/3229.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database/3231.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database/3233.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database/3234.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database/3236.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database/3239.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database/3240.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database/restore.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database/toc.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database2.tar" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/validation.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/validation.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -59,21 +57,36 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server.js">
+        <entry file="file://$PROJECT_DIR$/client/src/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="73" column="34" selection-start-line="73" selection-start-column="26" selection-end-line="73" selection-end-column="34" />
+            <state relative-caret-position="462">
+              <caret line="62" column="217" selection-start-line="62" selection-start-column="217" selection-end-line="62" selection-end-column="217" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/components/Menu/BootstrapMenu.js">
+        <entry file="file://$PROJECT_DIR$/client/src/components/Notifications/Notifications.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="166">
-              <caret line="21" column="19" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="19" />
+            <state relative-caret-position="325">
+              <caret line="77" column="32" selection-start-line="77" selection-start-column="32" selection-end-line="77" selection-end-column="32" />
               <folding>
-                <element signature="e#0#26#0" expanded="true" />
+                <element signature="e#89#151#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/src/components/ModalUser/ModalUser.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="75" column="79" selection-start-line="75" selection-start-column="79" selection-end-line="75" selection-end-column="79" />
+              <folding>
+                <element signature="e#0#84#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -82,32 +95,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/src/components/Notifications/NotificationsHistory/NotificationsHistory.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-190">
-              <caret line="3" column="50" selection-start-line="3" selection-start-column="50" selection-end-line="3" selection-end-column="50" />
+            <state relative-caret-position="219">
+              <caret line="83" column="65" selection-start-line="83" selection-start-column="65" selection-end-line="83" selection-end-column="65" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/App.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="338">
-              <caret line="62" column="89" lean-forward="true" selection-start-line="62" selection-start-column="89" selection-end-line="62" selection-end-column="89" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/client/src/utils/withAuth.js">
+        <entry file="file://$PROJECT_DIR$/client/src/containers/Wall/Wall.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="23" column="9" lean-forward="true" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
+            <state relative-caret-position="250">
+              <caret line="117" column="65" selection-start-line="117" selection-start-column="65" selection-end-line="117" selection-end-column="65" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -116,13 +117,31 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/containers/Wall/Wall.js">
+        <entry file="file://$PROJECT_DIR$/client/src/components/Menu/BootstrapMenu.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="117">
-              <caret line="51" column="36" selection-start-line="51" selection-start-column="36" selection-end-line="51" selection-end-column="36" />
+            <state relative-caret-position="-1453">
+              <caret line="51" column="22" selection-start-line="51" selection-start-column="22" selection-end-line="51" selection-end-column="22" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="404">
+              <caret line="224" column="21" selection-start-line="224" selection-start-column="21" selection-end-line="224" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/controllers/account/userWallActions.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="370">
+              <caret line="108" column="33" selection-start-line="108" selection-start-column="33" selection-end-line="108" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -138,40 +157,42 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>clickedU</find>
+      <find>ref</find>
+      <find>l</find>
+      <find>handleConn</find>
+      <find>connected</find>
+      <find>handleConnec</find>
+      <find>href</find>
+      <find>/login</find>
+      <find>userIdFocus</find>
       <find>userId</find>
-      <find>likes</find>
-      <find>like</find>
+      <find>loadingMinCard</find>
+      <find>withRouter</find>
+      <find>history</find>
+      <find>checkUser</find>
+      <find>loadingMin</find>
+      <find>loading</find>
+      <find>DIdUpd</find>
+      <find>isLoading</find>
+      <find>pushnoti</find>
+      <find>getc</find>
+      <find>this.pros.s</find>
+      <find>this.socke</find>
+      <find>handleCard</find>
+      <find>s_like</find>
+      <find>handleCa</find>
+      <find>add</find>
+      <find>getNot</find>
+      <find>getNotif</find>
+      <find>sWall</find>
+      <find>AddNotifN</find>
       <find>userLike</find>
-      <find>INNER</find>
-      <find>assign</find>
-      <find>slice</find>
-      <find>getNoti</find>
-      <find>date</find>
-      <find>console.log</find>
-      <find>user</find>
-      <find>checkUse</find>
-      <find>300</find>
-      <find>3001</find>
-      <find>3000</find>
-      <find>user-pro</find>
-      <find>user-profile</find>
-      <find>:3002</find>
-      <find>3002</find>
-      <find>delete</find>
-      <find>getNo</find>
-      <find>get</find>
-      <find>Profile</find>
-      <find>console.log(2);</find>
-      <find>Like</find>
-      <find>console.log(2)</find>
-      <find>openSocket</find>
-      <find>s_wall</find>
-      <find>socket</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/client/</dir>
       <dir>$PROJECT_DIR$/</dir>
+      <dir>$PROJECT_DIR$</dir>
+      <dir>$PROJECT_DIR$/client/src</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -182,8 +203,6 @@
       <list>
         <option value="$PROJECT_DIR$/client/src/components/ForgotPassword/Login.scss" />
         <option value="$PROJECT_DIR$/client/src/components/ForgotPassword/Login.js" />
-        <option value="$PROJECT_DIR$/client/src/components/Signup/Signup.js" />
-        <option value="$PROJECT_DIR$/client/src/components/EditProfil/Location/Map/Map.js" />
         <option value="$PROJECT_DIR$/client/src/components/EditProfil/Location/Location.scss" />
         <option value="$PROJECT_DIR$/client/src/components/EditProfil/AddPhotos/Preview/loadCurrentPictures/loadImages/loadImages.js" />
         <option value="$PROJECT_DIR$/utils/validation.js" />
@@ -191,35 +210,40 @@
         <option value="$PROJECT_DIR$/client/src/components/Notifications/ModalUserLike/ModalUserLike.js" />
         <option value="$PROJECT_DIR$/client/src/components/ForgotPassword/ChangePassword.js" />
         <option value="$PROJECT_DIR$/client/src/components/EditProfil/ChangeMyMail/ChangeMyMail.js" />
-        <option value="$PROJECT_DIR$/client/src/components/ForgotPassword/ForgotPassword.js" />
-        <option value="$PROJECT_DIR$/client/src/components/EditProfil/AddPhotos/AddPhotos.js" />
-        <option value="$PROJECT_DIR$/client/src/components/EditProfil/Location/Location.js" />
-        <option value="$PROJECT_DIR$/client/src/components/EditProfil/BasicInformations/BasicsInformations.js" />
-        <option value="$PROJECT_DIR$/client/src/components/EditProfil/EditProfil.js" />
         <option value="$PROJECT_DIR$/client/src/components/ModalUser/ModalUser.scss" />
-        <option value="$PROJECT_DIR$/client/src/components/UserMiniCard/UserMiniCard.js" />
         <option value="$PROJECT_DIR$/client/src/components/ModalUser/ModalUserActions.js" />
         <option value="$PROJECT_DIR$/controllers/account/match.js" />
-        <option value="$PROJECT_DIR$/client/src/components/ModalUser/ModalUser.js" />
         <option value="$PROJECT_DIR$/client/src/App.scss" />
         <option value="$PROJECT_DIR$/client/src/components/Notifications/NotificationsHistory/NotificationsHistory.scss" />
         <option value="$PROJECT_DIR$/client/src/utils/validation.js" />
         <option value="$PROJECT_DIR$/controllers/account/addphotos.js" />
         <option value="$PROJECT_DIR$/client/src/components/fileUpload/fileUpload.js" />
-        <option value="$PROJECT_DIR$/client/src/components/EditProfil/AddInterests/AddInterests.js" />
         <option value="$PROJECT_DIR$/client/src/components/EditProfil/AddInterests/js.js" />
-        <option value="$PROJECT_DIR$/client/src/utils/API.js" />
-        <option value="$PROJECT_DIR$/controllers/account/lib.js" />
         <option value="$PROJECT_DIR$/client/src/components/Menu/Menu.scss" />
-        <option value="$PROJECT_DIR$/controllers/account/userWallActions.js" />
-        <option value="$PROJECT_DIR$/server.js" />
-        <option value="$PROJECT_DIR$/client/src/components/Notifications/Notifications.js" />
-        <option value="$PROJECT_DIR$/client/src/components/Notifications/NotificationsHistory/NotificationsHistory.js" />
-        <option value="$PROJECT_DIR$/client/src/components/Login/Login.js" />
-        <option value="$PROJECT_DIR$/client/src/components/Menu/BootstrapMenu.js" />
-        <option value="$PROJECT_DIR$/client/src/App.js" />
-        <option value="$PROJECT_DIR$/client/src/containers/Wall/Wall.js" />
         <option value="$PROJECT_DIR$/client/src/utils/withAuth.js" />
+        <option value="$PROJECT_DIR$/client/src/components/UserMiniCard/UserMiniCard.scss" />
+        <option value="$PROJECT_DIR$/client/public/index.html" />
+        <option value="$PROJECT_DIR$/client/src/utils/API.js" />
+        <option value="$PROJECT_DIR$/client/src/components/Signup/Signup.js" />
+        <option value="$PROJECT_DIR$/client/src/components/Login/Login.js" />
+        <option value="$PROJECT_DIR$/client/src/components/ForgotPassword/ForgotPassword.js" />
+        <option value="$PROJECT_DIR$/client/src/components/UserMiniCard/UserMiniCard.js" />
+        <option value="$PROJECT_DIR$/controllers/account/faker.js" />
+        <option value="$PROJECT_DIR$/client/src/components/EditProfil/EditProfil.js" />
+        <option value="$PROJECT_DIR$/client/src/components/EditProfil/AddInterests/AddInterests.js" />
+        <option value="$PROJECT_DIR$/client/src/components/EditProfil/AddPhotos/AddPhotos.js" />
+        <option value="$PROJECT_DIR$/client/src/components/EditProfil/Location/Map/Map.js" />
+        <option value="$PROJECT_DIR$/client/src/components/EditProfil/Location/Location.js" />
+        <option value="$PROJECT_DIR$/client/src/components/EditProfil/BasicInformations/BasicsInformations.js" />
+        <option value="$PROJECT_DIR$/controllers/account/lib.js" />
+        <option value="$PROJECT_DIR$/client/src/components/Menu/BootstrapMenu.js" />
+        <option value="$PROJECT_DIR$/controllers/account/userWallActions.js" />
+        <option value="$PROJECT_DIR$/client/src/components/ModalUser/ModalUser.js" />
+        <option value="$PROJECT_DIR$/server.js" />
+        <option value="$PROJECT_DIR$/client/src/App.js" />
+        <option value="$PROJECT_DIR$/client/src/components/Notifications/NotificationsHistory/NotificationsHistory.js" />
+        <option value="$PROJECT_DIR$/client/src/components/Notifications/Notifications.js" />
+        <option value="$PROJECT_DIR$/client/src/containers/Wall/Wall.js" />
       </list>
     </option>
   </component>
@@ -253,6 +277,12 @@
               <item name="MatchApp" type="b2602c69:ProjectViewProjectNode" />
               <item name="MatchApp" type="462c0819:PsiDirectoryNode" />
               <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MatchApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MatchApp" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -261,31 +291,6 @@
               <item name="client" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MatchApp" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MatchApp" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="EditProfil" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MatchApp" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MatchApp" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="EditProfil" type="462c0819:PsiDirectoryNode" />
-              <item name="AddInterests" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MatchApp" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MatchApp" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="Login" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MatchApp" type="b2602c69:ProjectViewProjectNode" />
@@ -294,6 +299,14 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
               <item name="Menu" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MatchApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MatchApp" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="ModalUser" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MatchApp" type="b2602c69:ProjectViewProjectNode" />
@@ -318,7 +331,7 @@
               <item name="client" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="SearchBox" type="462c0819:PsiDirectoryNode" />
+              <item name="Signup" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MatchApp" type="b2602c69:ProjectViewProjectNode" />
@@ -435,12 +448,13 @@
       <workItem from="1579895370375" duration="53866000" />
       <workItem from="1580407267363" duration="5140000" />
       <workItem from="1580473218003" duration="12902000" />
-      <workItem from="1580504711792" duration="7015000" />
+      <workItem from="1580504711792" duration="41056000" />
+      <workItem from="1580693227841" duration="22907000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="87564000" />
+    <option name="totallyTimeSpent" value="144512000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -456,11 +470,11 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23819743" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22103004" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32891566" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.036144577" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -469,7 +483,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.30963856" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.3987952" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -535,64 +549,6 @@
     </option>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/client/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="8" column="10" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/Menu/Menu.js" />
-    <entry file="file://$PROJECT_DIR$/utils/middleware.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="16" column="5" lean-forward="true" selection-start-line="4" selection-start-column="4" selection-end-line="16" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/Login/Login.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="18" column="7" selection-start-line="18" selection-start-column="2" selection-end-line="18" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/Location/Map/Map.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="394">
-          <caret line="58" column="89" selection-start-line="58" selection-start-column="89" selection-end-line="58" selection-end-column="89" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/Location/Location.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="17" column="15" selection-start-line="17" selection-start-column="15" selection-end-line="17" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/Location/LocationComponent/LocationComponent.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/AddPhotos/Preview/loadCurrentPictures/loadImages/loadImages.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="14" column="33" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/AddPhotos/Preview/loadCurrentPictures/loadPreviewImages.js">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -627,16 +583,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/Signup/Signup.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14">
-          <caret line="148" column="20" selection-start-line="72" selection-start-column="28" selection-end-line="72" selection-end-column="62" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/containers/Footer/Footer.js">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -651,33 +597,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/ChangeMyMail/ChangeMyMail.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="56">
-          <caret line="4" column="63" selection-start-line="4" selection-start-column="63" selection-end-line="4" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/AddPhotos/AddPhotos.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="91" column="24" selection-start-line="91" selection-start-column="24" selection-end-line="91" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/Location/Location.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="9" selection-start-line="8" selection-start-column="87" selection-end-line="9" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/components/ModalUser/ModalUser.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -688,44 +607,7 @@
     <entry file="file://$PROJECT_DIR$/client/src/components/Warnings/Warnings.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/ForgotPassword/ForgotPassword.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="66" column="35" lean-forward="true" selection-start-line="54" selection-start-column="31" selection-end-line="66" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/components/Notifications/ModalUserLike/ModalUserLike.js" />
-    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/EditProfil.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="44" column="6" selection-start-line="44" selection-start-column="6" selection-end-line="44" selection-end-column="6" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/App.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="448">
-          <caret line="36" column="78" selection-start-line="36" selection-start-column="78" selection-end-line="36" selection-end-column="78" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/BasicInformations/BasicsInformations.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-897">
-          <caret line="77" column="38" selection-start-line="77" selection-start-column="30" selection-end-line="77" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/EditProfil.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="14">
@@ -741,24 +623,10 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/utils/socket.js" />
-    <entry file="file://$PROJECT_DIR$/controllers/account/match.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="127" column="14" selection-start-line="127" selection-start-column="13" selection-end-line="127" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/utils/validation.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="328">
           <caret line="260" column="19" selection-start-line="260" selection-start-column="17" selection-end-line="260" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/Notifications/NotificationsHistory/NotificationsHistory.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="25" column="32" selection-start-line="25" selection-start-column="32" selection-end-line="25" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -779,16 +647,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/ModalUser/ModalUser.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="27" column="17" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#84#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/components/ModalUser/ModalUserActions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="840">
@@ -799,10 +657,156 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/AddInterests/js.js" />
+    <entry file="file://$PROJECT_DIR$/client/src/components/Menu/Menu.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="83" column="27" selection-start-line="83" selection-start-column="27" selection-end-line="83" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/Notifications/NotificationsHistory/NotificationsHistory.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="25" column="32" selection-start-line="25" selection-start-column="32" selection-end-line="25" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="12" column="59" selection-start-line="12" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/UserMiniCard/UserMiniCard.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="505">
+          <caret line="50" column="1" selection-start-line="50" selection-start-column="1" selection-end-line="50" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/App.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="36" column="78" selection-start-line="36" selection-start-column="78" selection-end-line="36" selection-end-column="78" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/utils/withAuth.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/Location/LocationComponent/LocationComponent.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="9" selection-start-column="9" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="28">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/utils/API.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="444">
+          <caret line="322" column="27" selection-start-line="322" selection-start-column="27" selection-end-line="322" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/Login/Login.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="204" column="120" selection-start-line="204" selection-start-column="120" selection-end-line="204" selection-end-column="120" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/Signup/Signup.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="221" column="144" lean-forward="true" selection-start-line="221" selection-start-column="45" selection-end-line="221" selection-end-column="144" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/ChangeMyMail/ChangeMyMail.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1558">
+          <caret line="4" column="63" selection-start-line="4" selection-start-column="63" selection-end-line="4" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/ForgotPassword/ForgotPassword.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="131" column="22" lean-forward="true" selection-start-line="131" selection-start-column="22" selection-end-line="131" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/components/UserMiniCard/UserMiniCard.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="30" column="74" selection-start-line="30" selection-start-column="37" selection-end-line="30" selection-end-column="74" />
+        <state relative-caret-position="277">
+          <caret line="37" column="84" selection-start-line="37" selection-start-column="84" selection-end-line="37" selection-end-column="84" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/account/faker.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-128">
+          <caret line="109" column="17" selection-start-line="109" selection-start-column="17" selection-end-line="109" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calendargoogle.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/Location/Map/Map.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="39" column="96" selection-start-line="39" selection-start-column="96" selection-end-line="39" selection-end-column="96" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/AddInterests/AddInterests.scss">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/AddPhotos/AddPhotos.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-949">
+          <caret line="71" column="31" lean-forward="true" selection-start-line="71" selection-start-column="11" selection-end-line="71" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/AddInterests/Interests/Interests.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -811,98 +815,76 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/AddInterests/AddInterests.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="100" column="35" selection-start-line="100" selection-start-column="35" selection-end-line="100" selection-end-column="35" />
+        <state relative-caret-position="295">
+          <caret line="95" column="15" lean-forward="true" selection-start-line="95" selection-start-column="6" selection-end-line="95" selection-end-column="15" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/AddInterests/js.js">
+    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/Location/Location.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="28" selection-end-column="2" />
+        <state relative-caret-position="443">
+          <caret line="134" column="55" selection-start-line="134" selection-start-column="55" selection-end-line="134" selection-end-column="55" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/Menu/Menu.scss">
+    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/EditProfil.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="83" column="27" selection-start-line="83" selection-start-column="27" selection-end-line="83" selection-end-column="27" />
+        <state relative-caret-position="374">
+          <caret line="75" column="20" selection-start-line="75" selection-start-column="20" selection-end-line="75" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/EditProfil/BasicInformations/BasicsInformations.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="438">
+          <caret line="193" column="56" selection-start-line="193" selection-end-line="194" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/account/match.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1324">
+          <caret line="127" column="14" selection-start-line="127" selection-start-column="13" selection-end-line="127" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/account/lib.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="874">
-          <caret line="284" column="70" selection-start-line="284" selection-start-column="66" selection-end-line="284" selection-end-column="70" />
+        <state relative-caret-position="219">
+          <caret line="26" column="20" lean-forward="true" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/account/userWallActions.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="85" column="58" selection-start-line="85" selection-start-column="58" selection-end-line="85" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/Login/Login.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="27" column="30" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/Notifications/Notifications.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="28" column="36" lean-forward="true" selection-start-line="28" selection-start-column="36" selection-end-line="28" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-            <element signature="e#132#194#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/utils/API.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-11">
-          <caret line="22" column="13" lean-forward="true" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/account/faker.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10">
-          <caret line="73" column="34" selection-start-line="73" selection-start-column="34" selection-end-line="73" selection-end-column="34" />
+        <state relative-caret-position="370">
+          <caret line="108" column="33" selection-start-line="108" selection-start-column="33" selection-end-line="108" selection-end-column="33" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="73" column="34" selection-start-line="73" selection-start-column="26" selection-end-line="73" selection-end-column="34" />
+        <state relative-caret-position="404">
+          <caret line="224" column="21" selection-start-line="224" selection-start-column="21" selection-end-line="224" selection-end-column="21" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/components/Menu/BootstrapMenu.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="21" column="19" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/components/Notifications/NotificationsHistory/NotificationsHistory.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-190">
-          <caret line="3" column="50" selection-start-line="3" selection-start-column="50" selection-end-line="3" selection-end-column="50" />
+        <state relative-caret-position="-1453">
+          <caret line="51" column="22" selection-start-line="51" selection-start-column="22" selection-end-line="51" selection-end-column="22" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -911,28 +893,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/App.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="338">
-          <caret line="62" column="89" lean-forward="true" selection-start-line="62" selection-start-column="89" selection-end-line="62" selection-end-column="89" />
+        <state relative-caret-position="462">
+          <caret line="62" column="217" selection-start-line="62" selection-start-column="217" selection-end-line="62" selection-end-column="217" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/containers/Wall/Wall.js">
+    <entry file="file://$PROJECT_DIR$/client/src/components/Notifications/NotificationsHistory/NotificationsHistory.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="51" column="36" selection-start-line="51" selection-start-column="36" selection-end-line="51" selection-end-column="36" />
+        <state relative-caret-position="219">
+          <caret line="83" column="65" selection-start-line="83" selection-start-column="65" selection-end-line="83" selection-end-column="65" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/utils/withAuth.js">
+    <entry file="file://$PROJECT_DIR$/client/src/components/Notifications/Notifications.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="23" column="9" lean-forward="true" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
+        <state relative-caret-position="325">
+          <caret line="77" column="32" selection-start-line="77" selection-start-column="32" selection-end-line="77" selection-end-column="32" />
+          <folding>
+            <element signature="e#89#151#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/ModalUser/ModalUser.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="75" column="79" selection-start-line="75" selection-start-column="79" selection-end-line="75" selection-end-column="79" />
+          <folding>
+            <element signature="e#0#84#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/containers/Wall/Wall.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="117" column="65" selection-start-line="117" selection-start-column="65" selection-end-line="117" selection-end-column="65" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>

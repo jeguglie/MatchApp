@@ -309,4 +309,22 @@ export default {
             }
         )
     },
+    getNotifNb: () => {
+        return axios.get(
+            `${burl}/getNotifNb`,
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
+    logout: () => {
+        return axios.get(
+            `${burl}/logout`,
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    }
 };

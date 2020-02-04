@@ -37,18 +37,20 @@ class SimpleMap extends Component {
     }
 
     updatePosition = () => {
-        this.setState({
-            lat: this.props.innerRef.state.coords.latitude,
-            lng: this.props.innerRef.state.coords.longitude,
-        }, () => {
-            this.setState(prevState => ({
-                center: {
-                    ...prevState.center,
-                    lat: this.state.lat,
-                    lng: this.state.lng
-                }
-            }))
-        })
+        if (this.props.innerRef && this.props.innerRef.state && this.props.innerRef.state.coords) {
+            this.setState({
+                lat: this.props.innerRef.state.coords.latitude,
+                lng: this.props.innerRef.state.coords.longitude,
+            }, () => {
+                this.setState(prevState => ({
+                    center: {
+                        ...prevState.center,
+                        lat: this.state.lat,
+                        lng: this.state.lng
+                    }
+                }))
+            })
+        }
     }
     render() {
         const {center, zoom, lat, lng} = this.state;

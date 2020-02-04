@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from "react-router";
 import UserMiniCard from "../../components/UserMiniCard/UserMiniCard";
 import API from './../../utils/API';
 import InputRange from 'react-input-range';
@@ -9,27 +10,15 @@ import Button from "semantic-ui-react/dist/commonjs/elements/Button";
 import ModalUser from '../../components/ModalUser/ModalUser';
 
 const DEFAULT_STATE = {
-    user: {
-        lastname: '',
-        firstname: '',
-        interests: [],
-        gender: [],
-        interested: [],
-        imgs: [],
-        country: '',
-        bio: '',
-        age: '',
-        likes: ''
-    },
     loadingModal: '',
     nextUsers: '',
-    showModal: false,
     hasMoreContent: false,
-    userIdFocus: 0,
     clear: false,
     users: [],
     warnings: [],
-    loading: false,
+    loading: true,
+    userView: false,
+    userIdFocusLoading: null,
     interests: [],
     distanceRange: 250,
     ageRange: {
@@ -40,7 +29,6 @@ const DEFAULT_STATE = {
         min: 0,
         max: 50,
     },
-    liked: false,
 };
 class Wall extends React.Component {
 
@@ -48,35 +36,20 @@ class Wall extends React.Component {
         super(props);
         this.state = {...DEFAULT_STATE};
         this._mounted = false;
-        this.s_wallvisit = this.s_wallvisit.bind(this);
-        console.log(this.props.test);
+        this.innerRefModal = React.createRef();
     }
 
-    s_wallvisit(userIdFocus){
-        this.props.sWallvisit(userIdFocus);
-    }
     componentDidMount = async() => {
         this._mounted = true;
-        this._mounted && this.setState({loading: true});
-        // Check if user can view users
         await API.checkUserView()
-            .then(res => { this.canView = res.status === 200 })
-            .catch(() => { this.props.history.push('/') });
-        if(!this.canView)
-            this.props.history.push('/');
-        await API.getUserInterests()
-            .then(response => {
-                if (typeof response.data.interests !== "undefined"){
-                    if (this._mounted)
-                        this._mounted && this.setState({interests: response.data.interests})
+            .then(res => {
+                if (res.status === 200) {
+                    this.setState({userView: true});
+                    this.searchMatch();
                 }
             })
-            .catch(error => {
-                if (this._mounted)
-                    this._mounted && this.setState({warnings: error.response.data.warnings})
-            });
-        await this.searchMatch();
-        this._mounted && this.setState({loading: false});
+            .catch( (e) => this.setState(this.props.history.push('/profile')));
+            this._mounted && this.setState({loading: false});
     };
 
     componentWillUnmount() {
@@ -98,15 +71,10 @@ class Wall extends React.Component {
         this._mounted && this.setState({loading: true});
         const {distanceRange, ageRange, popularityRange } = this.state;
         let users = [];
-        // Get users
         await API.getUsers(distanceRange, ageRange, popularityRange)
             .then(response => {
                 if (response.status === 200)
                     users = response.data.users;
-            })
-            .catch(error => {
-                if(typeof error.response !== 'undefined')
-                    this._mounted && this.setState({warnings : error.response.data.warnings})
             });
         let nextUsers = 0;
         if(users.length > 20)
@@ -121,43 +89,15 @@ class Wall extends React.Component {
     };
 
 
-    // Cliked user handle
     clickedUser = async(userIdFocus) => {
         // Send notification
-        this.s_wallvisit(userIdFocus);
-        API.wallvisit(userIdFocus);
-        await API.checkUserLike(userIdFocus)
-            .then(response => {
-                if (response.status === 200 && typeof response.data.liked != 'undefined')
-                    this._mounted && this.setState({liked: response.data.liked});
-            })
-            .catch(e => console.log(e));
-        await API.getUserIdProfile(userIdFocus)
-            .then(res => {
-                if (res.status === 200){
-                    this._mounted && this.setState({
-                        user: res.data.user,
-                        userIdFocus: userIdFocus,
-                        showModal: true
-                    });
-                }
-            });
+        this.props.sWallVisit(userIdFocus);
+        // Inner Ref Modal
+        this.innerRefModal.current && this.innerRefModal.current.loadUser(userIdFocus);
+        this._mounted && this.setState({ loadingMinCard: true, userIdFocusLoad: userIdFocus});
     };
-    userLike = async(userIdFocus) => {
-        await API.userLike(userIdFocus)
-            .then(response => {
-                if (response.status === 200 && typeof response.data.liked != 'undefined') {
-                    this._mounted && this.setState({liked: response.data.liked});
-                    // Socket
-                    if (response.data.liked === true)
-                        this.props.s_like(userIdFocus);
-                }
-            })
-            .catch(err => console.log(err));
-    };
-    handleClose = () => {
-        this._mounted && this.setState({ userIdFocus: null, showModal: false, liked: false})
-    };
+
+    handleCardUserComplete = () => this._mounted && this.setState({loading: false, loadingMinCardLoad: false});
     handleBottomPage = () => {
         const { nextUsers, users } = this.state;
         if (nextUsers.length){
@@ -167,12 +107,17 @@ class Wall extends React.Component {
         }
         else
             this._mounted && this.setState({hasMoreContent: false});
-    }
+    };
     render() {
-        const { hasMoreContent, user, liked, showModal, users, loading, distanceRange, ageRange, popularityRange, interests } = this.state;
+        const { hasMoreContent, users, userIdFocusLoad, loadingMinCardLoad, loading, distanceRange, ageRange, popularityRange } = this.state;
             return (
                 <div className="WallContainer">
-                    <ModalUser showModal={showModal} user={user} liked={liked} userLike={this.userLike} handleClose={this.handleClose} userInterests={interests} />
+                    <ModalUser
+                        handleCardUserComplete={this.handleCardUserComplete}
+                        s_like={this.props.s_like}
+                        s_like_unliked={this.props.s_like_unliked}
+                        s_like_likedback={this.props.s_like_likedback}
+                        ref={this.innerRefModal} />
                     <Dimmer active={loading}>
                         <Loader size='massive'/>
                     </Dimmer>
@@ -247,8 +192,10 @@ class Wall extends React.Component {
 
                     </Grid.Column>
                             <Grid.Column>
-                                <Grid stackable  >
+                                <Grid stackable >
                                     <UserMiniCard
+                                        userIdFocus={userIdFocusLoad}
+                                        loading={loadingMinCardLoad}
                                         users={users}
                                         clickedUser={this.clickedUser}
                                     />
@@ -266,4 +213,4 @@ class Wall extends React.Component {
 }
 
 
-export default Wall;
+export default withRouter(Wall);

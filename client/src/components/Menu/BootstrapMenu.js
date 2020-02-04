@@ -6,7 +6,20 @@ import classnames from 'classnames';
 import { withRouter } from 'react-router';
 import Aux from "../../hoc/Aux";
 import API from '../../utils/API';
-import io from 'socket.io-client'; // The default import should be called io.
+
+const withRouterAndRef = (WrappedComponent) => {
+    class InnerComponentWithRef extends React.Component {
+        render() {
+            const { forwardRef, ...rest } = this.props;
+            return <WrappedComponent {...rest} ref={forwardRef} />;
+        }
+    }
+    const ComponentWithRouter = withRouter(InnerComponentWithRef, { withRef: true });
+    return React.forwardRef((props, ref) => {
+        return <ComponentWithRouter {...props} forwardRef={ref} />;
+    });
+}
+
 
 class NavbarBootstrap extends React.Component {
 
@@ -19,56 +32,64 @@ class NavbarBootstrap extends React.Component {
             notifNb: 0,
         };
         this._mounted = false;
-        this.socket = io('http://localhost:8000');
     }
 
     componentDidMount = async() => {
         this._mounted = true;
-        this._mounted && this.setState({activeItem: this.props.location.pathname, connected: this.props.isConnected});
-        this.socket.on("getnotif", () => { this._mounted && this.setState((prevState) => ( {notifNb: prevState.notifNb + 1} )) });
-        await API.getNotifications()
+        await API.withAuth()
+            .then(async(res) => {
+                if (res.status === 200)
+                    this.setState({connected: true});
+                await API.getNotifNb()
+                    .then(res => {
+                        if (res.status === 200)
+                            this._mounted && this.setState({notifNb: res.data.notifNb})
+                    });
+            });
+        this._mounted && this.setState({activeItem: this.props.location.pathname});
+    };
+
+    updateNotifNb = () => {
+        API.getNotifNb()
             .then(res => {
                 if (res.status === 200)
-                    this._mounted && this.setState({notifNb: res.data.notifications.length})
-            })
-            .catch(e => console.log(e));
+                    this._mounted && this.setState({notifNb: res.data.notifNb})
+            });
     };
+    handleConnected = (bool) => {this.setState({connected: bool})};
 
-    static getDerivedStateFromProps(nextProps, prevState){
-        if (nextProps.isConnected !== prevState.connected)
-            return { connected: nextProps.isConnected};
-        if(nextProps.location.pathname !== prevState.activeItem)
-            return { activeItem: nextProps.location.pathname};
-        return null;
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.isConnected !== this.props.isConnected && this.props.isConnected === true){
+            API.getNotifNb()
+                .then(res => {
+                    if (res.status === 200)
+                        this._mounted && this.setState({notifNb: res.data.notifNb, connected: true})
+                });
+        }
     }
 
-    handleItemClick = (e, redirect) => {
-        this.setState({ activeItem: redirect}, () => this.redirect(redirect));
-    };
+    static getDerivedStateFromProps(nextProps, prevState){
+        if(nextProps.location.pathname !== prevState.activeItem)
+           return{activeItem: nextProps.location.pathname};
+        if (nextProps.isConnected !== prevState.isConnected && nextProps.isConnected === true){
+            API.getNotifNb()
+                .then(res => {
+                    if (res.status === 200)
+                       return({notifNb: res.data.notifNb, connected: true});
+                });
+        }
+    }
 
-    redirect = (redirect) => {
-        this.props.history.push(redirect);
-    };
+    handleItemClick = (e, redirect) => { this.setState({ activeItem: redirect}, () => this.redirect(redirect)) };
+    redirect = (redirect) => { this.props.history.push(redirect) };
     disconnect = () => {
-        fetch('http://localhost:5000/logout', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+        API.logout()
             .then(res => {
                 if (res.status === 200) {
-                    this.props.handleConnected(false);
+                    this._mounted && this.setState({connected: false});
                     this.props.history.push('/login');
-                    this.props.s_logout();
-                } else {
-                    const error = new Error(res.error);
-                    throw error;
+                    this.props.logout();
                 }
-            })
-            .catch(err => {
-                this.setState({warnings: ["Wrong username or password"]});
             });
     };
 
@@ -106,15 +127,17 @@ class NavbarBootstrap extends React.Component {
         }
     };
 
+
+
     showMenu = () => {
-        const { activeItem, notifNb } = this.state;
+        const { activeItem, notifNb, connected } = this.state;
         const navDropdownTitle = (
             <Aux>
                 <Icon size='large' name='user'/>
                 <span className="itemMenu">Profile</span>
             </Aux>
         );
-        if (this.state.connected === true)
+        if (connected === true)
             return (
                 <Nav className='mr-auto'>
                     <Nav.Link
@@ -192,4 +215,5 @@ class NavbarBootstrap extends React.Component {
     }
 }
 
-export default withRouter(NavbarBootstrap);
+
+export default withRouterAndRef(NavbarBootstrap);

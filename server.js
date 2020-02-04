@@ -83,9 +83,10 @@ app.post('/checkUserView', withAuth, account.checkUserView);
 app.post('/getUserIdProfile', withAuth, account.getUserIdProfile);
 app.post('/userLike', withAuth, wallActions.userLike);
 app.post('/checkUserLike', withAuth, wallActions.checkUserLike);
-app.post('/wallvisit', withAuth, wallActions.wallvisit);
+// app.post('/wallvisit', withAuth, wallActions.wallvisit);
 app.post('/deletenotif', withAuth, account.deletenotif);
 app.get('/getNotifications', withAuth, account.getNotifications);
+app.get('/getNotifNb', withAuth, account.getNotifNb);
 app.get('/faker', faker.matchAppFaker);
 
 
@@ -195,7 +196,7 @@ io.sockets.on('connection', socket => {
     socket.on("userlogin", () => {
         pushUserSocket(socket);
     });
-    socket.on('logout', () => {
+    socket.on('disconnectuser', () => {
         if (typeof socket.handshake !== "undefined" && typeof socket.handshake.headers !== "undefined" && typeof socket.handshake.headers.cookie !== "undefined")
             deleteUserSocket(socket);
     });
@@ -203,24 +204,46 @@ io.sockets.on('connection', socket => {
         let socketID = findSocketID(userID);
         if (socketID){
             let userIDemitter = await getUserIDFromSocketEmitter(socket);
-            if (userIDemitter && await usercansendnotif(userIDemitter, userID))
-                io.sockets.to(socketID).emit('like:receive like', {userID: userID, userIDemitter: userIDemitter});
-                io.sockets.to(socketID).emit('getnotif', {userID: userID, userIDemitter: userIDemitter});
+            if (userIDemitter && await usercansendnotif(userIDemitter, userID)) {
+                let name = await account.getNameUserId(userIDemitter);
+                io.sockets.to(socketID).emit('like:receive like', {useremitter: name});
+            }
         }
 
     });
     socket.on('wall:visit', async(userID) => {
         let socketID = findSocketID(userID);
-        if (socketID){
+        if (socketID) {
             let userIDemitter = await getUserIDFromSocketEmitter(socket);
             if (userIDemitter && await usercansendnotif(userIDemitter, userID)) {
-                io.sockets.to(socketID).emit('wall:visit', {userID: userID, userIDemitter: userIDemitter});
-                io.sockets.to(socketID).emit('getnotif', {userID: userID, userIDemitter: userIDemitter});
-                console.log('send to :' + socketID);
-                console.log(userslist);
+                let name = await account.getNameUserId(userIDemitter);
+                io.sockets.to(socketID).emit('wall:visit', {useremitter: name});
             }
         }
     })
+    socket.on('like:unlike', async(userID) => {
+        console.log(2);
+        let socketID = findSocketID(userID);
+        if (socketID) {
+            let userIDemitter = await getUserIDFromSocketEmitter(socket);
+            if (userIDemitter && await usercansendnotif(userIDemitter, userID)) {
+                let name = await account.getNameUserId(userIDemitter);
+                io.sockets.to(socketID).emit('like:unlike', {useremitter: name});
+            }
+        }
+    })
+    socket.on('like:likedback', async(userID) => {
+        console.log(1);
+        let socketID = findSocketID(userID);
+        if (socketID) {
+            let userIDemitter = await getUserIDFromSocketEmitter(socket);
+            if (userIDemitter && await usercansendnotif(userIDemitter, userID)) {
+                let name = await account.getNameUserId(userIDemitter);
+                io.sockets.to(socketID).emit('like:likedback', {useremitter: name});
+            }
+        }
+    })
+
 });
 const portio = 8000;
 io.listen(portio);

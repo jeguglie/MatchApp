@@ -2,10 +2,10 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import API from '../utils/API';
 
-function withAuth(ComponentToProtect, propstring) {
+function withAuth(ComponentToProtect) {
     return class extends React.Component {
-        constructor() {
-            super();
+        constructor(props) {
+            super(props);
             this.state = {
                 loading: true,
                 redirect: false,
@@ -26,11 +26,9 @@ function withAuth(ComponentToProtect, propstring) {
             const { loading, redirect } = this.state;
             if (loading)
                 return null;
-            if (redirect) {
+            if (redirect)
                 return <Redirect to="/login" />;
-            }
-            console.log(this.props);
-            return <ComponentToProtect {...this.props} {propstring} />
+            return <ComponentToProtect {...this.props} />
         }
     }
 }

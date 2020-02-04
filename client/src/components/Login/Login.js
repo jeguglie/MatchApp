@@ -104,9 +104,9 @@ class Login extends React.Component {
                         await API.login(email, password)
                             .then((response) => {
                                 if (typeof response.data !== 'undefined' && typeof response.data.connect !== 'undefined')
+                                    this.props.s_userlogin();
                                     this.props.handleConnected(true);
                                     this.props.history.push('/profile');
-                                    this.props.s_userlogin();
                             })
                             .catch(error => {
                                 if (typeof error.response !== 'undefined' && typeof error.response.data !== 'undefined') {
@@ -202,12 +202,11 @@ class Login extends React.Component {
                     <Divider hidden />
                     <div className="loginNoAccount">
                         <p className="loginForgot">
-                            <a  href="/forgotpassword"
-                               >
+                            <a href='#' onClick={(e) => {e.preventDefault(); this.props.history.push('/forgotpassword')}}>
                                 <strong>Forgot password ?</strong>
                             </a>
                         </p>
-                        <p>No account ? <a href="/signup">Register</a></p>
+                        <p>No account ? <a href='#' onClick={(e) => {e.preventDefault(); this.props.history.push('/signup')}}>Register</a></p>
                     </div>
                 <Divider hidden />
             </Container>

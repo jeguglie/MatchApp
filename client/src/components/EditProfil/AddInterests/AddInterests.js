@@ -50,33 +50,33 @@ class AddInterests extends Component {
     async componentDidMount() {
         this._mounted = true;
         // Set loader and get progress bar
-        this.setState({loading: true, interests: []}, this.props.getcomplete);
-        await VALIDATE.sleepLoader(400).then(async () => {
-            API.getInterests()
-                .then(response => {
-                      DATA = response.data.results;
-                })
-                .catch(error => {
-                    if (this._mounted)
-                        this.setState({warnings: error.response.data.warnings})
-                });
-            API.getUserInterests()
-                .then(response => {
-                    if (response.data.interests !== false){
-                        DEFAULT_STATE.interests = response.data.interests;
-                        if (this._mounted)
-                            this.setState({interests: response.data.interests})
-                    }
-                })
-                .catch(error => {
-                    if (this._mounted)
-                        this.setState({warnings: error.response.data.warnings})
-                    // @TODO make push instead
-                });
-        });
-        if (this._mounted)
-            this.setState({loading: false});
+        this.setState({loading: true, interests: []});
+        API.getInterests()
+            .then(response => {
+                  DATA = response.data.results;
+            })
+            .catch(error => {
+                this._mounted && this.setState({warnings: error.response.data.warnings})
+            });
+        API.getUserInterests()
+            .then(response => {
+                if (response.data.interests !== false){
+                    DEFAULT_STATE.interests = response.data.interests;
+                    this._mounted && this.setState({interests: response.data.interests})
+                }
+            })
+            .catch(error => {
+                this._mounted && this.setState({warnings: error.response.data.warnings})
+            });
+            this._mounted && this.setState({loading: false});
     }
+
+    componentDidUpdate = async(props, state) =>{
+        if (props.complete !== state.complete)
+            this._mounted && this.setState({complete: props.complete})
+        if (props.loading !== state.loading)
+            this._mounted && this.setState({loading: props.loading})
+    };
 
     // Semantic UI Search
     handleResultSelect = (e, { result }) => this.setState({ value: result.title.trim() })
@@ -147,7 +147,18 @@ class AddInterests extends Component {
         else
             return null
     };
+
+    prevSection = () => {
+        this._mounted && this.setState({loading: true});
+        this.props.prevsection();
+    };
+
+    nextSection = () => {
+        this._mounted && this.setState({loading: true});
+        this.props.nextsection();
+    };
     render() {
+        const { prevSection, nextSection } = this;
         const {isLoading, value, results, warnings, interests} = this.state;
         const ProgressBar = () => (
             <Progress
@@ -205,12 +216,12 @@ class AddInterests extends Component {
                             className="EditProfilArrow"
                             name='arrow circle left'
                             size="huge"
-                            onClick={this.props.prevsection}/>
+                            onClick={prevSection}/>
                         <Icon
                             className="EditProfilArrow"
                             name='arrow circle right'
                             size="huge"
-                            onClick={this.props.nextsection}/>
+                            onClick={nextSection}/>
                     </Grid.Row>
                 </Grid>
             </div>

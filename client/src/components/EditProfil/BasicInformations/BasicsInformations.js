@@ -2,6 +2,7 @@ import React from 'react';
 import {Divider, Form, TextArea, Grid, Progress, Icon, Select, Loader, Dimmer} from 'semantic-ui-react';
 import API from "../../../utils/API";
 import VALIDATE from "../../../utils/validation";
+import _ from "lodash";
 const countries = VALIDATE.countries;
 const age = VALIDATE.age;
 const genderOptions = [
@@ -68,7 +69,7 @@ class BasicsInformations extends React.Component {
 
     static getDerivedStateFromProps(nextProps, prevState){
         if(nextProps.complete !== prevState.complete)
-            return { complete: nextProps.complete}
+            return { complete: nextProps.complete};
         return null;
     }
 
@@ -77,7 +78,6 @@ class BasicsInformations extends React.Component {
         this._mounted = true;
         this._mounted && this.setState({loading: true});
         this._mounted && this.setState({complete: this.props.complete});
-        await this.props.getcomplete();
         await API.getEditProfilValues()
             .then((response) => {
                 if (typeof response.data.findProfil !== 'undefined')
@@ -95,6 +95,7 @@ class BasicsInformations extends React.Component {
 
     handleSave = async() => {
         if (this._mounted) {
+            this.setState({loading: true})
             this.warnings = {...DEFAULT_ERRORS};
             // Check country
             let detectCountry = false;
@@ -141,9 +142,10 @@ class BasicsInformations extends React.Component {
             } else
                 this._mounted && this.setState({...this.warnings});
         }
+        this._mounted && this.setState({loading: false})
     };
     handleChange = (e, { value, id }) => {
-        this._mounted && this.setState({ [id]: value, ["w_" + id]: ''});
+        this._mounted && this.setState({[id]: value, ["w_" + id]: ''});
     };
 
     render() {
@@ -190,7 +192,7 @@ class BasicsInformations extends React.Component {
                                         color="white"
                                         id="lastname"
                                         value={this.state.lastname}
-                                        onChange={this.handleChange}
+                                        onChange={_.debounce(this.handleChange, 500, { leading: true })}
                                         placeholder="Last Name"
                                     />
                                     <Form.Input

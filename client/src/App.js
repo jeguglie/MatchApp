@@ -9,70 +9,64 @@ import withAuth from "./utils/withAuth";
 import './App.scss';
 import BootstrapMenu from './components/Menu/BootstrapMenu';
 import Footer from './containers/Footer/Footer';
-import API from "./utils/API";
 import Notifications from "./components/Notifications/Notifications";
 import NotificationsHistory from "./components/Notifications/NotificationsHistory/NotificationsHistory";
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import ChangePassword from './components/ForgotPassword/ChangePassword';
 import ChangeMyEmail from "./components/EditProfil/ChangeMyMail/ChangeMyMail";
-import io from 'socket.io-client';
 
 
 class App extends Component {
 
     constructor(props){
         super(props);
-        this.state = {
-            connected: false,
-        };
         this._mounted = false;
-        this.socket = io('http://localhost:8000');
-        this.s_wallvisit = this.s_wallvisit.bind(this);
+        this.innerRef = React.createRef();
+        this.innerRefSockets = React.createRef();
+        this.innerRefNotifHistory = React.createRef();
+
+
     }
+    componentDidMount = async() => {
+        this._mounted = true;
+    };
+    updateNotifs = () => { this.innerRefNotifHistory && this.innerRefNotifHistory.current && this.innerRefNotifHistory.current.updateNotifs() };
+
+    updateNotifNbNavbar = async() => { this.innerRef && this.innerRef.current.updateNotifNb() };
+
 
     // Sockets
-    s_wallvisit(userIdFocus){this.socket.emit("wall:visit", userIdFocus)};
-    s_like = (userIdFocus) => {this.socket.emit("like", userIdFocus)};
-    s_userlogin = () => {this.socket.emit("userlogin")};
-    s_logout = () => {this.socket.emit("logout")};
-    isConnected = (bool) => {
-        this.setState({connected: bool});
-    };
+    s_wallvisit = (userIdFocus) => { this.innerRefSockets && this.innerRefSockets.current.s_wallvisit(userIdFocus) };
+    s_like_likedback = (userIdFocus) => { this.innerRefSockets && this.innerRefSockets.current.s_like_likedback(userIdFocus) };
+    s_like_unliked = (userIdFocus) => { this.innerRefSockets && this.innerRefSockets.current.s_like_unliked(userIdFocus) };
+    s_like = (userIdFocus) => {this.innerRefSockets && this.innerRefSockets.current.s_like(userIdFocus)};
+    s_userlogin = () => { this.innerRefSockets && this.innerRefSockets.current.s_userlogin()};
+    s_logout = () => {this.innerRefSockets && this.innerRefSockets.current.s_logout()};
 
-    componentDidMount() {
-        API.withAuth()
-            .then(res => {
-                if (res.status === 200) {
-                    this.setState({connected: true});
-                }
-                else
-                    throw new Error(res.error);
-            })
-            .catch(() => {this.setState({connected: false})});
-    }
+    // Handle Connect
+    isConnected = (bool) => {this.innerRef && this.innerRef.current.handleConnected(bool)};
 
     render() {
-        const { connected } = this.state;
         return (
-            <Aux>
-                <BootstrapMenu isConnected={connected} handleConnected={this.isConnected} />
-                <Notifications push/>
-                <div className="content">
+            <div>
+                <BootstrapMenu ref={this.innerRef} logout={this.s_logout} />
+                <Notifications ref={this.innerRefSockets} updateNotifs={this.updateNotifs} push/>
+                <div className="content" >
                     <Switch>
-                        <Route exact path="/" component={withAuth(Wall, 'test={"test"}')} />
+                        <Route exact path="/" component={withAuth(() => <Wall sWallVisit={this.s_wallvisit} s_like_likedback={this.s_like_likedback} s_like_unliked={this.s_like_unliked} s_like={this.s_like}/>)}/>
                         <Route exact path="/profile" component={withAuth(EditProfile)} />
                         <Route exact path="/signup" component={Signup} />
                         <Route exact path="/forgotpassword/:token" component={ChangePassword} />
                         <Route exact path="/forgotpassword" component={ForgotPassword} />
                         <Route exact path="/changepassword" component={ChangePassword} />
                         <Route exact path="/changemail" component={withAuth(ChangeMyEmail)} />
-                        <Route exact path="/notifications" component={withAuth(NotificationsHistory)} />
-                        <Route exact isConnected={connected} path="/login" render={(props) => <Login {...props} handleConnected={this.isConnected} />} />
+                        <Route exact path="/notifications" component={withAuth(() => <NotificationsHistory ref={this.innerRefNotifHistory} s_like_likedback={this.s_like_likedback} s_like_unliked={this.s_like_unliked} updateNotifNb={this.updateNotifNbNavbar} sWallVisit={this.s_wallvisit} s_like={this.s_like}/>)}/>
+                        <Route exact path="/login" render={(props) => <Login {...props} s_userlogin={this.s_userlogin} handleConnected={this.isConnected} />} />
                         <Route exact path={"/login/:token"} component={Login} />
                     </Switch>
                 </div>
                 <Footer />
-            </Aux>
+            </div>
         );
     }
 }
