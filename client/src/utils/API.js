@@ -280,26 +280,6 @@ export default {
             }
         )
     },
-    checkUserLike: (userLikedID) => {
-        return axios.post(
-            `${burl}/checkUserLike`,
-            {userLikedID},
-            {
-                withCredentials: 'true',
-                headers: headers
-            }
-        )
-    },
-    wallvisit: (userIDvisited) => {
-        return axios.post(
-            `${burl}/wallvisit`,
-            {userIDvisited},
-            {
-                withCredentials: 'true',
-                headers: headers
-            }
-        )
-    },
     getNotifications: () => {
         return axios.get(
             `${burl}/getNotifications`,

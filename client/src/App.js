@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
-import Aux from './hoc/Aux';
+import { Route, Switch, Redirect} from "react-router-dom";
 import Signup from "./components/Signup/Signup.js";
 import Wall from './containers/Wall/Wall';
 import Login from "./components/Login/Login";
@@ -24,14 +23,14 @@ class App extends Component {
         this.innerRef = React.createRef();
         this.innerRefSockets = React.createRef();
         this.innerRefNotifHistory = React.createRef();
-
-
+        this._mounted = false;
     }
-    componentDidMount = async() => {
-        this._mounted = true;
-    };
-    updateNotifs = () => { this.innerRefNotifHistory && this.innerRefNotifHistory.current && this.innerRefNotifHistory.current.updateNotifs() };
 
+    componentDidMount() {
+        this._mounted = true;
+    }
+
+    updateNotifs = () => { this.innerRefNotifHistory && this.innerRefNotifHistory.current && this.innerRefNotifHistory.current.updateNotifs() };
     updateNotifNbNavbar = async() => { this.innerRef && this.innerRef.current.updateNotifNb() };
 
 
@@ -58,11 +57,12 @@ class App extends Component {
                         <Route exact path="/signup" component={Signup} />
                         <Route exact path="/forgotpassword/:token" component={ChangePassword} />
                         <Route exact path="/forgotpassword" component={ForgotPassword} />
-                        <Route exact path="/changepassword" component={ChangePassword} />
+                        <Route exact path="/changepassword" component={withAuth(ChangePassword)} />
                         <Route exact path="/changemail" component={withAuth(ChangeMyEmail)} />
                         <Route exact path="/notifications" component={withAuth(() => <NotificationsHistory ref={this.innerRefNotifHistory} s_like_likedback={this.s_like_likedback} s_like_unliked={this.s_like_unliked} updateNotifNb={this.updateNotifNbNavbar} sWallVisit={this.s_wallvisit} s_like={this.s_like}/>)}/>
-                        <Route exact path="/login" render={(props) => <Login {...props} s_userlogin={this.s_userlogin} handleConnected={this.isConnected} />} />
+                        <Route exact path="/login" component={ (props) => <Login {...props} s_userlogin={this.s_userlogin} handleConnected={this.isConnected} />}  />
                         <Route exact path={"/login/:token"} component={Login} />
+                        <Redirect from="*" to="" />
                     </Switch>
                 </div>
                 <Footer />

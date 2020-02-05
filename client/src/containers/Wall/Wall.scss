@@ -1,6 +1,7 @@
 .WallContainer {
-  padding: 3em;
+  padding: 2em;
   margin: auto;
+  padding-top: 0.6em !important;
 }
 
 input[type="range"]::-webkit-slider-thumb {
@@ -21,8 +22,53 @@ input[type="range"] {
   width: 100%;
 }
 
+.searchButton {
+  background-color: #671833 !important;
+  color: white !important;
+  border-radius: 5px !important;
+  .searchButton button:hover {
+    box-shadow: -1px 5px 5px -2px rgba(0, 0, 0, 0.2) !important;
+  }
+
+}
+
+.ButtonFilters {
+  border-radius: 15px !important;
+  box-shadow: 4px 5px 12px 0px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid #d8d8d8 !important;
+  border-radius: 10px !important;
+
+  color: #c1c1c1 !important;
+  & button {
+    color: #565656 !important;
+    background-color: #cbcbcb !important
+  }
+  & i {
+    color: #c1c1c1 !important;
+    background-color: #858585 !important;
+  }
+  & button:hover i{
+    color: white !important;
+    background-color: #959595 !important
+  }
+  & button:hover{
+    color: white !important;
+    background-color: #6e6e6e !important;
+  }
+}
+
+.bottomFilter {
+  margin: -1.5em !important;
+  border-radius: 10px !important;
+  margin-top: 1em !important;
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  background-color: #db366e !important;
+}
+
 .SegmentFilter {
   border-radius: 10px !important;
+  border: 1px solid #d8d8d8 !important;
   padding: 1.5em !important;
   box-shadow: 4px 5px 12px 0px rgba(0, 0, 0, 0.15) !important;
 }
@@ -113,6 +159,14 @@ input[type="range"] {
 
 }
 
+#includeMyInterests {
+  color: grey !important;
+  text-align: left !important;
+  margin-top: 0.2em !important;
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.1em !important;
+}
+
 .IncludeInterestsTitle {
   font-family: "Open Sans", sans-serif;
   background: none !important;
@@ -130,7 +184,6 @@ input[type="range"] {
   text-align: center !important;
   & #search {
     border-radius: 10px;
-    margin-bottom: 10px;
   }
 }
 

@@ -6,6 +6,8 @@ import classnames from 'classnames';
 import { withRouter } from 'react-router';
 import Aux from "../../hoc/Aux";
 import API from '../../utils/API';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 
 const withRouterAndRef = (WrappedComponent) => {
     class InnerComponentWithRef extends React.Component {
@@ -36,16 +38,17 @@ class NavbarBootstrap extends React.Component {
 
     componentDidMount = async() => {
         this._mounted = true;
-        await API.withAuth()
-            .then(async(res) => {
-                if (res.status === 200)
-                    this.setState({connected: true});
-                await API.getNotifNb()
-                    .then(res => {
-                        if (res.status === 200)
-                            this._mounted && this.setState({notifNb: res.data.notifNb})
-                    });
-            });
+        if (cookies.get('token'))
+            await API.withAuth()
+                .then(async(res) => {
+                    if (res.status === 200)
+                        this.setState({connected: true});
+                    await API.getNotifNb()
+                        .then(res => {
+                            if (res.status === 200)
+                                this._mounted && this.setState({notifNb: res.data.notifNb})
+                        });
+                });
         this._mounted && this.setState({activeItem: this.props.location.pathname});
     };
 
@@ -78,6 +81,7 @@ class NavbarBootstrap extends React.Component {
                        return({notifNb: res.data.notifNb, connected: true});
                 });
         }
+        return null;
     }
 
     handleItemClick = (e, redirect) => { this.setState({ activeItem: redirect}, () => this.redirect(redirect)) };
@@ -176,7 +180,7 @@ class NavbarBootstrap extends React.Component {
                         id='/notifications'
                         onClick={() => this.handleItemClick(null, "/notifications")}>
                         <Icon size='large' name='bell' />
-                        <div class="badgecontainernotif">
+                        <div className="badgecontainernotif">
                             <span className="itemMenu">Notifications</span>
                             {notifNb > 0 ? <span class="badgenotif">{notifNb}</span> : null}
                         </div>

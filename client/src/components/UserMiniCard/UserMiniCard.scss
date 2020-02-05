@@ -2,10 +2,9 @@
   background: grey;
   width: 170px;
   height: 220px;
-  border-radius: 10px;
-  overflow: hidden !important;
   position: relative;
   margin: 1em;
+  overflow: auto !important;
 }
 
 .TopCardContainer img {
@@ -18,6 +17,10 @@
   object-fit: cover !important;
 }
 
+.likesSpan {
+  color: white;
+  font-family: "Open Sans", sans-serif;
+}
 .BottomCardGrid {
   padding-top: 3.9em !important;
   position: absolute;
@@ -30,6 +33,13 @@
   width: 100%;
   background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,1) 70%);
   z-index: 302 !important;
+}
+
+#includeMyInterests {
+  color: white;
+  font-family: "Open Sans";
+  font-size: 0.9em;
+  line-height: 0.9em;
 }
 
 .DistanceUserMinCard {
@@ -54,16 +64,13 @@
 }
 .userMinCard {
   box-shadow: 4px 5px 12px 0px rgba(0, 0, 0, 0.15) !important;
+  overflow: auto !important;
   border-radius: 10px !important;
-  .large.image {
-    border-radius: 10px 10px 0 0  !important;
-  }
+  border: 1px solid #d8d8d8 !important;
 }
 
 .ui.card > .extra, .ui.cards > .card > .extra {
   background: #db366e;
-  border-bottom-right-radius: 10px !important;
-  border-bottom-left-radius: 10px !important;
   & a {
     color: rgba(255, 255, 255, 0.8) !important;
     font-family: "Open Sans", sans-serif !important;

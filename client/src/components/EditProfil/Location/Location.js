@@ -23,13 +23,15 @@ class Location extends React.Component {
         // Bind for location REF
         this.getInnerRef = this.getInnerRef.bind(this);
         this.getLocation = this.getLocation.bind(this);
+        this._mounted = false;
     }
 
     async componentDidMount() {
-        this.setState({loading: true});
+        this._mounted = true;
+        this._mounted && this.setState({loading: true});
         await VALIDATE.sleepLoader(200);
-        this.setState({complete: this.props.complete});
-        this.setState({loading: false});
+        this._mounted && this.setState({complete: this.props.complete});
+        this._mounted && this.setState({loading: false});
     }
 
     componentDidUpdate = async(props, state) =>{
@@ -52,8 +54,8 @@ class Location extends React.Component {
 
     getLocation = async() => {
         this.innerRef && this.innerRef.getLocation();
-        if (this.innerRef && this.innerRef.state && this.innerRef.state.coords) {
-            this.innerRef && this.setState({innerRef: this.innerRef});
+        if (this.innerRef && this._mounted &&  this.innerRef.state && this.innerRef.state.coords) {
+            this.innerRef && this._mounted && this.setState({innerRef: this.innerRef});
             await API.updategeolocate(this.innerRef.state.coords.latitude, this.innerRef.state.coords.longitude)
                 .then(response => {
                     if (response.status === 200) {

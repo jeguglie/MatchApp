@@ -4,6 +4,8 @@ import {Button, Container, Form, Image, Grid, Divider, Dimmer,Loader} from "sema
 import Warnings from "../Warnings/Warnings";
 import validate from '../../utils/validation';
 import {store} from "react-notifications-component";
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 
 const DEFAULT_STATE = {
     lastname: "",
@@ -41,6 +43,8 @@ class Signup extends React.Component {
 
     componentDidMount() {
         this._mounted = true;
+        if (cookies.get('token'))
+            this.props.history.push('/profile');
     }
 
     componentWillUnmount() {

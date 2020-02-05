@@ -1,6 +1,8 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import API from '../utils/API';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 
 function withAuth(ComponentToProtect) {
     return class extends React.Component {
@@ -10,18 +12,28 @@ function withAuth(ComponentToProtect) {
                 loading: true,
                 redirect: false,
             };
+            this._mounted = false;
         }
         componentDidMount() {
-            API.withAuth()
-                .then(res => {
-                    if (res.status === 200) {
-                        this.setState({loading: false});
-                    }
-                    else
-                        throw new Error(res.error);
-                })
-                .catch(() => {this.setState({loading: false, redirect: true});});
+            this._mounted = true;
+            if (cookies.get('token'))
+                API.withAuth()
+                    .then(res => {
+                        if (res.status === 200) {
+                            this._mounted && this.setState({loading: false});
+                        }
+                        else
+                            throw new Error(res.error);
+                    })
+                    .catch(() => {this._mounted && this.setState({loading: false, redirect: true})});
+            else
+                this._mounted && this.setState({loading: false, redirect: true});
         }
+
+        componentWillUnmount() {
+            this._mounted = false;
+        }
+
         render () {
             const { loading, redirect } = this.state;
             if (loading)
@@ -32,6 +44,5 @@ function withAuth(ComponentToProtect) {
         }
     }
 }
-
 
 export default withAuth;

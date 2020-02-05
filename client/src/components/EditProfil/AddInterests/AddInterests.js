@@ -4,7 +4,6 @@ import API from "../../../utils/API";
 import {Grid, Progress, Icon, Divider, Search, Dimmer, Loader} from "semantic-ui-react";
 import Interests from "./Interests/Interests";
 import Warnings from '../../../components/Warnings/Warnings';
-import VALIDATE from "../../../utils/validation";
 
 const DEFAULT_STATE = {
     interests: [],
@@ -207,9 +206,6 @@ class AddInterests extends Component {
                     </Grid.Row>
                     <Divider hidden />
                 </Grid>
-                <Divider hidden />
-                <Divider hidden />
-                <Divider hidden />
                 <Grid>
                     <Grid.Row centered>
                         <Icon

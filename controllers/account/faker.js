@@ -90,10 +90,11 @@ async function matchAppFaker(req, res) {
         }
         // GENERATE USERS PROFILE -------------------------------------
         let gender = ["male", "female", "other"];
+        let online = [0, 1];
         for (let i = 0; i < 1000; i++){
             console.log("Generate user profile " + i + " of 1000");
             const location = randomLocation.randomCirclePoint(P, R)
-            const text = 'INSERT INTO profile(user_id, lastname, firstname, gender, interested, country, age, bio, longitude, latitude, likes, geolocate, usecustomaddress) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);';
+            const text = 'INSERT INTO profile(user_id, lastname, firstname, gender, interested, country, age, bio, longitude, latitude, likes, geolocate, usecustomaddress, online, last_date_online) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15);';
             const values = [
                 i,
                 faker.name.lastName(),
@@ -107,7 +108,9 @@ async function matchAppFaker(req, res) {
                 location.latitude,
                 0,
                 0,
-                0
+                0,
+                online[Math.round(Math.random())],
+                new Date()
             ];
             await pool.query(text, values);
         }

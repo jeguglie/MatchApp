@@ -12,11 +12,9 @@ const addphotos = require('./controllers/account/addphotos.js');
 const faker = require('./controllers/account/faker');
 const match = require('./controllers/account/match');
 const port = 5000;
-const cookie = require('cookie');
+const notifications = require('./controllers/account/notifications');
 const io = require('socket.io')();
-const jwt = require('jsonwebtoken');
-const secret = 'mysecretsshhh';
-const pool = require('./utils/queries');
+const portio = 8000;
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -52,7 +50,10 @@ app.use('/public', express.static('public'));
 app.get('/checkToken', withAuth, function(req, res) {
     res.sendStatus(200);
 });
-app.get('/logout', (req, res) => {
+app.get('/logout', withAuth, async(req, res) => {
+    const userID = await account.getUserId(res.locals.email);
+    if (userID !== null)
+        account.setUserLastConnection(userID, 0);
     res.clearCookie('token');
     res.sendStatus(200);
 
@@ -82,8 +83,6 @@ app.post('/getConnectedUserLocation', withAuth, account.getConnectedUserLocation
 app.post('/checkUserView', withAuth, account.checkUserView);
 app.post('/getUserIdProfile', withAuth, account.getUserIdProfile);
 app.post('/userLike', withAuth, wallActions.userLike);
-app.post('/checkUserLike', withAuth, wallActions.checkUserLike);
-// app.post('/wallvisit', withAuth, wallActions.wallvisit);
 app.post('/deletenotif', withAuth, account.deletenotif);
 app.get('/getNotifications', withAuth, account.getNotifications);
 app.get('/getNotifNb', withAuth, account.getNotifNb);
@@ -93,159 +92,76 @@ app.get('/faker', faker.matchAppFaker);
 // Store connected users
 let userslist = [];
 
-function pushUserSocket(socket){
-    // Get cookies
-    let cookief = socket.handshake.headers.cookie;
-    if (cookief) {
-        let cookies = cookie.parse(cookief);
-        // Check Auth
-        if (cookies && typeof cookies.token != "undefined") {
-            jwt.verify(cookies.token, secret, async (err, decoded) => {
-                if (!err) {
-                    let email = decoded.email;
-                    // Get User ID
-                    let userID = await account.getUserId(email);
-                    if (userID) {
-                        // Store userID and socketID
-                        if (!userslist.length)
-                            userslist.push({userID: userID, socketID: socket.id});
-                        else {
-                            let find = false;
-                            for (let i = 0; i < userslist.length; i++){
-                                if (userslist[i].userID === userID) {
-                                    find = true;
-                                    userslist[i].socketID = socket.id;
-                                }
-                            }
-                            // If userID not match, then add it to userlists
-                            if (!find)
-                                userslist.push({userID: userID, socketID: socket.id});
-                        }
-                    }
-                }
-            });
-        }
-    }
-}
-
-async function getUserIDFromSocketEmitter(socket) {
-    let cookief = socket.handshake.headers.cookie;
-    let userID = null;
-    if (cookief) {
-        let cookies = cookie.parse(cookief);
-        if (cookies && typeof cookies.token != "undefined")
-            userID = await jwt.verify(cookies.token, secret, async (err, decoded) => {
-                if (!err)
-                    return await account.getUserId(decoded.email);
-            });
-    }
-    return userID;
-}
-
-function deleteUserSocket(socket){
-    // Get cookies
-    let cookief = socket.handshake.headers.cookie;
-    if (cookief) {
-        let cookies = cookie.parse(cookief);
-        // Check Auth
-        if (cookies && typeof cookies.token != "undefined") {
-            jwt.verify(cookies.token, secret, async (err, decoded) => {
-                if (!err) {
-                    let email = decoded.email;
-                    // Get User ID
-                    let userID = await account.getUserId(email);
-                    if (userID) {
-                        for (let i = 0; i < userslist.length; i++){
-                            if (userslist[i].userID === userID)
-                                userslist.splice(i, 1);
-                        }
-                    }
-                }
-            });
-        }
-    }
-}
-
-// Check if destination user for notification is ONLINE
-function findSocketID(userID){
-    for (let i = 0; i < userslist.length; i++){
-        if (userslist[i].userID === userID) {
-            return userslist[i].socketID;
-        }
-    }
-    return null;
-}
-
-async function usercansendnotif(userIDsending, userIDreceive){
-    try {
-        let text = 'SELECT * FROM user_hide WHERE user_id = $1 AND user_id_reported = $2';
-        let values = [userIDreceive, userIDsending];
-        let response = await pool.query(text, values);
-        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length)
-            return false;
-        return true
-    } catch(e){
-        return false;
-    }
-}
-
 // Notifications
 io.sockets.on('connection', socket => {
-    pushUserSocket(socket);
-    console.log(socket.id);
-    socket.on("userlogin", () => {
-        pushUserSocket(socket);
-    });
-    socket.on('disconnectuser', () => {
-        if (typeof socket.handshake !== "undefined" && typeof socket.handshake.headers !== "undefined" && typeof socket.handshake.headers.cookie !== "undefined")
-            deleteUserSocket(socket);
+    notifications.pushUserSocket(socket, userslist);
+    socket.on("userlogin", async() => {
+        let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
+        userIDemitter && await account.setUserLastConnection(userIDemitter, 1);
+        notifications.pushUserSocket(socket, userslist);});
+    socket.on('disconnectuser', async() => {
+        // Verify cookies
+        if (typeof socket.handshake !== "undefined" && typeof socket.handshake.headers !== "undefined" && typeof socket.handshake.headers.cookie !== "undefined"){
+            // Delete user from userlist;
+            notifications.deleteUserSocket(socket, userslist);
+            // Set user offline in DBB
+            let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
+            userIDemitter && await account.setUserLastConnection(userIDemitter, 0);
+        }
     });
     socket.on('like', async(userID) => {
-        let socketID = findSocketID(userID);
+        let socketID =  notifications.findSocketID(userID, userslist);
         if (socketID){
-            let userIDemitter = await getUserIDFromSocketEmitter(socket);
-            if (userIDemitter && await usercansendnotif(userIDemitter, userID)) {
-                let name = await account.getNameUserId(userIDemitter);
+            let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
+            if (userIDemitter && await  notifications.usercansendnotif(userIDemitter, userID)) {
+                let name = await account.getNameUserId(userIDemitter, userslist);
                 io.sockets.to(socketID).emit('like:receive like', {useremitter: name});
             }
         }
 
     });
     socket.on('wall:visit', async(userID) => {
-        let socketID = findSocketID(userID);
+        let socketID =  notifications.findSocketID(userID, userslist);
         if (socketID) {
-            let userIDemitter = await getUserIDFromSocketEmitter(socket);
-            if (userIDemitter && await usercansendnotif(userIDemitter, userID)) {
-                let name = await account.getNameUserId(userIDemitter);
+            let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
+            if (userIDemitter && await  notifications.usercansendnotif(userIDemitter, userID)) {
+                let name = await account.getNameUserId(userIDemitter, userslist);
                 io.sockets.to(socketID).emit('wall:visit', {useremitter: name});
             }
         }
-    })
+    });
     socket.on('like:unlike', async(userID) => {
-        console.log(2);
-        let socketID = findSocketID(userID);
+        let socketID =  notifications.findSocketID(userID, userslist);
         if (socketID) {
-            let userIDemitter = await getUserIDFromSocketEmitter(socket);
-            if (userIDemitter && await usercansendnotif(userIDemitter, userID)) {
-                let name = await account.getNameUserId(userIDemitter);
+            let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
+            if (userIDemitter && await  notifications.usercansendnotif(userIDemitter, userID)) {
+                let name = await account.getNameUserId(userIDemitter, userslist);
                 io.sockets.to(socketID).emit('like:unlike', {useremitter: name});
             }
         }
-    })
+    });
     socket.on('like:likedback', async(userID) => {
-        console.log(1);
-        let socketID = findSocketID(userID);
+        let socketID =  notifications.findSocketID(userID);
         if (socketID) {
-            let userIDemitter = await getUserIDFromSocketEmitter(socket);
-            if (userIDemitter && await usercansendnotif(userIDemitter, userID)) {
-                let name = await account.getNameUserId(userIDemitter);
-                io.sockets.to(socketID).emit('like:likedback', {useremitter: name});
+            let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
+            if (userIDemitter && await  notifications.usercansendnotif(userIDemitter, userID)) {
+                let name = await account.getNameUserId(userIDemitter, userslist);
+                io.sockets.to(socketID).emit('like:likedback', {useremitter: name, userIDemitter: userIDemitter});
+            }
+        }
+    });
+    socket.on('like:likedbackreturn', async(userID) => {
+        let socketID =  notifications.findSocketID(userID);
+        if (socketID) {
+            let userIDemitter = await notifications.getUserIDFromSocketEmitter(socket, userslist);
+            if (userIDemitter && await notifications.usercansendnotif(userIDemitter, userID)) {
+                let name = await account.getNameUserId(userIDemitter, userslist);
+                io.sockets.to(socketID).emit('like:likedbackreturn', {useremitter: name, userIDemitter: userIDemitter});
             }
         }
     })
 
 });
-const portio = 8000;
 io.listen(portio);
 console.log('Listening on port ', portio);
 app.listen(port, 'localhost', () => console.log(`Listening on port ${port}`));

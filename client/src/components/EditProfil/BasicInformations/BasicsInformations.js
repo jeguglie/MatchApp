@@ -61,6 +61,7 @@ class BasicsInformations extends React.Component {
         this.countries = this.countries.map((item, index) => ({key: index, text: item.value, value: item.value }));
         // Set default errors
         this.warnings = {...DEFAULT_ERRORS};
+
     }
 
     componentWillUnmount() {
@@ -73,10 +74,8 @@ class BasicsInformations extends React.Component {
         return null;
     }
 
-
     componentDidMount = async() => {
         this._mounted = true;
-        this._mounted && this.setState({loading: true});
         this._mounted && this.setState({complete: this.props.complete});
         await API.getEditProfilValues()
             .then((response) => {
@@ -90,12 +89,10 @@ class BasicsInformations extends React.Component {
                     if (this._mounted === true)
                         this._mounted && this.setState({...error.response.data.warnings});
             })
-        this._mounted && this.setState({loading: false});
     }
 
     handleSave = async() => {
         if (this._mounted) {
-            this.setState({loading: true})
             this.warnings = {...DEFAULT_ERRORS};
             // Check country
             let detectCountry = false;
@@ -142,14 +139,13 @@ class BasicsInformations extends React.Component {
             } else
                 this._mounted && this.setState({...this.warnings});
         }
-        this._mounted && this.setState({loading: false})
     };
     handleChange = (e, { value, id }) => {
         this._mounted && this.setState({[id]: value, ["w_" + id]: ''});
     };
 
     render() {
-        const {loading, w_age, w_firstname, w_lastname, w_gender, w_interested, w_country, w_bio, complete} = this.state;
+        const {w_age, w_firstname, age, w_lastname, w_gender, w_interested, w_country, w_bio, complete} = this.state;
         const ProgressBar = () => (
             <Progress
                 percent={complete}
@@ -161,9 +157,6 @@ class BasicsInformations extends React.Component {
             <div className="BasicInfosContainer">
                 <div className="BasicInformations">
                     <ProgressBar />
-                    <Dimmer active={loading}>
-                        <Loader size='massive'/>
-                    </Dimmer>
                     <Grid textAlign="center">
                         <Grid.Row centered>
                             <h1 className="CompleteTitle">Complete Basics Informations</h1>
@@ -178,7 +171,7 @@ class BasicsInformations extends React.Component {
                                     error={w_age.length > 0 ? w_age : null}
                                     id="age"
                                     control={Select}
-                                    value={this.state.age.toString()}
+                                    value={age ? age.toString() : ''}
                                     options={this.age}
                                     label="Select your age"
                                     placeholder='Your Age'

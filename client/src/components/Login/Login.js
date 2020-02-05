@@ -4,6 +4,8 @@ import VALIDATE from '../../utils/validation';
 import API from "../../utils/API";
 import {Container, Image, Form, Button, Dimmer, Loader, Divider} from 'semantic-ui-react';
 import { store } from 'react-notifications-component';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 
 const DEFAULT_STATE = {
     email: "",
@@ -33,6 +35,8 @@ class Login extends React.Component {
     }
 
     async componentDidMount() {
+        if (cookies.get('token'))
+            this.props.history.push('/profile');
         this._mounted = true;
         this.params = this.props.match.params;
         if (this.params.token){
@@ -145,9 +149,6 @@ class Login extends React.Component {
         this.setState({[event.target.id]: event.target.value});
     }
 
-    handleClickForgot = () => {
-
-    }
 
     render() {
         const {loading, w_email, w_password} = this.state;

@@ -1,0 +1,12 @@
+.SearchTags {
+  .ui.dropdown:not(.button)>.default.text {
+    font-size: 1em !important;
+    font-family: "Open Sans", sans-serif;
+    color: grey !important;
+  }
+  border: none !important;
+  border-radius: 10px !important;
+  .ui.multiple.dropdown>.label{
+    font-size: 0.8em !important;
+  }
+}

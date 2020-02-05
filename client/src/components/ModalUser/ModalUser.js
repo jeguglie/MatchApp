@@ -20,6 +20,7 @@ const DEFAULT_STATE = {
         interested: [],
         imgs: [],
         country: '',
+        last_date_online: '',
         bio: '',
         age: '',
         likes: ''
@@ -50,19 +51,11 @@ class ModalUser extends React.Component {
 
     // Ref
     loadUser = (userIdFocus) => {
-        let liked = this.state.liked;
-        API.checkUserLike(userIdFocus)
-            .then(response => {
-                if (response.status === 200 && typeof response.data.liked != 'undefined') {
-                    liked = response.data.liked;
-                    API.getUserIdProfile(userIdFocus)
-                        .then(async (res) => {
-                            if (res.status === 200)
-                                this._mounted && this.setState({user: res.data.user, showModal: true, liked: liked});
-                        });
-                }
+        API.getUserIdProfile(userIdFocus)
+            .then(async (res) => {
+                if (res.status === 200)
+                    this._mounted && this.setState({user: res.data.user, showModal: true, liked: res.data.user.liked});
             });
-
         this.props.handleCardUserComplete && this.props.handleCardUserComplete();
     };
 
@@ -88,7 +81,6 @@ class ModalUser extends React.Component {
     closeHide = () => { this._mounted && this.setState({openHide: false})};
     openHide = () => {this._mounted && this.setState({openHide: true})};
     render() {
-        const { userid} = this.props;
         const {user, liked, showModal, openReport, openFake, openHide, interests } = this.state;
         return (
             showModal && typeof user.imgs !== 'undefined' ?
@@ -100,7 +92,7 @@ class ModalUser extends React.Component {
                     closeFake={this.closeFake}
                     openHide={openHide}
                     closeHide={this.closeHide}
-                    userID={userid}
+                    userID={user.user_id}
                 />
                 <Modal
                     dimmer={"blurring"}
@@ -112,7 +104,10 @@ class ModalUser extends React.Component {
                         className="CardHeaderTile"> {user.firstname} {user.lastname}, <strong>{user.age}</strong></h1>
                     </Modal.Header>
                     <Modal.Content className="ModalProfilView">
-                        <Modal.Header></Modal.Header>
+                        {user.online ?
+                            <span>Online</span> :
+                            <span>Last connection {user.last_date_online}</span>
+                        }
                         <Divider hidden/>
                         <Grid centered columns={2}>
                             <Grid.Column className="RowImages">

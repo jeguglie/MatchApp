@@ -20,8 +20,20 @@ class EditProfil extends React.Component {
         this._mounted = false;
 
     }
-    handleNext = () => {this.setState({loading: true, section: this.state.section + 1}) };
-    handlePrev = () => {this.setState({loading: true, section: this.state.section - 1}) };
+    handleNext = () => {
+        API.getComplete()
+            .then ((response) => {
+                this._mounted && this.setState({complete: response.data.complete});
+            })
+        this.setState({loading: true, section: this.state.section + 1})
+    };
+    handlePrev = () => {
+        API.getComplete()
+            .then ((response) => {
+                this._mounted && this.setState({complete: response.data.complete});
+            })
+        this.setState({loading: true, section: this.state.section - 1})
+    };
 
     componentDidMount = async() => {
         this._mounted = true;
@@ -29,7 +41,7 @@ class EditProfil extends React.Component {
             .then ((response) => {
                 this._mounted && this.setState({complete: response.data.complete});
             })
-    }
+    };
 
     componentWillUnmount() {
         this._mounted = false;
@@ -39,7 +51,7 @@ class EditProfil extends React.Component {
     useCustomAddress = () => { this.props.history.push('/usecustomaddress') };
 
     render(){
-        const {section, loading} = this.state;
+        const {section} = this.state;
         if (section === 1)
             return(
                     <BasicsInformations

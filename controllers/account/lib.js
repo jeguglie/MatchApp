@@ -5,7 +5,8 @@ const validate = require('../../utils/validation');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const secret = 'mysecretsshhh';
-
+const notifications = require('./../../controllers/account/notifications');
+const account = require('./../../controllers/account/lib');
 
 let transport = nodemailer.createTransport({
     host: 'smtp.mailtrap.io',
@@ -116,7 +117,8 @@ async function reportuserhide(req, res){
         return res.status(200).json({});
     }
     catch(e){
-        return res.status(500).json({
+        console.log(e);
+        return res.status(400).json({
             warnings: ["Server error"]
         });
     }
@@ -182,7 +184,6 @@ async function updatetotalcomplete(userID){
         let response = await pool.query(text, value);
         let complete = 0;
         if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length){
-            console.log(response.rows);
                 complete =  response.rows[0].complete_basics + response.rows[0].complete_photos + response.rows[0].complete_interets;
                 text = 'UPDATE users SET complete = $1 WHERE user_id = $2';
                 value = [complete, userID];
@@ -402,7 +403,8 @@ async function login(req, res) {
             const token = jwt.sign(payload, secret, {
                 expiresIn: '1h',
             });
-            res.cookie('token', token, { httpOnly: true, path: '/', domain: 'localhost' });
+            res.cookie('token', token, { httpOnly: true, path: '/', domain: 'localhost', httpOnly: false, secure: false});
+            await account.setUserLastConnection(response.rows[0].user_id, 1);
             return res.status(200).json({connect: true});
         }
         else {
@@ -412,6 +414,7 @@ async function login(req, res) {
         }
     }
     catch (error) {
+        console.log(error);
         return res.status(500).json({
             warnings: ['An error occured with server']
         });
@@ -429,14 +432,15 @@ async function getEditProfilValues(req, res) {
     let values = [userID];
     try {
         const response = await pool.query(text, values);
-        if (response.rows.length < 1)
-            return res.status(500).json({ warnings: ["Profile not found, please logout and login"]});
-        else {
+        if (typeof response != 'undefined' && typeof response.rows != 'undefined' && response.rows.length < 1)
+            return res.status(400).json({ warnings: ["Profile not found, please logout and login"]});
+        else if (typeof response != 'undefined' && typeof response.rows != 'undefined' && response.rows.length) {
             response.rows[0].email = res.locals.email;
-            response.rows[0].age =  response.rows[0].age.toString();
+            response.rows[0].age =  response.rows[0].age ? response.rows[0].age.toString() : null;
             return res.status(200).json({ findProfil: response.rows[0] })
         }
     } catch (e) {
+        console.log(e);
         return res.status(500).json({
             warnings: ["Error during query"]
         });
@@ -871,30 +875,36 @@ async function checkUserView(req, res) {
     }
 }
 
-
-
 async function getUserIdProfile(req, res) {
     const userID = await getUserId(res.locals.email);
     if (userID === null)
         return (res.status(500).json({
             warnings: ["Can't get user ID, please logout and login"]
         }));
+    let liked = false;
+
     try {
         let userIDprofile = req.body.userId;
         let text = 'SELECT * FROM profile WHERE user_id = $1';
         let values = [userIDprofile];
         let response = await pool.query(text, values);
-        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length){
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length) {
+            text = 'SELECT * FROM user_likes WHERE user_id_like = $1 AND user_id_liked = $2';
+            values = [userID, userIDprofile];
+            let responselike = await pool.query(text, values);
+            await notifications.pushnotifications(userIDprofile, userID, 1);
+            if (typeof responselike !== 'undefined' && typeof responselike.rows !== 'undefined' && responselike.rows.length)
+                liked = true;
             let user = response.rows[0];
             // Get user interests IDs
             text = 'SELECT interest_id FROM user_interests WHERE user_id = $1';
             values = [userIDprofile];
             response = await pool.query(text, values);
-            if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length){
+            if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length) {
                 let intereststab = [];
                 let interestsIDtab = response.rows;
                 // Add interests to tab
-                for (let i = 0; i < interestsIDtab.length; i++){
+                for (let i = 0; i < interestsIDtab.length; i++) {
                     text = 'SELECT interest FROM interests WHERE id = $1';
                     values = [interestsIDtab[i].interest_id];
                     response = await pool.query(text, values);
@@ -911,10 +921,12 @@ async function getUserIdProfile(req, res) {
                     imgtab.push(response.rows[i].img_link);
                 // Add imgtab to user
                 Object.assign(user, {imgs: imgtab});
+                Object.assign(user, {liked: liked});
                 return res.status(200).json({
                     user: user
                 });
             }
+            return res.status(401).json('Bad Request');
         }
     } catch (error) {
         console.log(error);
@@ -923,7 +935,20 @@ async function getUserIdProfile(req, res) {
         });
     }
 }
+    async function setUserLastConnection(userID, connected){
+        try {
+            let text = 'UPDATE profile SET last_date_online = $1, online = $2 WHERE user_id = $3';
+            let value = [new Date(), connected, userID];
+            await pool.query(text, value);
+            console.log(1);
+            return true;
+        }catch (e){
+            console.log(e);
+            return false;
+        }
+}
 
+exports.setUserLastConnection = setUserLastConnection;
 exports.updatetotalcomplete = updatetotalcomplete;
 exports.login = login;
 exports.getNotifNb = getNotifNb;

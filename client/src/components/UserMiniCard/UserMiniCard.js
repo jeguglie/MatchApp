@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Grid, Image, Icon, Loader, Dimmer, Segment } from 'semantic-ui-react';
+import { Card, Grid, Image, Icon, Loader, Dimmer } from 'semantic-ui-react';
 import equal from 'fast-deep-equal';
 
 const DEFAULT_STATE = {
@@ -13,13 +13,19 @@ class UserMiniCard extends React.Component {
     constructor(props){
         super(props);
         this.state = {...DEFAULT_STATE};
+        this._mounted = false;
+
+    }
+
+    componentDidMount() {
+        this._mounted = true;
     }
 
     componentDidUpdate(prevProps) {
-        if(!equal(this.props.users, prevProps.users))
-            this.setState({users: this.props.users});
+        if(!equal(this.props.users[0], prevProps.users[0]))
+            this._mounted && this.setState({users: this.props.users});
         if(!equal(this.props.loading, prevProps.loading))
-            this.setState({loading: this.props.loading});
+            this._mounted && this.setState({loading: this.props.loading});
     }
     render() {
         const { users, loading } = this.state;
@@ -51,7 +57,7 @@ class UserMiniCard extends React.Component {
                                 </Card.Meta>
                             </Card.Content>
                             <Card.Content extra>
-                                <span>
+                                <span className={'likesSpan'}>
                                     <Icon name='heart' />
                                     {likes} Likes
                                 </span>
