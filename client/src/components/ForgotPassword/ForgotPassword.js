@@ -128,7 +128,7 @@ class ForgotPassword extends React.Component {
                 </Form>
                 <Divider hidden />
                 <div className="loginNoAccount">
-                    <p>No account ? <a href='#' onClick={(e) => {e.preventDefault(); this.props.history.push('/signup')}}>Register</a></p>
+                    <p>No account ? <a href='# ' onClick={(e) => {e.preventDefault(); this.props.history.push('/signup')}}>Register</a></p>
                 </div>
                 <Divider hidden />
             </Container>

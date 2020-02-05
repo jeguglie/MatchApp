@@ -81,7 +81,7 @@ class Location extends React.Component {
 
 
     render() {
-        const {getInnerRef, getLocation, nextSection, prevSection } = this;
+        const {getInnerRef, getLocation, prevSection } = this;
         const {complete, loading} = this.state;
         return (
                 <div className="Location">

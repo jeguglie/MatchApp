@@ -203,11 +203,11 @@ class Login extends React.Component {
                     <Divider hidden />
                     <div className="loginNoAccount">
                         <p className="loginForgot">
-                            <a href='#' onClick={(e) => {e.preventDefault(); this.props.history.push('/forgotpassword')}}>
+                            <a href='# ' onClick={(e) => {e.preventDefault(); this.props.history.push('/forgotpassword')}}>
                                 <strong>Forgot password ?</strong>
                             </a>
                         </p>
-                        <p>No account ? <a href='#' onClick={(e) => {e.preventDefault(); this.props.history.push('/signup')}}>Register</a></p>
+                        <p>No account ? <a href='# ' onClick={(e) => {e.preventDefault(); this.props.history.push('/signup')}}>Register</a></p>
                     </div>
                 <Divider hidden />
             </Container>

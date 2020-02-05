@@ -46,6 +46,8 @@ class NotificationsHistory extends React.Component{
                 return 'Remove his like  ';
             case 5:
                 return 'Like your profile  ';
+            default:
+                return null;
         }
     };
 

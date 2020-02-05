@@ -223,7 +223,7 @@ class Signup extends React.Component {
             <Grid textAlign="center">
                 <Grid.Row centered>
                     <div className="SignupNoAccount">
-                        <p>Have an account ? <a href='#' onClick={(e) => {e.preventDefault(); this.props.history.push('/login')}}>Log in</a></p>
+                        <p>Have an account ? <a href='# ' onClick={(e) => {e.preventDefault(); this.props.history.push('/login')}}>Log in</a></p>
                     </div>
                 </Grid.Row>
             </Grid>

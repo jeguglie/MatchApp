@@ -1,5 +1,5 @@
 import React from 'react';
-import {Divider, Form, TextArea, Grid, Progress, Icon, Select, Loader, Dimmer} from 'semantic-ui-react';
+import {Divider, Form, TextArea, Grid, Progress, Icon, Select} from 'semantic-ui-react';
 import API from "../../../utils/API";
 import VALIDATE from "../../../utils/validation";
 import _ from "lodash";

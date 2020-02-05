@@ -4,7 +4,6 @@ import FileUpload from "../../fileUpload/fileUpload";
 import Warnings from '../../../components/Warnings/Warnings';
 import ProfileImgPreview from '../../../components/EditProfil/AddPhotos/Preview/loadCurrentPictures/loadPreviewImages';
 import API from "../../../utils/API";
-import VALIDATE from "../../../utils/validation";
 
 const DEFAULT_STATE = {
     profileImg: [],
