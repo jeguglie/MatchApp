@@ -112,7 +112,6 @@ io.sockets.on('connection', socket => {
         }
     });
     socket.on('like:likedback', async(userID) => {
-        console.log(1);
         let socketID =  notifications.findSocketID(userID, userslist);
         console.log(socketID);
 

@@ -1,10 +1,9 @@
 import React from 'react';
-import { Card, Grid, Image, Icon, Loader, Dimmer } from 'semantic-ui-react';
+import { Card, Grid, Image, Icon } from 'semantic-ui-react';
 import equal from 'fast-deep-equal';
 
 const DEFAULT_STATE = {
     users: [],
-    loading: false,
 };
 
 
@@ -30,7 +29,6 @@ class UserMiniCard extends React.Component {
     // Filters
     ageFilter = (order) => {
         let users = this.state.users;
-        this.setState({loading: true});
         if (order === true) {
             users.sort(function (a, b) {
                 if (b.age === a.age)
@@ -72,7 +70,7 @@ class UserMiniCard extends React.Component {
     };
 
     render() {
-        const { users, loading } = this.state;
+        const { users} = this.state;
         if (users && users.length) {
             return users.map((user, i) => {
                 const {user_id, img_link, firstname, likes, distance,  age} = user;
@@ -83,18 +81,12 @@ class UserMiniCard extends React.Component {
                             key={i}
                             className="userMinCard"
                             onClick={() => this.props.clickedUser(user_id)}>
-                            {
-                                this.props.userIdFocus && this.props.userIdFocus === user_id ?
-                                    <Dimmer id={'DimmerUserMinCard'} active={loading}>
-                                        <Loader />
-                                    </Dimmer> : null
-                            }
                             <Image
                                 src={img_link}
                                 wrapped
                                 ui={false}
                                 size='large' />
-                            <Card.Content>
+                            <Card.Content className={'contentUserMinCard'}>
                                 <Card.Header>{firstname}<span className="MinCardAge">, {age}</span></Card.Header>
                                 <Card.Meta>
                                     <span className='date'>{Math.round(distance)} <strong>km</strong></span>
@@ -103,7 +95,7 @@ class UserMiniCard extends React.Component {
                             <Card.Content extra>
                                 <span className={'likesSpan'}>
                                     <Icon name='heart' />
-                                    {likes} Likes
+                                    {likes}
                                 </span>
                             </Card.Content>
                         </Card>

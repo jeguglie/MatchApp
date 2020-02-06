@@ -13,6 +13,7 @@ const DEFAULT_STATE = {
     openFake: false,
     liked: false,
     interests: '',
+    like: false,
     showModal: false,
     user: {
         lastname: '',
@@ -35,30 +36,31 @@ class ModalUser extends React.Component {
         super(props);
         this.state = {...DEFAULT_STATE};
         this._mounted = false;
+        this.state.interests = this.props.interests
 
     }
 
     componentDidMount = async() => {
         this._mounted = true;
-        API.getUserInterests()
-            .then(response => {
-                if (response.status === 200)
-                    this._mounted && this.setState({interests: response.data.interests})
-            });
     };
     componentWillUnmount() {
         this._mounted && this.setState({...DEFAULT_STATE});
         this._mounted = false;
     }
 
+    static getDerivedStateFromProps(nextProps, prevState){
+        if (nextProps.interests !== prevState.interests) {
+            return ({interests: nextProps.interests});
+        }
+        return null;
+    }
     // Ref
     loadUser = (userIdFocus) => {
         API.getUserIdProfile(userIdFocus)
             .then(async (res) => {
                 if (res.status === 200)
-                    this._mounted && this.setState({user: res.data.user, showModal: true, liked: res.data.user.liked});
+                    this._mounted && this.setState({user: res.data.user, showModal: true, liked: res.data.user.liked, like: res.data.like});
             });
-        this.props.handleCardUserComplete && this.props.handleCardUserComplete();
     };
 
     // Like
@@ -83,7 +85,7 @@ class ModalUser extends React.Component {
     closeHide = () => { this._mounted && this.setState({openHide: false})};
     openHide = () => {this._mounted && this.setState({openHide: true})};
     render() {
-        const {user, liked, showModal, openReport, openFake, openHide, interests } = this.state;
+        const {user, liked, like, showModal, openReport, openFake, openHide, interests } = this.state;
         return (
             showModal && typeof user.imgs !== 'undefined' ?
             <div>
@@ -106,15 +108,24 @@ class ModalUser extends React.Component {
                         className="CardHeaderTile"> {user.firstname} {user.lastname}, <strong>{user.age}</strong></h1>
                     </Modal.Header>
                     <Modal.Content className="ModalProfilView">
-                        {user.online ?
-                            <span className={'Online'}>
-                                <Icon name={'circle'} />
-                                Online
+                        <p>
+                            {user.online ?
+                                <span className={'Online'}>
+                                    <Icon name={'circle'} />
+                                    Online
+                                </span> :
+                                <span className={'LastConnection'}>
+                                     <Icon name={'circle'} />
+                                    Online {moment(user.last_date_online).fromNow()}
+                                </span>
+                            }
+                        </p>
+                        {like ?
+                            <span className={'spanLike'}>
+                                <Icon name={'heart'} />
+                                Like your profile
                             </span> :
-                            <span className={'LastConnection'}>
-                                 <Icon name={'circle'} />
-                                Online {moment(user.last_date_online).fromNow()}
-                            </span>
+                            null
                         }
                         <Divider hidden/>
                         <Grid centered columns={2}>

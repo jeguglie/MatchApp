@@ -230,20 +230,10 @@ export default {
             }
         )
     },
-    getUsers: (distanceRange, ageRange, popularityRange) => {
+    getUsers: (distanceRange, ageRange, popularityRange, interests) => {
         return axios.post(
             `${burl}/getUsers`,
-            {distanceRange, ageRange, popularityRange},
-            {
-                withCredentials: 'true',
-                headers: headers
-            }
-        )
-    },
-    getConnectedUserLocation: () => {
-        return axios.post(
-            `${burl}/getConnectedUserLocation`,
-            {},
+            {distanceRange, ageRange, popularityRange, interests},
             {
                 withCredentials: 'true',
                 headers: headers

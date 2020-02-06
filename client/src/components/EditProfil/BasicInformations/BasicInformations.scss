@@ -26,6 +26,9 @@
   & .ui.form input::placeholder {
     color: #7c7c7c !important;
   }
+  input::placeholder{
+    color: #4f384f !important;
+  }
   input, .selection , textarea, .ui.fluid.dropdown {
     border-radius: 15px !important;
     border: none !important;

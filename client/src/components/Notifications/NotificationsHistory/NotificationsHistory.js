@@ -13,6 +13,7 @@ class NotificationsHistory extends React.Component{
             notifications: [],
             userIdFocus: null,
             loading: false,
+            interests: [],
         };
         this._mounted = false;
         this.innerRefModal = React.createRef();
@@ -25,7 +26,12 @@ class NotificationsHistory extends React.Component{
             .then(res => {
                 if (res.status === 200)
                     this._mounted && this.setState({notifications: res.data.notifications})
-            })
+            });
+        await API.getUserInterests()
+            .then(response => {
+                if (response.status === 200)
+                    this._mounted && this.setState({interests: response.data.interests})
+            });
     };
 
 
@@ -80,10 +86,11 @@ class NotificationsHistory extends React.Component{
 
 
     render(){
-        const { notifications } = this.state;
+        const { notifications, interests } = this.state;
         return (
             <Grid columns={1} textAlign={'center'}>
                     <ModalUser
+                        interests={interests}
                         s_like={this.props.s_like}
                         s_like_unliked={this.props.s_like_unliked}
                         s_like_likedback={this.props.s_like_likedback}

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Dropdown } from 'semantic-ui-react'
 import API from "../../../utils/API";
-import _ from "lodash";
 
 const DEFAULT_STATE = {
         isFetching: false,
@@ -38,8 +37,19 @@ class SearchTags extends Component {
     }
 
     handleChange = (e, { value }) => {
-            this._mounted && this.setState({value})
+            this._mounted && this.setState({value}, () => {
+                if (this.state.value && this.state.value.length < 1)
+                    this.props.activeCheckBox();
+                else
+                    this.props.disableCheckBox();
+            });
     };
+
+    clearValue(){
+        if (this._mounted && this.state.value && this.state.value.length > 0) {
+            this._mounted && this.setState({value: []});
+        }
+    }
 
     render() {
         const { multiple, DATA, search, value } = this.state;

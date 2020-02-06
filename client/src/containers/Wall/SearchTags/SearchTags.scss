@@ -9,4 +9,12 @@
   .ui.multiple.dropdown>.label{
     font-size: 0.8em !important;
   }
+  .ui.selection.dropdown {
+     border: none !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+   }
+  .ui.selection.dropdown {
+    border: none !important;
+  }
 }

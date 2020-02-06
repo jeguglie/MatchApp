@@ -4,12 +4,12 @@ const pool = require('./../../utils/queries');
 async function getUsers(req, res){
     const userID = await account.getUserId(res.locals.email);
     if (userID === null)
-        return (res.status(500).json({
+        return (res.status(400).json({
             warnings: ["Can't get user ID, please logout and login"]
         }));
 
     // Get filter options ---------------------------
-    const {popularityRange, distanceRange, ageRange } = req.body;
+    const {popularityRange, distanceRange, ageRange, interests } = req.body;
     try {
 
         // Interested and Gender of connected user
@@ -40,7 +40,7 @@ async function getUsers(req, res){
             users = users.map((user) = async(user) =>{
                 // if (hidedusers.find(userID => user.user_id === userID))
                 //     return null;
-                text = 'SELECT * FROM user_interests WHERE user_id = $1';
+                text = 'SELECT * FROM user_interests U INNER JOIN interests I ON U.interest_id = I.id WHERE user_id = $1';
                 values = [user.user_id];
                 response = await pool.query(text, values);
                 return Object.assign(user, {interests: response.rows});
@@ -59,12 +59,19 @@ async function getUsers(req, res){
                         userLocation.longitude = response.rows[0].longitude;
                         userLocation.latitude = response.rows[0].latitude;
                     }
-                    // Get connected user interests
-                    text = 'SELECT * FROM user_interests WHERE user_id = $1';
-                    values = [userID];
-                    response = await pool.query(text, values);
-                    let usersCinterests = response.rows;
-
+                    // If interests are defined
+                    let usersCinterests = [];
+                    if (interests && interests.length > 0) {
+                        usersCinterests = interests;
+                        console.log(interests);
+                    }
+                    else {
+                        // Get connected user interests
+                        text = 'SELECT * FROM user_interests WHERE user_id = $1';
+                        values = [userID];
+                        response = await pool.query(text, values);
+                        usersCinterests = response.rows;
+                    }
                     // Insert distance of each users and filter by distanceRange ------------------------------------
                     users.map((user) => {
                         let distance = Math.round(getDistanceFromLatLonInKm(userLocation.latitude, userLocation.longitude, user.latitude, user.longitude));
@@ -73,17 +80,18 @@ async function getUsers(req, res){
                         return Object.assign(user,{distance:  distance});
                     });
                     users = users.filter(user => user.distance <= distanceRange);
-
                     // Add point if filtered users have same interests
                     for (let i = 0; i < users.length; i++){
                         for (let j = 0; j < users[i].interests.length; j++){
                             // Map interests tab on user and add point
                             let nbInterests = 0;
                             usersCinterests.map(e => {
-                                if (e.interest_id === users[i].interests[j].interest_id)
+                                if (e.interest === users[i].interests[j].interest) {
                                     nbInterests += 1;
-                                if (j + 1 === users[i].interests.length)
+                                }
+                                if (j + 1 === users[i].interests.length) {
                                     users[i].points += fibonacci(nbInterests);
+                                }
                             })
                         }
                     }
@@ -98,7 +106,6 @@ async function getUsers(req, res){
                         delete(user.longitude);
                         delete(user.latitude);
                         delete(user.img_order);
-                        delete(user.points);
                     });
                     return res.status(200).json({
                         users: users,
@@ -106,12 +113,13 @@ async function getUsers(req, res){
                 })
         }
         else
-            return res.status(500).json({
+            return res.status(400).json({
                 warnings: ["Please complete your profile"]
             });
 
     } catch(error) {
-        return res.status(500).json({
+        console.log(error);
+        return res.status(400).json({
             warnings: ["Error server"]
         })
     }

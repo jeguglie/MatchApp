@@ -4,7 +4,6 @@ import InputRange from "react-input-range";
 import SearchTags from "../SearchTags/SearchTags";
 import 'react-input-range/lib/css/index.css';
 import Aux from "../../../hoc/Aux";
-import Debounce from 'react-debounce-component';
 
 const DEFAULT_STATE = {
     distanceRange: 250,
@@ -17,6 +16,7 @@ const DEFAULT_STATE = {
         max: 50,
     },
     loading: false,
+    checked: true,
 };
 
 class Filter extends React.Component {
@@ -25,14 +25,12 @@ class Filter extends React.Component {
         super(props);
         this.state = {...DEFAULT_STATE};
         this._mounted = false;
+        this.state.loading = true;
+        this.innerRef = React.createRef();
     }
 
     componentDidMount() {
         this._mounted = true;
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log(2);
     }
 
     // Filter
@@ -45,8 +43,34 @@ class Filter extends React.Component {
             this._mounted && this.setState({popularityRange: value});
     };
 
+    // Search click
+    handleClick = () => {
+        this.props.searchMatch(
+            this.state.distanceRange,
+            this.state.ageRange,
+            this.state.popularityRange,
+            this.innerRef.current && this.innerRef.current.state.value
+        );
+    };
+
+    activeCheckBox = () => {
+        if (this.state.checked === false) {
+            this.innerRef.current.clearValue();
+            this.setState({checked: true})
+        }
+    };
+    disableCheckBox = () => {
+        if (this.state.checked === true) {
+            this.setState({checked: false})
+        }
+    };
+    static getDerivedStateFromProps(nextProps, prevState){
+        if (nextProps.loading !== prevState.loading)
+            return {loading: nextProps.loading};
+        return null
+    }
     render(){
-        const {distanceRange, loading, ageRange, popularityRange} = this.state;
+        const {distanceRange, loading, checked, ageRange, popularityRange} = this.state;
         return (
             <Aux>
                 <Grid.Column mobile={16} tablet={6} computer={6} largeScreen={4} widescreen={3}>
@@ -95,20 +119,19 @@ class Filter extends React.Component {
                             </Grid.Row>
                             <Divider hidden/>
                             <Segment className={'bottomFilter'}>
-                                <Grid divided columns={'equal'}>
+                                <Grid columns={'equal'}>
                                     <Grid.Row  >
                                         <Grid.Column width={6}>
-                                            <Segment>
+                                            {/*<Segment className={'CheckBoxContainer'}>*/}
                                                 <Grid.Row centered>
-                                                    <Checkbox toggle />
+                                                    <Checkbox checked={checked} onClick={checked ? this.disableCheckBox : this.activeCheckBox} toggle />
                                                     <p id={'includeMyInterests'}>Use my interests</p>
                                                 </Grid.Row>
-                                            </Segment>
+                                            {/*</Segment>*/}
                                         </Grid.Column>
                                         <Grid.Column>
                                             <Grid.Row>
-                                                <SearchTags />
-                                                <Divider />
+                                                <SearchTags activeCheckBox={this.activeCheckBox} disableCheckBox={this.disableCheckBox} ref={this.innerRef} />
                                             </Grid.Row>
                                             <Grid.Row centered textAlign={'center'}>
                                                 <Button
@@ -118,7 +141,7 @@ class Filter extends React.Component {
                                                     fluid
                                                     loading={loading}
                                                     floated={'right'}
-                                                    onClick={() => this.props.searchMatch(this.state.distanceRange, this.state.ageRange, this.state.popularityRange)}>
+                                                    onClick={this.handleClick}>
                                                     Search
                                                 </Button>
                                             </Grid.Row>

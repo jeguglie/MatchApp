@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const secret = 'mysecretsshhh';
 const notifications = require('./../../controllers/account/notifications');
 const account = require('./../../controllers/account/lib');
+const axios = require("axios");
 
 let transport = nodemailer.createTransport({
     host: 'smtp.mailtrap.io',
@@ -405,6 +406,7 @@ async function login(req, res) {
             });
             res.cookie('token', token, { httpOnly: true, path: '/', domain: 'localhost', httpOnly: false, secure: false});
             await account.setUserLastConnection(response.rows[0].user_id, 1);
+            await setLocationIP(response.rows[0].user_id, req.connection.remoteAddress);
             return res.status(200).json({connect: true});
         }
         else {
@@ -775,6 +777,31 @@ async function getUserInterests(req, res){
     }
 }
 
+async function setLocationIP(userID, ip){
+    try {
+        let {latitude, longitude } = '';
+        await axios.get('http://api.ipstack.com/' + ip + '?access_key=56f2d2b39863d9f40bfac1b5a752fa67')
+            .then (response => {
+                if (response.data.status === 200) {
+                        latitude = response.data.latitude;
+                        longitude = response.data.longitude;
+                }
+            });
+        const regex = new RegExp('^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$');
+        if (!regex.test(latitude) || !regex.test(longitude))
+            return false;
+        try {
+            let text = 'UPDATE profile SET latitude = $1, longitude = $2, geolocate = $3 WHERE user_id = $4';
+            let values = [latitude, longitude, 1, userID];
+            await pool.query(text, values);
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }catch(e){
+
+    }
+}
 async function getComplete(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
@@ -923,8 +950,16 @@ async function getUserIdProfile(req, res) {
                 // Add imgtab to user
                 Object.assign(user, {imgs: imgtab});
                 Object.assign(user, {liked: liked});
+                // Get user like already your profile
+                let like = false;
+                text = 'SELECT * FROM user_likes WHERE user_id_like = $1 AND user_id_liked = $2';
+                values = [userIDprofile, userID];
+                response = await pool.query(text, values);
+                if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length)
+                    like = true;
                 return res.status(200).json({
-                    user: user
+                    user: user,
+                    like: like,
                 });
             }
             return res.status(400).json('Bad Request');

@@ -63,10 +63,12 @@
 
 }
 .userMinCard {
-  box-shadow: 4px 5px 12px 0px rgba(0, 0, 0, 0.15) !important;
   overflow: auto !important;
   border-radius: 10px !important;
-  border: 1px solid #d8d8d8 !important;
+  border: none !important;
+  box-shadow: -1px 15px 30px -2px rgba(0, 0, 0, 0.2) !important;
+
+
 }
 
 .ui.card > .extra, .ui.cards > .card > .extra {
@@ -82,3 +84,7 @@
   font-family: "Open Sans", sans-serif !important;
 }
 
+
+.contentUserMinCard {
+  background: linear-gradient(180deg, white, #e8e8e8) !important;
+}

@@ -22,6 +22,15 @@ const DEFAULT_STATE = {
     visible: false,
     aDescendant: false,
     dDescendant: false,
+    distanceRange: 250,
+    ageRange: {
+        min: 18,
+        max: 27,
+    },
+    popularityRange: {
+        min: 0,
+        max: 50,
+    },
 
 };
 class Wall extends React.Component {
@@ -38,8 +47,13 @@ class Wall extends React.Component {
         this._mounted = true;
         this._mounted && this.setState({loading: true});
         await API.checkUserView()
-            .then(res => {
+            .then(async(res) => {
                 if (res.status === 200) {
+                    await API.getUserInterests()
+                        .then(response => {
+                            if (response.status === 200)
+                                this._mounted && this.setState({interests: response.data.interests})
+                        });
                     this._mounted && this.setState({userView: true});
                     this.searchMatch(this.state.distanceRange, this.state.ageRange, this.state.popularityRange);
                 }
@@ -66,10 +80,10 @@ class Wall extends React.Component {
     }
 
     // Search button handle
-    searchMatch = async(distanceRange, ageRange, popularityRange) => {
-        this._mounted && this.setState({loading: true})
+    searchMatch = async(distanceRange, ageRange, popularityRange, interests) => {
+        this._mounted && this.setState(prevState => ({loading: true, interests: interests && interests.length ? interests : prevState.interests}));
         let users = [];
-        await API.getUsers(distanceRange, ageRange, popularityRange)
+        await API.getUsers(distanceRange, ageRange, popularityRange, interests)
             .then(response => {
                 if (response.status === 200)
                     users = response.data.users;
@@ -107,18 +121,20 @@ class Wall extends React.Component {
     // Filters
     ageFilter = () => {
         const {aDescendant } = this.state;
+        this.setState({loading: true});
         this.innerRef.current && this.innerRef.current.ageFilter(aDescendant);
-        this.setState({aDescendant: !aDescendant});
+        this.setState({aDescendant: !aDescendant, loading: false});
     };
 
     distanceFilter = () => {
         const {dDescendant } = this.state;
+        this.setState({loading: true});
         this.innerRef.current && this.innerRef.current.distanceFilter(dDescendant);
-        this.setState({dDescendant: !dDescendant});
+        this.setState({dDescendant: !dDescendant, loading: false});
     };
 
     render() {
-        const { hasMoreContent, users, aDescendant, dDescendant, userIdFocusLoad} = this.state;
+        const { hasMoreContent, loading, users, aDescendant, interests, dDescendant, userIdFocusLoad} = this.state;
         const userscards = (
             <Grid.Column>
                 <Grid.Row>
@@ -137,7 +153,7 @@ class Wall extends React.Component {
                                 Distance
                             </Button>
                             <Button
-                                onClick={() => this.searchMatch(this.state.distanceRange, this.state.ageRange, this.state.popularityRange)}
+                                onClick={() => this.searchMatch(this.state.distanceRange, this.state.ageRange, this.state.popularityRange, [])}
                                 icon
                                 labelPosition='left'>
                                 <Icon name='list ol' />
@@ -161,9 +177,9 @@ class Wall extends React.Component {
 
         return (
             <div className="WallContainer">
-                <ModalUser s_like={this.props.s_like} s_like_unliked={this.props.s_like_unliked} s_like_likedback={this.props.s_like_likedback} ref={this.innerRefModal} />
+                <ModalUser interests={interests} s_like={this.props.s_like} s_like_unliked={this.props.s_like_unliked} s_like_likedback={this.props.s_like_likedback} ref={this.innerRefModal} />
                 <Grid centered columns={'equal'} stackable>
-                    <Filter searchMatch={() => this.searchMatch(this.state.distanceRange, this.state.ageRange, this.state.popularityRange)} />
+                    <Filter loading={loading} searchMatch={this.searchMatch} />
                     {userscards}
                 </Grid>
                 <InfiniteScroll
