@@ -1,6 +1,30 @@
 const account = require('./lib.js');
 const pool = require('./../../utils/queries');
+const multer = require('multer');
+const DIR = './public/';
+const uuid = require('uuid/v4');
 
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, DIR);
+    },
+    filename: (req, file, cb) => {
+        const fileName = file.originalname.toLowerCase().split(' ').join('-');
+        cb(null, uuid() + '-' + fileName)
+    }
+});
+const upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            return false;
+        }
+    }
+});
 
 async function updatetotalimage(userID){
 
@@ -120,5 +144,7 @@ async function deleteImage(req, res) {
 }
 
 exports.uploadPhoto = uploadPhoto;
+exports.storage = storage;
+exports.upload = upload;
 exports.getPhotos = getPhotos;
 exports.deleteImage = deleteImage;

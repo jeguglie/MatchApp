@@ -109,7 +109,6 @@ export default class ReactSearchBox extends Component {
     }
 
     handleClear = () => {
-        console.log("handlClear");
         this.setState({value: ''});
         this.props.resetClear();
     };

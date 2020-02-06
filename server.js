@@ -1,41 +1,19 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const uuid = require('uuid/v4');
 const cookieParser = require('cookie-parser');
-const multer = require('multer');
 const withAuth = require('./utils/middleware');
 const app = express();
-const DIR = './public/';
+const faker = require('./controllers/account/faker');
+const match = require('./controllers/account/match');
 const account = require('./controllers/account/lib.js');
 const wallActions = require('./controllers/account/userWallActions.js');
 const addphotos = require('./controllers/account/addphotos.js');
-const faker = require('./controllers/account/faker');
-const match = require('./controllers/account/match');
-const port = 5000;
 const notifications = require('./controllers/account/notifications');
 const io = require('socket.io')();
+const port = 5000;
 const portio = 8000;
+let userslist = [];
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, DIR);
-    },
-    filename: (req, file, cb) => {
-        const fileName = file.originalname.toLowerCase().split(' ').join('-');
-        cb(null, uuid() + '-' + fileName)
-    }
-});
-const upload = multer({
-    storage: storage,
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-            cb(null, true);
-        } else {
-            cb(null, false);
-            return false;
-        }
-    }
-});
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -47,17 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use('/public', express.static('public'));
-app.get('/checkToken', withAuth, function(req, res) {
-    res.sendStatus(200);
-});
-app.get('/logout', withAuth, async(req, res) => {
-    const userID = await account.getUserId(res.locals.email);
-    if (userID !== null)
-        account.setUserLastConnection(userID, 0);
-    res.clearCookie('token');
-    res.sendStatus(200);
 
-});
 app.post('/reportuserhide', withAuth, account.reportuserhide);
 app.post('/reportuserfake', withAuth, account.reportuserfake);
 app.post('/reportuser', withAuth, account.reportuser);
@@ -70,7 +38,7 @@ app.post('/activeaccount', account.activeaccount);
 app.post('/updategeolocate', withAuth, account.updategeolocate);
 app.post('/getEditProfilValues', withAuth, account.getEditProfilValues);
 app.post('/updateEditProfilValues', withAuth, account.updateEditProfilValues);
-app.post('/user-profile', upload.single('file'), withAuth, addphotos.uploadPhoto);
+app.post('/user-profile', addphotos.upload.single('file'), withAuth, addphotos.uploadPhoto);
 app.post('/getPhotos', withAuth, addphotos.getPhotos);
 app.post('/addInterests', withAuth, account.addInterests);
 app.post('/getInterests', withAuth, account.getInterests);
@@ -84,13 +52,16 @@ app.post('/checkUserView', withAuth, account.checkUserView);
 app.post('/getUserIdProfile', withAuth, account.getUserIdProfile);
 app.post('/userLike', withAuth, wallActions.userLike);
 app.post('/deletenotif', withAuth, account.deletenotif);
+app.get('/checkToken', withAuth, function(req, res) {res.sendStatus(200);});
 app.get('/getNotifications', withAuth, account.getNotifications);
 app.get('/getNotifNb', withAuth, account.getNotifNb);
 app.get('/faker', faker.matchAppFaker);
-
-
-// Store connected users
-let userslist = [];
+app.get('/logout', withAuth, async(req, res) => {
+    const userID = await account.getUserId(res.locals.email);
+    userID !== null ? account.setUserLastConnection(userID, 0) : 0;
+    res.clearCookie('token');
+    res.sendStatus(200);
+});
 
 // Notifications
 io.sockets.on('connection', socket => {
@@ -131,7 +102,7 @@ io.sockets.on('connection', socket => {
         }
     });
     socket.on('like:unlike', async(userID) => {
-        let socketID =  notifications.findSocketID(userID, userslist);
+        let socketID = notifications.findSocketID(userID, userslist);
         if (socketID) {
             let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
             if (userIDemitter && await  notifications.usercansendnotif(userIDemitter, userID)) {
@@ -141,8 +112,12 @@ io.sockets.on('connection', socket => {
         }
     });
     socket.on('like:likedback', async(userID) => {
-        let socketID =  notifications.findSocketID(userID);
+        console.log(1);
+        let socketID =  notifications.findSocketID(userID, userslist);
+        console.log(socketID);
+
         if (socketID) {
+            console.log(2);
             let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
             if (userIDemitter && await  notifications.usercansendnotif(userIDemitter, userID)) {
                 let name = await account.getNameUserId(userIDemitter, userslist);
@@ -151,7 +126,7 @@ io.sockets.on('connection', socket => {
         }
     });
     socket.on('like:likedbackreturn', async(userID) => {
-        let socketID =  notifications.findSocketID(userID);
+        let socketID =  notifications.findSocketID(userID, userslist);
         if (socketID) {
             let userIDemitter = await notifications.getUserIDFromSocketEmitter(socket, userslist);
             if (userIDemitter && await notifications.usercansendnotif(userIDemitter, userID)) {
@@ -162,6 +137,7 @@ io.sockets.on('connection', socket => {
     })
 
 });
+
 io.listen(portio);
 console.log('Listening on port ', portio);
 app.listen(port, 'localhost', () => console.log(`Listening on port ${port}`));

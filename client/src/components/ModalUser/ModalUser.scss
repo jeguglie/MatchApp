@@ -19,3 +19,21 @@
   background-color: #c82325;
   color: white;
 }
+
+.LastConnection {
+  font-family: "Open Sans", sans-serif !important;
+  font-size: 0.8em !important;
+  font-weight: 400;
+  & i {
+    color: #710209;
+  }
+}
+
+.Online {
+  font-family: "Open Sans", sans-serif !important;
+  font-size: 0.8em !important;
+  font-weight: 400;
+  & i {
+    color: #00c700;
+  }
+}

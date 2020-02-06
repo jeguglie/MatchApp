@@ -4,6 +4,8 @@ import React from "react";
 import classnames from 'classnames';
 import ModalUserActions from "./ModalUserActions";
 import API from "../../utils/API";
+const moment = require('moment');
+
 
 const DEFAULT_STATE = {
     openHide: false,
@@ -67,7 +69,7 @@ class ModalUser extends React.Component {
                     this._mounted && this.setState({liked: response.data.liked});
                     if (response.data.liked) this.props.s_like(userIdFocus);
                     if (response.data.unliked) this.props.s_like_unliked(userIdFocus);
-                    if (response.data.likedback)this.props.s_like_likedback(userIdFocus);
+                    if (response.data.likedback) this.props.s_like_likedback(userIdFocus);
                 }
             })
             .catch(err => console.log(err));
@@ -105,8 +107,14 @@ class ModalUser extends React.Component {
                     </Modal.Header>
                     <Modal.Content className="ModalProfilView">
                         {user.online ?
-                            <span>Online</span> :
-                            <span>Last connection {user.last_date_online}</span>
+                            <span className={'Online'}>
+                                <Icon name={'circle'} />
+                                Online
+                            </span> :
+                            <span className={'LastConnection'}>
+                                 <Icon name={'circle'} />
+                                Online {moment(user.last_date_online).fromNow()}
+                            </span>
                         }
                         <Divider hidden/>
                         <Grid centered columns={2}>
@@ -126,26 +134,30 @@ class ModalUser extends React.Component {
                             </Grid.Row>
                         </Grid>
                         <Modal.Description>
-                            <Segment className="BioSegment" textAlign="center" inverted>
-                                <p>{user.bio}</p>
-                            </Segment>
+                            {user.bio && user.bio.length ?
+                                <Segment className="BioSegment" textAlign="center" inverted>
+                                    <p>{user.bio}</p>
+                                </Segment> : <Divider hidden />
+                            }
                             <Segment basic textAlign={'center'}>
-                                <Button size='small' id='like' onClick={() => this.userLike(user.user_id)}>
-                                    <Icon name='heart'/>
-                                    {liked ? 'Unlike' : 'Like'}
-                                </Button>
-                                <Button size='small' id='hide' onClick={this.openHide}>
-                                    <Icon name='user x'/>
-                                    Hide
-                                </Button>
-                                <Button size='small' id='fake' onClick={this.openFake}>
-                                    <Icon name='user secret'/>
-                                    Fake
-                                </Button>
-                                <Button size='small' id='blockuser' onClick={this.openReport}>
-                                    <Icon name='warning'/>
-                                    Signal
-                                </Button>
+                                <Button.Group fluid widths={4}>
+                                    <Button size='small' id='like' onClick={() => this.userLike(user.user_id)}>
+                                        <Icon name='heart'/>
+                                        {liked ? 'Unlike' : 'Like'}
+                                    </Button>
+                                    <Button size='small' id='hide' onClick={this.openHide}>
+                                        <Icon name='user x'/>
+                                        Hide
+                                    </Button>
+                                    <Button size='small' id='fake' onClick={this.openFake}>
+                                        <Icon name='user secret'/>
+                                        Fake
+                                    </Button>
+                                    <Button size='small' id='blockuser' onClick={this.openReport}>
+                                        <Icon name='warning'/>
+                                        Signal
+                                    </Button>
+                                </Button.Group>
                             </Segment>
                             <Divider hidden/>
                             <Label.Group size='small'>

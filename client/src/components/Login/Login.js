@@ -36,7 +36,12 @@ class Login extends React.Component {
 
     async componentDidMount() {
         if (cookies.get('token'))
-            this.props.history.push('/profile');
+            await API.withAuth()
+                .then(res => {
+                    if (res.status === 200)
+                        this.props.history.push('/profile');
+                })
+                .catch(() => cookies.remove('token'));
         this._mounted = true;
         this.params = this.props.match.params;
         if (this.params.token){

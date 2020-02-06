@@ -125,8 +125,9 @@ const deleteUserSocket = async(socket, userslist) => {
 const findSocketID = (userID, userslist) => {
     if (userslist)
         for (let i = 0; i < userslist.length; i++)
-            if (userslist[i].userID === userID)
+            if (userslist[i].userID === userID) {
                 return userslist[i].socketID;
+            }
     return null;
 }
 

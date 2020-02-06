@@ -54,38 +54,46 @@ class EditProfil extends React.Component {
         const {section} = this.state;
         if (section === 1)
             return(
+                <div className={'EditProfileContainer'}>
                     <BasicsInformations
                         nextsection={this.handleNext}
                         complete={this.state.complete}
                         getcomplete={this.getComplete}
                         />
+                </div>
                 );
         else if (section === 2)
             return (
+                <div className={'EditProfileContainer'}>
                     <AddPhotos
                         prevsection={this.handlePrev}
                         nextsection={this.handleNext}
                         complete={this.state.complete}
                         getcomplete={this.getComplete}
                         />
+                </div>
             );
         else if (section === 3)
             return (
+                <div className={'EditProfileContainer'}>
                     <AddInterests
                         prevsection={this.handlePrev}
                         nextsection={this.handleNext}
                         complete={this.state.complete}
                         getcomplete={this.getComplete}
                        />
+                </div>
             );
         else if (section === 4)
             return (
-                <Location
-                    prevsection={this.handlePrev}
-                    complete={this.state.complete}
-                    getcomplete={this.getComplete}
-                    useCustomAddress={this.useCustomAddress}
-                    />
+                <div className={'EditProfileContainer'}>
+                    <Location
+                        prevsection={this.handlePrev}
+                        complete={this.state.complete}
+                        getcomplete={this.getComplete}
+                        useCustomAddress={this.useCustomAddress}
+                        />
+                </div>
             );
         }
 

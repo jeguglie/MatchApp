@@ -39,13 +39,19 @@ class Signup extends React.Component {
         super(props);
         this.state = {...DEFAULT_STATE};
         this.warnings = {...DEFAULT_ERRORS};
+        this._mounted = false;
     }
 
-    componentDidMount() {
-        this._mounted = true;
+    componentDidMount = async() =>{
         if (cookies.get('token'))
-            this.props.history.push('/profile');
-    }
+            await API.withAuth()
+                .then(res => {
+                    if (res.status === 200)
+                        this.props.history.push('/profile');
+                })
+                .catch(() => cookies.remove('token'));
+        this._mounted = true;
+    };
 
     componentWillUnmount() {
         this._mounted = false;

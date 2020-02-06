@@ -25,6 +25,7 @@ class AddPhotos extends React.Component {
     }
 
     async componentDidMount() {
+        window.scrollTo(0, 0)
         this._mounted = true;
         this._mounted && this.setState({loading: true});
         await API.getPhotos()
@@ -57,7 +58,7 @@ class AddPhotos extends React.Component {
         if(this.state.profileImg.length > 0)
             this.setState({coverImage: this.state.profileImg[0].img_link});
         else
-            this.setState({coverImage : "https://react.semantic-ui.com/images/wireframe/white-image.png"});
+            this.setState({coverImage : "https://localhost:3000/public/img/white-image.png"});
 
     }
     async handleImageUpload () {

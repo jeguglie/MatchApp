@@ -1,5 +1,4 @@
 import React from 'react';
-// import ModalUserLike from "./ModalUserLike/ModalUserLike";
 import ReactNotification from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
 import { store } from 'react-notifications-component';
@@ -15,20 +14,19 @@ class Notifications extends React.Component {
     };
 
     // Sockets
-    s_wallvisit(userIdFocus){this.socket.emit("wall:visit", userIdFocus)};
-    s_like_likedback(userIdFocus){console.log(2);this.socket.emit("like:likedback", userIdFocus)};
-    s_like_likedbackreturn(userIdFocus){this.socket.emit("like:likedbackreturn", userIdFocus)};
-    s_like_unliked(userIdFocus){console.log(1); this.socket.emit("like:unlike", userIdFocus)};
-    s_like = (userIdFocus) => {this.socket.emit("like", userIdFocus)};
-    s_userlogin = () => {this.socket.emit("userlogin")};
-    s_logout = () => {this.socket.emit("disconnectuser")};
+    s_wallvisit(userIdFocus){this.socket.connected && this.socket.emit("wall:visit", userIdFocus)};
+    s_like_likedback(userIdFocus){this.socket.connected && this.socket.emit("like:likedback", userIdFocus)};
+    s_like_likedbackreturn(userIdFocus){this.socket.connected && this.socket.emit("like:likedbackreturn", userIdFocus)};
+    s_like_unliked(userIdFocus){this.socket.connected && this.socket.emit("like:unlike", userIdFocus)};
+    s_like = (userIdFocus) => {this.socket.connected && this.socket.emit("like", userIdFocus)};
+    s_userlogin = () => {this.socket.connected && this.socket.emit("userlogin")};
+    s_logout = () => {this.socket.connected && this.socket.emit("disconnectuser")};
 
     componentDidMount() {
         this.socket.on("like:receive like", (data) => {
             this.props.updateNotifs();
             store.addNotification({
-                title: data.useremitter,
-                message: "Liked your profile",
+                message: data.useremitter + " liked your profile",
                 type: "success",
                 insert: "top",
                 container: "top-right",
@@ -43,8 +41,7 @@ class Notifications extends React.Component {
         this.socket.on("wall:visit", (data) => {
             this.props.updateNotifs();
             store.addNotification({
-                title: data.useremitter,
-                message: "Visited your profile",
+                message: data.useremitter + " visited your profile",
                 type: "warning",
                 insert: "top",
                 container: "top-right",
@@ -58,10 +55,9 @@ class Notifications extends React.Component {
         });
         this.socket.on("like:likedback", (data) => {
             this.props.updateNotifs();
-            this.s_like_likedbackreturn(data.userIDemitter);
+            this.s_like_likedbackreturn(parseInt(data.userIDemitter));
             store.addNotification({
-                title: data.useremitter,
-                message: "Like your profile back. It's a Match !",
+                message: data.useremitter + " like your profile back. It's a Match !",
                 type: "success",
                 insert: "top",
                 container: "top-right",
@@ -72,6 +68,7 @@ class Notifications extends React.Component {
                     onScreen: true
                 }
             });
+
         });
         this.socket.on("like:likedbackreturn", (data) => {
             this.props.updateNotifs();
@@ -92,8 +89,7 @@ class Notifications extends React.Component {
         this.socket.on("like:unlike", (data) => {
             this.props.updateNotifs();
             store.addNotification({
-                title: data.useremitter,
-                message: "Unlike your profile",
+                message: data.useremitter + " unlike your profile",
                 type: "success",
                 insert: "top",
                 container: "top-right",

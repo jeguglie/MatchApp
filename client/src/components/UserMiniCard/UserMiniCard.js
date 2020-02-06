@@ -22,11 +22,55 @@ class UserMiniCard extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if(!equal(this.props.users[0], prevProps.users[0]))
+        if(!equal(this.props.users, prevProps.users)) {
             this._mounted && this.setState({users: this.props.users});
-        if(!equal(this.props.loading, prevProps.loading))
-            this._mounted && this.setState({loading: this.props.loading});
+        }
     }
+
+    // Filters
+    ageFilter = (order) => {
+        let users = this.state.users;
+        this.setState({loading: true});
+        if (order === true) {
+            users.sort(function (a, b) {
+                if (b.age === a.age)
+                    return b.points - a.points;
+                return b.age - a.age;
+            });
+            this._mounted && this.setState({users: users});
+            return ;
+        }
+        else{
+            users.sort(function (a, b) {
+                if (b.age === a.age)
+                    return b.points - a.points;
+                return a.age - b.age;
+            });
+            this._mounted && this.setState({users: users});
+        }
+    };
+
+    distanceFilter = (order) => {
+        let users = this.state.users;
+        if (order) {
+            users.sort(function (a, b) {
+                if (b.distance === a.distance)
+                    return b.points - a.points;
+                return b.distance - a.distance;
+            });
+            this._mounted && this.setState({users: users});
+            return ;
+        }
+        else {
+            users.sort(function (a, b) {
+                if (b.distance === a.distance)
+                    return b.points - a.points;
+                return a.distance - b.distance;
+            });
+            this._mounted && this.setState({users: users});
+        }
+    };
+
     render() {
         const { users, loading } = this.state;
         if (users && users.length) {

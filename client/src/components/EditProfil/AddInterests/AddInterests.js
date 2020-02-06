@@ -47,6 +47,7 @@ class AddInterests extends Component {
     }
 
     async componentDidMount() {
+        window.scrollTo(0, 0);
         this._mounted = true;
         // Set loader and get progress bar
         this.setState({loading: true, interests: []});

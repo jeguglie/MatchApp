@@ -75,6 +75,7 @@ class BasicsInformations extends React.Component {
     }
 
     componentDidMount = async() => {
+        window.scrollTo(0, 0)
         this._mounted = true;
         this._mounted && this.setState({complete: this.props.complete});
         await API.getEditProfilValues()
@@ -140,9 +141,15 @@ class BasicsInformations extends React.Component {
                 this._mounted && this.setState({...this.warnings});
         }
     };
-    handleChange = (e, { value, id }) => {
+    handleChange = _.debounce((e, { value, id }) => {
         this._mounted && this.setState({[id]: value, ["w_" + id]: ''});
-    };
+    }, 300);
+
+    handleChangeFocus = (e) => {
+        let id = e.target.id;
+        if (this.state.id !== '')
+            this._mounted && this.setState({[id]: ''});
+    }
 
     render() {
         const {w_age, w_firstname, age, w_lastname, w_gender, w_interested, w_country, w_bio, complete} = this.state;
@@ -184,18 +191,18 @@ class BasicsInformations extends React.Component {
                                         label='Last Name'
                                         color="white"
                                         id="lastname"
-                                        value={this.state.lastname}
-                                        onChange={_.debounce(this.handleChange, 500, { leading: true })}
-                                        placeholder="Last Name"
+                                        onClick={this.handleChangeFocus}
+                                        onChange={this.handleChange}
+                                        placeholder={this.state.lastname}
                                     />
                                     <Form.Input
                                         error={w_firstname.length > 0 ? w_firstname : null}
                                         fluid
                                         label='First Name'
                                         id="firstname"
-                                        value={this.state.firstname}
+                                        content={this.state.firstname}
+                                        placeholder={this.state.firstname}
                                         onChange={this.handleChange}
-                                        placeholder="First Name"
                                     />
                                 </Form.Group>
                                 <Form.Group widths='equal' className="DropdownBasic">
@@ -204,9 +211,9 @@ class BasicsInformations extends React.Component {
                                         id="gender"
                                         control={Select}
                                         value={this.state.gender}
+                                        placeholder="Select Gender"
                                         options={genderOptions}
                                         label="Select Gender"
-                                        placeholder='Gender'
                                         onChange={this.handleChange}
                                     />
                                     <Form.Field
@@ -226,8 +233,7 @@ class BasicsInformations extends React.Component {
                                         disabled
                                         label='Email'
                                         id="email"
-                                        placeholder="Email"
-                                        value={this.state.email}
+                                        placeholder={this.state.email}
                                         onChange={this.handleChange}
                                     />
                                     <Form.Field
@@ -247,8 +253,7 @@ class BasicsInformations extends React.Component {
                                     label='Bio'
                                     control={TextArea}
                                     id="bio"
-                                    placeholder="Bio"
-                                    value={this.state.bio != null && this.state.bio.length ? this.state.bio : ''}
+                                    placeholder={this.state.bio != null && this.state.bio.length ? this.state.bio : ''}
                                     onChange={this.handleChange}
                                 />
                             </Form>

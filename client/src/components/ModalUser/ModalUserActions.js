@@ -58,7 +58,6 @@ class ModalUserActions extends React.Component{
         this.props.closeFake();
     };
     doHide = async() => {
-        console.log(this.props.userID);
         await API.reportuserhide(this.props.userID)
             .then(response => {
                 if (response.status === 200){

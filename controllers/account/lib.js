@@ -47,7 +47,7 @@ async function getUserId(email){
 async function getNotifications(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["User ID not found, please logout and login."]
         });
     let notifications = [];
@@ -69,7 +69,7 @@ async function getNotifications(req, res){
         }
         return res.status(200).json({notifications: notifications});
     }catch(e){
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Server error"]
         });
     }
@@ -78,7 +78,7 @@ async function getNotifications(req, res){
 async function getNotifNb(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["User ID not found, please logout and login."]
         });
     try {
@@ -91,7 +91,7 @@ async function getNotifNb(req, res){
             return res.status(200).json({notifNb: 0});
 
     }catch(e){
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Server error"]
         });
     }
@@ -99,7 +99,7 @@ async function getNotifNb(req, res){
 async function reportuserhide(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["User ID not found, please logout and login."]
         });
     const {user_id_reported} = req.body;
@@ -127,7 +127,7 @@ async function reportuserhide(req, res){
 async function reportuser(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["User ID not found, please logout and login."]
         });
     const {user_id_reported} = req.body;
@@ -145,7 +145,7 @@ async function reportuser(req, res){
         return res.status(200).json({});
     }
     catch(e){
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Server error"]
         });
     }
@@ -154,7 +154,7 @@ async function reportuser(req, res){
 async function reportuserfake(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["User ID not found, please logout and login."]
         });
     const {user_id_reported} = req.body;
@@ -172,7 +172,7 @@ async function reportuserfake(req, res){
         return res.status(200).json({});
     }
     catch(e){
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Server error"]
         });
     }
@@ -221,7 +221,7 @@ async function updatetotalinterests(userID){
 async function deletenotif(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["User ID not found, please logout and login."]
         });
     try {
@@ -238,14 +238,14 @@ async function deletenotif(req, res){
 
     }catch (e){
         console.log(e);
-        return res.status(500).json({warnings: ["Server error"]});
+        return res.status(400).json({warnings: ["Server error"]});
     }
 }
 
 async function updategeolocate(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["User ID not found, please logout and login."]
         });
     const { latitude, longitude } = req.body;
@@ -258,7 +258,7 @@ async function updategeolocate(req, res){
         await pool.query(text, values);
         return res.status(200).json({});
     } catch(e) {
-        return res.status(500).json({});
+        return res.status(400).json({});
     }
 
 }
@@ -288,7 +288,7 @@ async function signup(req, res) {
     if (!validate.validateFirstName(lastname))
         warnings.w_lastname = "Please use a valid last name.";
     if (Object.values(warnings).some(warning => warning.length))
-        return res.status(409).json({
+        return res.status(400).json({
             warnings: warnings
         });
     try {
@@ -306,7 +306,7 @@ async function signup(req, res) {
                 errors = true;
         }))
         if (errors === true)
-            return res.status(409).json({
+            return res.status(400).json({
                 warnings: warnings
             });
         // Create User
@@ -341,7 +341,7 @@ async function signup(req, res) {
 
     } catch (error) {
         warnings.warnings.push("Catch error");
-        return res.status(500).json({ warnings });
+        return res.status(400).json({ warnings });
     }
 }
 
@@ -391,12 +391,12 @@ async function login(req, res) {
                     else console.log(info);
                 });
                 pool.query(text, values);
-                return res.status(401).json({
+                return res.status(400).json({
                     w_emailconfirm: true,
                 });
             }
             if (!passwordHash.verify(password, response.rows[0].password))
-                return res.status(401).json({
+                return res.status(400).json({
                     w_email: "Wrong email or password"
                 });
             const payload = { email };
@@ -408,14 +408,14 @@ async function login(req, res) {
             return res.status(200).json({connect: true});
         }
         else {
-                return res.status(401).json({
+                return res.status(400).json({
                     w_email: "Wrong email or password"
                 });
         }
     }
     catch (error) {
         console.log(error);
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ['An error occured with server']
         });
     }
@@ -424,7 +424,7 @@ async function login(req, res) {
 async function getEditProfilValues(req, res) {
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["User ID not found, please logout and login."]
         });
     // Get Profile and User complete values
@@ -441,7 +441,7 @@ async function getEditProfilValues(req, res) {
         }
     } catch (e) {
         console.log(e);
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Error during query"]
         });
     }
@@ -450,7 +450,7 @@ async function getEditProfilValues(req, res) {
 async function changemyemail(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return (res.status(500).json({
+        return (res.status(400).json({
             warnings: ["User not found. Please logout and login."]
         }));
     const {email, emailconfirm } = req.body;
@@ -573,10 +573,11 @@ async function userforgot(req, res){
             text: 'Hello !\nHere is the link to reset your password http://localhost:3000/forgotpassword/'+hashtoken,
         };
         transport.sendMail(message, function(err, info) {
-            if (err)
-                console.log(err)
-            else
-                console.log(info);
+            return;
+            // if (err)
+            //     console.log(err)
+            // else
+            //     console.log(info);
         });
         pool.query(text, values);
         res.status(200).json({
@@ -595,7 +596,7 @@ async function userforgot(req, res){
 async function updateEditProfilValues(req, res) {
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return (res.status(500).json({
+        return (res.status(400).json({
             warnings: ["User not found. Please logout and login."]
         }));
     const {lastname, firstname, interested, age, country, gender, bio} = req.body.state;
@@ -620,7 +621,7 @@ async function updateEditProfilValues(req, res) {
     if ((typeof bio !== 'undefined' && bio) && (bio.length < 3 && bio.length > 90))
         valid = true;
     if (!find || !findage || !valid)
-        return (res.status(409)).json({
+        return (res.status(400)).json({
             warnings: ["Wrong input was sent. Please send valid data."]
         });
     try {
@@ -642,7 +643,7 @@ async function updateEditProfilValues(req, res) {
             complete: total
         });
        } catch (error) {
-            return res.status(500).json({
+            return res.status(400).json({
                 warnings: ["Error during the save of your profile"]
             });
     }
@@ -651,7 +652,7 @@ async function updateEditProfilValues(req, res) {
 async function addInterests(req, res) {
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return (res.status(500));
+        return (res.status(400));
     // Get interest
     const regex = new RegExp('/(^|\\B)#(?![0-9_]+\\b)([a-zA-Z0-9_]{1,30})(\\b|\\r)/g');
     const interest = req.body.interest.trim();
@@ -662,7 +663,7 @@ async function addInterests(req, res) {
     if (regex.test(interest))
         warnings.push("Your interest is not valid. Only letter and numeric value is accepted");
     if (warnings.length > 0)
-        return res.status(401).json({
+        return res.status(400).json({
             warnings: warnings
         });
     try {
@@ -672,7 +673,7 @@ async function addInterests(req, res) {
         let response = await pool.query(text, values);
         // If user reach 30
         if (response.rows.length >= 30)
-            return res.status(401).json({
+            return res.status(400).json({
                 warnings: ["Limit of 30 interests per profile"]
             })
         // Check if already exist in user_interests database
@@ -680,7 +681,7 @@ async function addInterests(req, res) {
         values = [userID, interest]
         response = await pool.query(text, values);
         if (response.rows.length > 0){
-            return res.status(401).json({
+            return res.status(400).json({
                 warnings: ["You already add this interest, try with other one"]
             })
         }
@@ -709,11 +710,11 @@ async function addInterests(req, res) {
                 warnings: ["Your interest \""+interest+"\" was successfully added"]
             });
         }
-        return res.status(401).json({
+        return res.status(400).json({
             warnings: ["Error when trying to get interest ID"]
         });
     } catch (error) {
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Server error"]
         });
     }
@@ -723,7 +724,7 @@ async function addInterests(req, res) {
 async function getInterests(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return (res.status(500));
+        return (res.status(400));
     try {
         let text = 'SELECT interest FROM interests';
         let response = await pool.query(text);
@@ -739,7 +740,7 @@ async function getInterests(req, res){
                 results: [],
             });
     } catch(error) {
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Catch error"]
         });
     }
@@ -748,7 +749,7 @@ async function getInterests(req, res){
 async function getUserInterests(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return (res.status(500).json({
+        return (res.status(400).json({
             warnings: ["Can't get user ID, please logout and login"]
         }));
     try {
@@ -768,7 +769,7 @@ async function getUserInterests(req, res){
                 interests: []
             });
     } catch (error) {
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Catch error"]
         });
     }
@@ -777,7 +778,7 @@ async function getUserInterests(req, res){
 async function getComplete(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return (res.status(500));
+        return (res.status(400));
     try {
         let text = 'SELECT * FROM user_complete WHERE user_id = $1';
         let values = [userID];
@@ -788,16 +789,16 @@ async function getComplete(req, res){
             });
         }
         else
-            return res.status(500).json({});
+            return res.status(400).json({});
     } catch (error) {
-        return res.status(500).json({});
+        return res.status(400).json({});
     }
 }
 
 async function deleteInterest(req, res){
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return (res.status(500).json({
+        return (res.status(400).json({
             warnings: ["Can't get user ID, please logout and login"]
         }));
     try {
@@ -819,7 +820,7 @@ async function deleteInterest(req, res){
                 warnings: ["You are not allowed to delete this interest"]
             });
     } catch (error) {
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Catch error"]
         });
     }
@@ -828,7 +829,7 @@ async function deleteInterest(req, res){
 async function getConnectedUserLocation(req, res) {
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return (res.status(500).json({
+        return (res.status(400).json({
             warnings: ["Can't get user ID, please logout and login"]
         }));
     try {
@@ -845,7 +846,7 @@ async function getConnectedUserLocation(req, res) {
         })
 
     } catch (error) {
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Catch error"]
         });
     }
@@ -854,7 +855,7 @@ async function getConnectedUserLocation(req, res) {
 async function checkUserView(req, res) {
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return (res.status(500).json({
+        return (res.status(400).json({
             warnings: ["Can't get user ID, please logout and login"]
         }));
     try {
@@ -869,7 +870,7 @@ async function checkUserView(req, res) {
         })
 
     } catch (error) {
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Catch error"]
         });
     }
@@ -878,7 +879,7 @@ async function checkUserView(req, res) {
 async function getUserIdProfile(req, res) {
     const userID = await getUserId(res.locals.email);
     if (userID === null)
-        return (res.status(500).json({
+        return (res.status(400).json({
             warnings: ["Can't get user ID, please logout and login"]
         }));
     let liked = false;
@@ -926,11 +927,11 @@ async function getUserIdProfile(req, res) {
                     user: user
                 });
             }
-            return res.status(401).json('Bad Request');
+            return res.status(400).json('Bad Request');
         }
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Catch error"]
         });
     }
@@ -940,7 +941,6 @@ async function getUserIdProfile(req, res) {
             let text = 'UPDATE profile SET last_date_online = $1, online = $2 WHERE user_id = $3';
             let value = [new Date(), connected, userID];
             await pool.query(text, value);
-            console.log(1);
             return true;
         }catch (e){
             console.log(e);

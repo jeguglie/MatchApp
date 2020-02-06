@@ -24,7 +24,6 @@ async function getUsers(req, res){
             values = [gender, interested, ageRange.min, ageRange.max, popularityRange.min, popularityRange.max, userID];
             response = await pool.query(text, values);
             let users = response.rows;
-
             // // Get hided users and remove them
             // text = 'SELECT * FROM user_hide WHERE user_id = $1';
             // values = [userID];

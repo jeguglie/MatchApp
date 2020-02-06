@@ -27,6 +27,7 @@ class Location extends React.Component {
     }
 
     async componentDidMount() {
+        window.scrollTo(0, 0);
         this._mounted = true;
         this._mounted && this.setState({loading: true});
         await VALIDATE.sleepLoader(200);

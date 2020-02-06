@@ -30,7 +30,10 @@ class App extends Component {
         this._mounted = true;
     }
 
-    updateNotifs = () => { this.innerRefNotifHistory && this.innerRefNotifHistory.current && this.innerRefNotifHistory.current.updateNotifs() };
+    updateNotifs = () => {
+        this.innerRefNotifHistory && this.innerRefNotifHistory.current && this.innerRefNotifHistory.current.updateNotifs();
+        this.innerRef && this.innerRef.current.updateNotifNb();
+    };
     updateNotifNbNavbar = async() => { this.innerRef && this.innerRef.current.updateNotifNb() };
 
 

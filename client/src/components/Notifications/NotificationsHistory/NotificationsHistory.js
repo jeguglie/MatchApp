@@ -52,10 +52,12 @@ class NotificationsHistory extends React.Component{
     };
 
     handleDismiss = async(i, notif_id) => {
-        await this.props.updateNotifNb();
         if (this._mounted) {
             this.state.notifications.splice(i, 1);
-            this._mounted && this.setState({notifications: this.state.notifications}, () => {API.deletenotif(notif_id)});
+            this._mounted && this.setState({notifications: this.state.notifications}, async() => {
+                await API.deletenotif(notif_id);
+                await this.props.updateNotifNb();
+            });
         }
     };
 
@@ -68,9 +70,9 @@ class NotificationsHistory extends React.Component{
 
     updateNotifs = async() => {
         await API.getNotifications()
-            .then(res => {
+            .then(async(res) => {
                 if (res.status === 200) {
-                    this._mounted && this.setState({notifications: res.data.notifications})
+                    this._mounted && this.setState({notifications: res.data.notifications});
                     this.props.updateNotifNb();
                 }
             })

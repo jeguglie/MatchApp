@@ -52,8 +52,8 @@ class NavbarBootstrap extends React.Component {
         this._mounted && this.setState({activeItem: this.props.location.pathname});
     };
 
-    updateNotifNb = () => {
-        API.getNotifNb()
+    updateNotifNb = async() => {
+        await API.getNotifNb()
             .then(res => {
                 if (res.status === 200)
                     this._mounted && this.setState({notifNb: res.data.notifNb})
@@ -182,7 +182,7 @@ class NavbarBootstrap extends React.Component {
                         <Icon size='large' name='bell' />
                         <div className="badgecontainernotif">
                             <span className="itemMenu">Notifications</span>
-                            {notifNb > 0 ? <span class="badgenotif">{notifNb}</span> : null}
+                            {notifNb > 0 ? <span className="badgenotif">{notifNb}</span> : null}
                         </div>
                     </Nav.Link>
                 </Nav>

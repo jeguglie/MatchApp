@@ -16,6 +16,10 @@ const DEFAULT_POSITION = {
         lat: 48.845289,
         lng: 2.338674
     },
+    defaultCenter: {
+        lat: 48.845289,
+        lng: 2.338674
+    },
     zoom: 11,
     innerRef: null,
 }
@@ -53,13 +57,13 @@ class SimpleMap extends Component {
         }
     }
     render() {
-        const {center, zoom, lat, lng} = this.state;
+        const {center, defaultCenter, zoom, lat, lng} = this.state;
         return (
             <div style={{ height: '100%', width: '100%' }}>
                 <div id="mapContent">
                     <GoogleMapReact
                         bootstrapURLKeys={{ key: 'AIzaSyDMyRL-0tVdDqmG-aCpDaSsI0IbZqb7FQg' }}
-                        defaultCenter={center}
+                        defaultCenter={defaultCenter}
                         center={center}
                         defaultZoom={zoom}
                         className={"content"} >
