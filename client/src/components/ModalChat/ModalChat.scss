@@ -1,0 +1,40 @@
+.inputChat {
+  margin: -1.5em !important;
+  margin-top: 1.5em !important;
+  & button.ui.icon.button {
+    border-radius: 0 !important;
+    background-color: #db366e;
+    color: white !important;
+    font-size: 1.2em !important;
+  }
+  & button.ui.icon.button:hover {
+    border-radius: 0 !important;
+    background-color: #bd2f5f;
+    color: #ffffff !important;
+    font-size: 1.2em !important;
+  }
+  & input {
+    border-radius: 0 !important;
+    background-color: #db366e;
+    font-size: 1.2em !important;
+  }
+}
+
+.chatUserBadge {
+  padding: 5px;
+  border-radius: 10px;
+  background-color: #bc2e5e;
+  color: white;
+}
+
+.HeaderChat {
+  background-color: #db366e !important;
+  color: white !important;
+  border: none !important;
+}
+
+.ModalChat {
+  & i.close.icon {
+    color: white !important;
+  }
+}

@@ -500,8 +500,6 @@ async function changepassword(req, res){
         warnings: [],
     };
     let errors = false;
-    let text = 'SELECT * FROM users WHERE tokenmail = $1';
-    let value = [token];
     // VALIDATION
     if (!validate.validatePassword(password))
         warnings.w_password = "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters.";
@@ -517,6 +515,8 @@ async function changepassword(req, res){
         });
     let hashpassword = passwordHash.generate(password);
     try {
+        let text = 'SELECT * FROM users WHERE tokenmail = $1';
+        let value = [token];
         let response = await pool.query(text, value);
         if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length) {
             if (response.rows[0].tokenmail === token) {
@@ -536,15 +536,16 @@ async function changepassword(req, res){
                 let connected = { bool: false, mail : '' };
                 jwt.verify(token, secret, function(err, decoded) {
                     if (!err) {
-                        connected = true;
+                        connected.bool = true;
                         connected.mail = decoded.email;
                     }
                 });
-                if (connected.bool === true && connected.mail.length)
+                if (connected.bool === true && connected.mail.length) {
                     text = 'UPDATE users SET password = $1 WHERE email = $2';
                     value = [hashpassword, connected.mail];
-                    pool.query(text, value);
+                    await pool.query(text, value);
                     return res.status(200).json({})
+                }
             }
             return res.status(400).json({
                 warnings: "Token is invalid"
@@ -552,6 +553,7 @@ async function changepassword(req, res){
         }
     }
     catch (e){
+        console.log(e);
         return res.status(400).json({
             warnings: "Token is invalid"
         })
@@ -983,6 +985,37 @@ async function getUserIdProfile(req, res) {
         }
 }
 
+async function getMatchedUsers(req, res){
+    const userID = await getUserId(res.locals.email);
+    if (userID === null)
+        return (res.status(400).json({
+            warnings: ["Can't get user ID, please logout and login"]
+        }));
+    try {
+       let matchedusers = [];
+       let text = 'SELECT * FROM matchedusers M INNER JOIN pictures PIC ON PIC.user_id = M.user_id INNER JOIN profile P ON P.user_id = M.user_id WHERE M.user_id2 = $1 AND PIC.img_order = 0';
+       let text2 = 'SELECT * FROM matchedusers M INNER JOIN pictures PIC ON PIC.user_id = M.user_id2 INNER JOIN profile P ON P.user_id = M.user_id2 WHERE M.user_id = $1 AND PIC.img_order = 0';
+       let response = await pool.query(text, [userID]);
+       let response2 = await pool.query(text2, [userID]);
+       if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length){
+            response.rows.map(obj => {
+                matchedusers.push(obj);
+            });
+        }
+        if (typeof response2 !== 'undefined' && typeof response2.rows !== 'undefined' && response2.rows.length){
+            response2.rows.map(obj => {
+                matchedusers.push(obj);
+            });
+        }
+        return res.status(200).json({
+            matchedusers: matchedusers
+        })
+    } catch(e){
+        console.log(e);
+        return res.status(400).json({});
+    }
+}
+
 exports.setUserLastConnection = setUserLastConnection;
 exports.updatetotalcomplete = updatetotalcomplete;
 exports.login = login;
@@ -1010,3 +1043,4 @@ exports.getConnectedUserLocation = getConnectedUserLocation;
 exports.checkUserView = checkUserView;
 exports.getUserIdProfile = getUserIdProfile;
 exports.getNameUserId = getNameUserId;
+exports.getMatchedUsers = getMatchedUsers;

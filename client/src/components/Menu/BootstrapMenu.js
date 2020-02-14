@@ -169,9 +169,9 @@ class NavbarBootstrap extends React.Component {
 
                     </NavDropdown>
                     <Nav.Link
-                        className={activeItem === '/messages' ? "activeItem" : null}
-                        redirect='messages'
-                        onClick={() => this.handleItemClick(null, "/messages")}>
+                        className={activeItem === '/chat' ? "activeItem" : null}
+                        redirect='chat'
+                        onClick={() => this.handleItemClick(null, "/chat")}>
                         <Icon size='large' name='conversation' />
                         <span className="itemMenu">Messages</span>
                     </Nav.Link>

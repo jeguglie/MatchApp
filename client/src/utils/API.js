@@ -296,5 +296,44 @@ export default {
                 headers: headers
             }
         )
+    },
+    getMatchedUsers: () => {
+        return axios.get(
+            `${burl}/getMatchedUsers`,
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
+    sendMessage: (user_id, message) => {
+        return axios.post(
+            `${burl}/sendMessage`,
+            {user_id, message},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
+    getMessages: (user_id_2) => {
+        return axios.get(
+            `${burl}/getMessages`,
+            {user_id_2},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
+    deleteMessages: (user_id_2) => {
+        return axios.get(
+            `${burl}/deleteMessages`,
+            {user_id_2},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
     }
 };

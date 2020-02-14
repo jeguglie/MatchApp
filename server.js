@@ -6,6 +6,7 @@ const app = express();
 const faker = require('./controllers/account/faker');
 const match = require('./controllers/account/match');
 const account = require('./controllers/account/lib.js');
+const chat = require('./controllers/account/chat.js');
 const wallActions = require('./controllers/account/userWallActions.js');
 const addphotos = require('./controllers/account/addphotos.js');
 const notifications = require('./controllers/account/notifications');
@@ -52,9 +53,13 @@ app.post('/checkUserView', withAuth, account.checkUserView);
 app.post('/getUserIdProfile', withAuth, account.getUserIdProfile);
 app.post('/userLike', withAuth, wallActions.userLike);
 app.post('/deletenotif', withAuth, account.deletenotif);
+app.post('/sendMessage', withAuth, chat.sendMessage);
+app.get('/getMessages', withAuth, chat.getMessages);
+app.get('/deleteMessages', withAuth, chat.deleteMessages);
 app.get('/checkToken', withAuth, function(req, res) {res.sendStatus(200);});
 app.get('/getNotifications', withAuth, account.getNotifications);
 app.get('/getNotifNb', withAuth, account.getNotifNb);
+app.get('/getMatchedUsers', withAuth, account.getMatchedUsers);
 app.get('/faker', faker.matchAppFaker);
 app.get('/logout', withAuth, async(req, res) => {
     const userID = await account.getUserId(res.locals.email);
@@ -66,6 +71,17 @@ app.get('/logout', withAuth, async(req, res) => {
 // Notifications
 io.sockets.on('connection', socket => {
     notifications.pushUserSocket(socket, userslist);
+
+    // Chat
+    socket.on('message:send', async(to_user_id, message) => {
+        let socketID =  notifications.findSocketID(to_user_id, userslist);
+        if (socketID){
+            let userIDemitter = await notifications.getUserIDFromSocketEmitter(socket, userslist);
+            if (userIDemitter && await notifications.usercansendnotif(userIDemitter, to_user_id))
+                io.sockets.to(socketID).emit('message:receive', {message: message, timestamp: new Date().getDate()});
+        }
+    });
+    // ___________________________
     socket.on("userlogin", async() => {
         let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
         userIDemitter && await account.setUserLastConnection(userIDemitter, 1);
@@ -89,7 +105,6 @@ io.sockets.on('connection', socket => {
                 io.sockets.to(socketID).emit('like:receive like', {useremitter: name});
             }
         }
-
     });
     socket.on('wall:visit', async(userID) => {
         let socketID =  notifications.findSocketID(userID, userslist);
@@ -113,10 +128,7 @@ io.sockets.on('connection', socket => {
     });
     socket.on('like:likedback', async(userID) => {
         let socketID =  notifications.findSocketID(userID, userslist);
-        console.log(socketID);
-
         if (socketID) {
-            console.log(2);
             let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
             if (userIDemitter && await  notifications.usercansendnotif(userIDemitter, userID)) {
                 let name = await account.getNameUserId(userIDemitter, userslist);

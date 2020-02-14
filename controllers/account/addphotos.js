@@ -71,7 +71,7 @@ async function uploadPhoto(req, res) {
             return res.status(200).json({
                 warnings: ["Number limit of images is 5"]
             });
-        let img_order = response.rows.length === 1 ? 0 : response.rows.length + 1;
+        let img_order = response.rows.length < 1 ? 0 : response.rows.length + 1;
         // Add image row and image order
         text = 'INSERT INTO pictures(user_id, img_link, img_order) VALUES ($1, $2, $3)';
         values = [user_id, 'http://localhost:5000/' + pathImg, img_order];
@@ -121,7 +121,7 @@ async function deleteImage(req, res) {
             warnings: ["User ID not found, please logout and login."]
         });
     try {
-        let img_id = req.body.imgID
+        let img_id = req.body.imgID;
         let text = 'SELECT img_id FROM pictures WHERE img_id = $1 AND user_id = $2';
         let values = [img_id, user_id];
         let response = await pool.query(text, values);

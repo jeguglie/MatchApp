@@ -19,6 +19,7 @@ const DEFAULT_STATE = {
     userView: false,
     userIdFocusLoading: null,
     interests: [],
+    userInterests: [],
     visible: false,
     aDescendant: false,
     dDescendant: false,
@@ -52,10 +53,10 @@ class Wall extends React.Component {
                     await API.getUserInterests()
                         .then(response => {
                             if (response.status === 200)
-                                this._mounted && this.setState({interests: response.data.interests})
+                                this._mounted && this.setState({interests: response.data.interests, userInterests: response.data.interests})
                         });
                     this._mounted && this.setState({userView: true});
-                    this.searchMatch(this.state.distanceRange, this.state.ageRange, this.state.popularityRange);
+                    this.searchMatch(this.state.distanceRange, this.state.ageRange, this.state.popularityRange, []);
                 }
             })
             .catch( () => {
@@ -81,7 +82,7 @@ class Wall extends React.Component {
 
     // Search button handle
     searchMatch = async(distanceRange, ageRange, popularityRange, interests) => {
-        this._mounted && this.setState(prevState => ({loading: true, interests: interests && interests.length ? interests : prevState.interests}));
+        this._mounted && this.setState(prevState => ({loading: true, interests: interests && interests.length ? interests : prevState.userInterests}));
         let users = [];
         await API.getUsers(distanceRange, ageRange, popularityRange, interests)
             .then(response => {

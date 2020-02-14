@@ -5,14 +5,14 @@ import { store } from 'react-notifications-component';
 import io from 'socket.io-client';
 class Notifications extends React.Component {
 
-    state = {
-        userID: null,
-    };
     constructor(props){
      super(props);
-     this.socket = io('http://localhost:8000');
+        this.state = { userID: null };
+        this.socket = io('http://localhost:8000');
     };
 
+    // Sockets chat
+    s_message_send(to_user_id, message){this.socket.connected && this.socket.emit("message:send", to_user_id, message)};
     // Sockets
     s_wallvisit(userIdFocus){this.socket.connected && this.socket.emit("wall:visit", userIdFocus)};
     s_like_likedback(userIdFocus){this.socket.connected && this.socket.emit("like:likedback", userIdFocus)};
@@ -23,6 +23,7 @@ class Notifications extends React.Component {
     s_logout = () => {this.socket.connected && this.socket.emit("disconnectuser")};
 
     componentDidMount() {
+        this.socket.on("message:receive", (data) => { this.props.s_message_receive(data.message, data.timestamp) });
         this.socket.on("like:receive like", (data) => {
             this.props.updateNotifs();
             store.addNotification({

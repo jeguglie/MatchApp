@@ -45,11 +45,14 @@ class Filter extends React.Component {
 
     // Search click
     handleClick = () => {
+        let interests = [];
+        if (this.innerRef.current && this.innerRef.current.state.value && this.innerRef.current.state.value.length > 0)
+            interests = this.innerRef.current.state.value;
         this.props.searchMatch(
             this.state.distanceRange,
             this.state.ageRange,
             this.state.popularityRange,
-            this.innerRef.current && this.innerRef.current.state.value
+            interests
         );
     };
 
@@ -122,12 +125,10 @@ class Filter extends React.Component {
                                 <Grid columns={'equal'}>
                                     <Grid.Row  >
                                         <Grid.Column width={6}>
-                                            {/*<Segment className={'CheckBoxContainer'}>*/}
                                                 <Grid.Row centered>
                                                     <Checkbox checked={checked} onClick={checked ? this.disableCheckBox : this.activeCheckBox} toggle />
                                                     <p id={'includeMyInterests'}>Use my interests</p>
                                                 </Grid.Row>
-                                            {/*</Segment>*/}
                                         </Grid.Column>
                                         <Grid.Column>
                                             <Grid.Row>

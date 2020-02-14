@@ -24,18 +24,24 @@ async function getUsers(req, res){
             values = [gender, interested, ageRange.min, ageRange.max, popularityRange.min, popularityRange.max, userID];
             response = await pool.query(text, values);
             let users = response.rows;
-            // // Get hided users and remove them
-            // text = 'SELECT * FROM user_hide WHERE user_id = $1';
-            // values = [userID];
-            // response = await pool.query(text, values);
-            // let hidedusers = [];
-            // if (typeof response != 'undefined' && typeof response.rows != 'undefined' && response.rows.length){
-            //     response.rows.map(obj => {
-            //         return hidedusers.push(obj.user_id_reported);
-            //     });
-            //     console.log(hidedusers);
-            // }
-            // users = users.filter(obj => word.length > 6);
+            // Get hided users and remove them
+            text = 'SELECT * FROM user_hide WHERE user_id = $1';
+            values = [userID];
+            response = await pool.query(text, values);
+            let hidedusers = [];
+            if (typeof response != 'undefined' && typeof response.rows != 'undefined' && response.rows.length){
+                response.rows.map(obj => {
+                    return hidedusers.push(obj.user_id_reported);
+                });
+                console.log(hidedusers);
+            }
+            users = users.filter(obj =>{
+                for (var key in hidedusers) {
+                    if (obj.user_id === hidedusers[key])
+                        return false;
+                }
+                return true;
+            })
             // Map all users and assign interests list
             users = users.map((user) = async(user) =>{
                 // if (hidedusers.find(userID => user.user_id === userID))
@@ -63,11 +69,13 @@ async function getUsers(req, res){
                     let usersCinterests = [];
                     if (interests && interests.length > 0) {
                         usersCinterests = interests;
-                        console.log(interests);
+                        interests.map(e => {
+                            return usersCinterests.push(Object.assign({interest: e}));
+                        })
                     }
                     else {
                         // Get connected user interests
-                        text = 'SELECT * FROM user_interests WHERE user_id = $1';
+                        text = 'SELECT * FROM user_interests U INNER JOIN interests I ON U.interest_id = I.id WHERE user_id = $1';
                         values = [userID];
                         response = await pool.query(text, values);
                         usersCinterests = response.rows;
@@ -82,9 +90,9 @@ async function getUsers(req, res){
                     users = users.filter(user => user.distance <= distanceRange);
                     // Add point if filtered users have same interests
                     for (let i = 0; i < users.length; i++){
+                        let nbInterests = 0;
                         for (let j = 0; j < users[i].interests.length; j++){
                             // Map interests tab on user and add point
-                            let nbInterests = 0;
                             usersCinterests.map(e => {
                                 if (e.interest === users[i].interests[j].interest) {
                                     nbInterests += 1;
@@ -92,7 +100,7 @@ async function getUsers(req, res){
                                 if (j + 1 === users[i].interests.length) {
                                     users[i].points += fibonacci(nbInterests);
                                 }
-                            })
+                            });
                         }
                     }
                     // Sort users by point

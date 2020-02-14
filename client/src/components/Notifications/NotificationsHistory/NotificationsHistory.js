@@ -82,7 +82,7 @@ class NotificationsHistory extends React.Component{
                     this.props.updateNotifNb();
                 }
             })
-    }
+    };
 
 
     render(){

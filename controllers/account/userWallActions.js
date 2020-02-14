@@ -40,6 +40,8 @@ async function userLike(req, res) {
             if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length) {
                 await notifications.pushnotifications(userLikedID, userID, 4);
                 unliked = true;
+                // Delete row un matched user
+                await pool.query('DELETE FROM matchedusers WHERE user_id = $1 AND user_id2 = $2 OR user_id = $2 AND user_id2 = $1', [userID, userLikedID])
             }
             // Delete like row
             text = 'DELETE FROM user_likes WHERE user_id_like = $1 AND user_id_liked = $2';
@@ -63,6 +65,13 @@ async function userLike(req, res) {
                 await notifications.pushnotifications(userID, userLikedID, 3);
                 await notifications.pushnotifications(userLikedID, userID, 3);
                 likedback = true;
+                // Insert in matched user
+                text = 'SELECT * FROM matchedusers WHERE user_id = $1 OR user_id2 = $2 AND user_id = $1 OR user_id2 = $2';
+                values = [userID, userLikedID];
+                response = await pool.query(text, values);
+                if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length < 1) {
+                    await pool.query('INSERT INTO matchedusers(user_id, user_id2) VALUES ($1, $2)', [userID, userLikedID])
+                }
             }
 
         }

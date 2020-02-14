@@ -32,7 +32,11 @@ async function matchAppFaker(req, res) {
             "DELETE FROM user_fake WHERE 1 = 1",
             "DELETE FROM user_hide WHERE 1 = 1",
             "DELETE FROM user_report WHERE 1 = 1",
-            "DELETE FROM user_likes WHERE 1 = 1;"
+            "DELETE FROM user_likes WHERE 1 = 1;",
+            "DELETE FROM matchedusers WHERE 1 = 1;",
+            "DELETE FROM chat WHERE 1 = 1;",
+            "DELETE FROM messages WHERE 1 = 1;"
+
         ];
         texts.map(async (request) => { await pool.query(request) });
 
