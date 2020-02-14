@@ -9,8 +9,8 @@ async function sendMessage(req, res){
         }));
     try {
         const { user_id, message } = req.body;
-        let text = 'INSERT INTO messages(user_id, user_id_dest, timestamp, message) VALUES ($1, $2, $3, $4)';
-        let values = [userID, user_id, new Date().getDate(), message.toString()];
+        let text = 'INSERT INTO chat(user_id, user_id_dest, timestamp, message) VALUES ($1, $2, $3, $4)';
+        let values = [userID, user_id, new Date(), message.toString()];
         await pool.query(text, values);
         return res.status(200).json({
             response: "Send"
@@ -29,8 +29,8 @@ async function getMessages(req, res){
         }));
     try {
         const { user_id_2 } = req.body;
-        let text = 'SELECT * FROM messages WHERE user_id_dest = $1 AND user_id = $2 ORDER BY timestamp DESC';
-        let values = [userID, user_id_2];
+        let text = 'SELECT * FROM chat WHERE user_id_dest = $1 AND user_id = $2 OR user_id = $1 AND user_id_dest = $2 ORDER BY timestamp ASC';
+        let values = [user_id_2, userID];
         let response = await pool.query(text, values);
         if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows)
             return res.status(200).json({ messages: response.rows });
@@ -50,7 +50,7 @@ async function deleteMessages(req, res) {
         }));
     try {
         const { user_id_2 } = req.body;
-        let text = 'DELETE FROM messages WHERE user_id_dest = $1 AND user_id = $2C';
+        let text = 'DELETE FROM chat WHERE user_id_dest = $1 AND user_id = $2C';
         let values = [userID, user_id_2];
         await pool.query(text, values);
         return res.status(200).json({})

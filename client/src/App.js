@@ -13,6 +13,8 @@ import NotificationsHistory from "./components/Notifications/NotificationsHistor
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import ChangePassword from './components/ForgotPassword/ChangePassword';
 import ChangeMyEmail from "./components/EditProfil/ChangeMyMail/ChangeMyMail";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 
 class App extends Component {
@@ -32,24 +34,30 @@ class App extends Component {
     // Notifications update
     updateNotifs = () => {
         this.innerRefNotifHistory && this.innerRefNotifHistory.current && this.innerRefNotifHistory.current.updateNotifs();
-        this.innerRef && this.innerRef.current.updateNotifNb();
+        this.innerRef && this.innerRef.current && this.innerRef.current.updateNotifNb();
     };
-    updateNotifNbNavbar = async () => { this.innerRef && this.innerRef.current.updateNotifNb() };
+    updateNotifNbNavbar = async () => { this.innerRef &&  this.innerRef.current && this.innerRef.current.updateNotifNb() };
 
     // Chat Sockets
-    s_message_send = (to_user_id, message, timestamp) => { this.innerRefSockets && this.innerRefSockets.current.s_message_send(to_user_id, message, timestamp); };
-    s_message_receive = (message) => { this.innerRefChat && this.innerRefChat.current.s_message_receive(message) };
+    s_message_send = (to_user_id, message, timestamp) => { this.innerRefSockets && this.innerRefSockets.current && this.innerRefSockets.current.s_message_send(to_user_id, message, timestamp); };
+    s_message_receive = (message, user_id_emitter, user_id_receiver) => { this.innerRefChat && this.innerRefChat.current && this.innerRefChat.current.s_message_receive(message, user_id_emitter, user_id_receiver) };
 
     // Sockets
-    s_wallvisit = (userIdFocus) => { this.innerRefSockets && this.innerRefSockets.current.s_wallvisit(userIdFocus) };
-    s_like_likedback = (userIdFocus) => { this.innerRefSockets && this.innerRefSockets.current.s_like_likedback(userIdFocus) };
-    s_like_unliked = (userIdFocus) => { this.innerRefSockets && this.innerRefSockets.current.s_like_unliked(userIdFocus) };
-    s_like = (userIdFocus) => { this.innerRefSockets && this.innerRefSockets.current.s_like(userIdFocus) };
-    s_userlogin = () => { this.innerRefSockets && this.innerRefSockets.current.s_userlogin() };
-    s_logout = () => { this.innerRefSockets && this.innerRefSockets.current.s_logout() };
+    s_wallvisit = (userIdFocus) => { this.innerRefSockets && this.innerRefSockets.current && this.innerRefSockets.current.s_wallvisit(userIdFocus) };
+    s_like_likedback = (userIdFocus) => { this.innerRefSockets && this.innerRefSockets.current && this.innerRefSockets.current.s_like_likedback(userIdFocus) };
+    s_like_unliked = (userIdFocus) => { this.innerRefSockets && this.innerRefSockets.current && this.innerRefSockets.current.s_like_unliked(userIdFocus) };
+    s_like = (userIdFocus) => { this.innerRefSockets && this.innerRefSockets.current && this.innerRefSockets.current.s_like(userIdFocus) };
+    s_userlogin = (token) => { this.innerRefSockets && this.innerRefSockets.current && this.innerRefSockets.current.s_userlogin(token) };
+    s_logout = () => { this.innerRefSockets && this.innerRefSockets.current && this.innerRefSockets.current.s_logout() };
 
     // Handle Connect
-    isConnected = (bool) => { this.innerRef && this.innerRef.current.handleConnected(bool) };
+    isConnected = (bool) => {
+        this.innerRef && this.innerRef.current.handleConnected(bool);
+        if (bool) {
+            if (cookies.get('token'))
+                this.s_userlogin(cookies.get('token'));
+        }
+    };
 
     render() {
         return (

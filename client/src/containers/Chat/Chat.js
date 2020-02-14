@@ -20,7 +20,7 @@ class Chat extends React.Component{
     }
 
     // Sockets
-    s_message_receive = (message) => { this.innerRefModalChat.current && this.innerRefModalChat.current.addMessage(message, false)};
+    s_message_receive = (message, user_id_emitter, user_id_receiver) => { this.innerRefModalChat && this.innerRefModalChat.current && this.innerRefModalChat.current.addMessage(message, user_id_emitter, user_id_receiver)};
 
     componentDidMount = async() => {
         this._mounted = true;

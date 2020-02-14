@@ -1,7 +1,6 @@
 import React from 'react';
-import {Form, Modal, Input, Divider, Icon } from 'semantic-ui-react'
+import { Form, Modal, Input, Icon } from 'semantic-ui-react'
 import API from '../../utils/API';
-const moment = require('moment');
 
 class ModalChat extends React.Component {
     constructor(props){
@@ -13,11 +12,14 @@ class ModalChat extends React.Component {
             messages: [],
         };
         this.innerRef = React.createRef();
-
+        this.innerRefScroll = React.createRef();
     }
 
     componentDidMount() {
         this._mounted = true;
+    }
+    componentWillUnmount() {
+        this._mounted = false;
     }
 
     // Outside Ref
@@ -26,41 +28,67 @@ class ModalChat extends React.Component {
         await API.getMessages(user.user_id)
             .then(res => {
                 if (res.status === 200)
-                    this._mounted && this.setState({messages: res.data.messages});
+                    this._mounted && this.setState({messages: res.data.messages}, () => {
+                        this.innerRefScroll && this.innerRefScroll.current && this.innerRefScroll.current.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'end',
+                            inline: 'end',
+                        });
+                    });
             })
     };
     handleClose = () => {this._mounted && this.setState({showModal: false, user: [], messages: []})};
     handleSend = async() => {
-        const message = this.innerRef.current.inputRef.current.value.toString();
-        const { user_id } = this.state;
+        const message = this.innerRef && this.innerRef.current && this.innerRef.current.inputRef.current.value.toString();
+        const user_id = this.state.user.user_id;
         await API.sendMessage(user_id, message)
             .then(res => {
                 if (res.status === 200) {
                     this.addMessage(message, true);
-                    this.props.s_message_send(user_id, message);
+                    this._mounted && this.props.s_message_send(user_id, message);
                 }
             })
     };
 
-    addMessage = (message, bool) => {
-        this._mounted && this.setState(prevState => {
-            prevState.messages.push({
-                user_id: bool,
-                user_id_dest: bool,
-                timestamp: new Date().getDate(),
-                message: message
-            })
+    addMessage = (message, user_id_emitter, user_id_receiver) => {
+        let messages = this.state.messages;
+        messages.push({
+            user_id: user_id_emitter,
+            user_id_dest: user_id_receiver,
+            timestamp: new Date().getDate(),
+            message: message
+        });
+        this._mounted && this.setState({messages: messages}, () => {
+            this.innerRefScroll && this.innerRefScroll.current && this.innerRefScroll.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',
+                inline: 'end',
+            });
         });
     };
 
     render(){
-        const { showModal, user } = this.state;
+        const { showModal, user, messages } = this.state;
         function userOnline() {
             if (user.online)
                 return <span className={'OnlineChat'}> <Icon name={'circle'}/> </span>;
             else
                 return <span className={'LastConnectionChat'}> <Icon name={'circle'}/> </span>
-        };
+        }
+        function messagesRows() {
+            let user_id = user.user_id;
+            if (messages && messages.length){
+                return messages.map( (obj, i) => {
+                    return (
+                        <div key={i} className={obj.user_id === user_id ? 'yours messages' : 'mine messages'}>
+                            <div  className={'message'}>
+                                <p> {obj.message} </p>
+                            </div>
+                        </div>
+                    )
+                })
+            }
+        }
         return (
             user ?
                 <Modal
@@ -68,14 +96,19 @@ class ModalChat extends React.Component {
                     size={'tiny'}
                     open={showModal}
                     onClose={this.handleClose}
-                    closeIcon>
+                    closeIcon >
                     <Modal.Header className={'HeaderChat'}>
                         {userOnline()} {' '}
                         <span className={'chatUserBadge'}>{user.firstname}</span>
                     </Modal.Header>
-                    <Divider hidden />
                     <Modal.Content scrolling className={'ModalChatContent'}>
-                        <div className={'inputChat'}>
+                        <div className={'messagesRows'}>
+                            <div ref={this.innerRefScroll} className={'chat'}>
+                                    {messagesRows()}
+                            </div>
+                        </div>
+                    </Modal.Content>
+                    <Modal.Actions className={'inputChat'}>
                             <Form onSubmit={this.handleSend}>
                                 <Input
                                     size='large'
@@ -85,8 +118,7 @@ class ModalChat extends React.Component {
                                     placeholder='Type a message...'
                                 />
                             </Form>
-                        </div>
-                    </Modal.Content>
+                    </Modal.Actions>
                 </Modal> : null
         )
     }

@@ -38,7 +38,8 @@ async function userLike(req, res) {
             values = [userLikedID, userID];
             response = await pool.query(text, values);
             if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length) {
-                await notifications.pushnotifications(userLikedID, userID, 4);
+                if (await notifications.usercansendnotif(userID, userLikedID))
+                    await notifications.pushnotifications(userLikedID, userID, 4);
                 unliked = true;
                 // Delete row un matched user
                 await pool.query('DELETE FROM matchedusers WHERE user_id = $1 AND user_id2 = $2 OR user_id = $2 AND user_id2 = $1', [userID, userLikedID])
@@ -55,15 +56,18 @@ async function userLike(req, res) {
             let values = [userID, userLikedID];
             await pool.query(text, values);
             liked = true;
-            await notifications.pushnotifications(userLikedID, userID, 5);
+            if (await notifications.usercansendnotif(userID, userLikedID))
+                await notifications.pushnotifications(userLikedID, userID, 5);
             // Check if two users like each other
             text = 'SELECT * FROM user_likes WHERE user_id_like = $1 AND user_id_liked = $2';
             values = [userLikedID, userID];
             let response = await pool.query(text, values);
             // Notif two user for like back
             if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length) {
-                await notifications.pushnotifications(userID, userLikedID, 3);
-                await notifications.pushnotifications(userLikedID, userID, 3);
+                if (await notifications.usercansendnotif(userID, userLikedID)) {
+                    await notifications.pushnotifications(userID, userLikedID, 3);
+                    await notifications.pushnotifications(userLikedID, userID, 3);
+                }
                 likedback = true;
                 // Insert in matched user
                 text = 'SELECT * FROM matchedusers WHERE user_id = $1 OR user_id2 = $2 AND user_id = $1 OR user_id2 = $2';

@@ -91,7 +91,7 @@ class NavbarBootstrap extends React.Component {
             .then(res => {
                 if (res.status === 200) {
                     this._mounted && this.setState({connected: false});
-                    this.props.history.push('/login');
+                    window.location.href = "/login";
                     this.props.logout();
                 }
             });
@@ -198,10 +198,13 @@ class NavbarBootstrap extends React.Component {
                         <Navbar.Brand
                             className="ml-3"
                             id='/'>
-                            <img
-                                src='./../../img/MatchApp-Logo.png'
-                                height="50"
-                                alt="MatchApp Logo"/>
+                            <a href='# ' onClick={() => this.props.history.push('/')}>
+                                <img
+                                    src='./../../img/MatchApp-Logo.png'
+                                    height="50"
+                                    alt="MatchApp Logo"
+                                />
+                            </a>
                         </Navbar.Brand>
                         <Navbar.Toggle/>
                         <Navbar.Collapse>

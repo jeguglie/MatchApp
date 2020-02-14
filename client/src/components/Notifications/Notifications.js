@@ -19,11 +19,11 @@ class Notifications extends React.Component {
     s_like_likedbackreturn(userIdFocus){this.socket.connected && this.socket.emit("like:likedbackreturn", userIdFocus)};
     s_like_unliked(userIdFocus){this.socket.connected && this.socket.emit("like:unlike", userIdFocus)};
     s_like = (userIdFocus) => {this.socket.connected && this.socket.emit("like", userIdFocus)};
-    s_userlogin = () => {this.socket.connected && this.socket.emit("userlogin")};
-    s_logout = () => {this.socket.connected && this.socket.emit("disconnectuser")};
+    s_userlogin = (token) => {this.socket.connected && this.socket.emit("userlogin", token)};
+    s_logout = () => {this.socket.connected && this.socket.emit("disconnect")};
 
     componentDidMount() {
-        this.socket.on("message:receive", (data) => { this.props.s_message_receive(data.message, data.timestamp) });
+        this.socket.on("message:receive", (data) => { this.props.s_message_receive(data.message, data.user_id_emitter, data.user_id_receiver) });
         this.socket.on("like:receive like", (data) => {
             this.props.updateNotifs();
             store.addNotification({

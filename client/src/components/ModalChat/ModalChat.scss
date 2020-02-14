@@ -1,6 +1,6 @@
 .inputChat {
-  margin: -1.5em !important;
-  margin-top: 1.5em !important;
+  margin: -1em !important;
+  margin-top: 1em !important;
   & button.ui.icon.button {
     border-radius: 0 !important;
     background-color: #db366e;
@@ -34,7 +34,61 @@
 }
 
 .ModalChat {
+  margin-top: 1.5em !important;
   & i.close.icon {
     color: white !important;
   }
+}
+
+
+// Messages
+
+//.chat {
+//  width: 300px;
+//  border: solid 1px #EEE;
+//  display: flex;
+//  flex-direction: column;
+//  padding: 10px;
+//}
+
+.messagesRows {
+  margin-bottom: 1.5em;
+}
+.messages {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  border-radius: 20px;
+  padding: 8px 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: inline-block;
+  max-width: 300px;
+  word-break: break-word;
+}
+
+.yours {
+  align-items: flex-start;
+}
+
+.yours .message {
+  margin-right: 25%;
+  background-color: #eee;
+  position: relative;
+}
+
+
+.mine {
+  align-items: flex-end;
+}
+
+.mine .message {
+  color: white;
+  margin-left: 25%;
+  background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
+  //background-attachment: fixed;
+  position: relative;
 }

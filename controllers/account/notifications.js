@@ -14,8 +14,6 @@ const account = require('../../controllers/account/lib.js');
 
 async function pushnotifications(user_id_notified, user_id_emitter, type){
     try {
-        var date = new Date();
-        var timestamp = date.getTime();
         let text = 'SELECT * FROM notifications WHERE 1 = 1';
         let response = await pool.query(text);
         if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length > 0) {
@@ -46,9 +44,44 @@ async function pushnotifications(user_id_notified, user_id_emitter, type){
     }
 }
 
+const pushUserSocketLogin = (token, userslist, socket) =>{
+    if (token) {
+        jwt.verify(token, secret, async (err, decoded) => {
+            if (!err) {
+                let email = decoded.email;
+                // Get User ID
+                let userID = await account.getUserId(email);
+                if (userID) {
+                    // Store userID and socketID
+                    if (userslist.length < 1) {
+                        userslist.push({userID: userID, socketID: socket.id});
+                    }
+                    else {
+                        let find = false;
+                        for (let i = 0; i < userslist.length; i++){
+                            if (userslist[i].userID === userID) {
+                                find = true;
+                                userslist[i].socketID = socket.id;
+                            }
+                        }
+                        // If userID not match, then add it to userlists
+                        if (!find) {
+                            userslist.push({userID: userID, socketID: socket.id});
+                        }
+                    }
+                }
+            }
+        });
+    }
+    return userslist;
+}
+
+
 const pushUserSocket = (socket, userslist) =>{
+    console.log(1);
     // Get cookies
     let cookief = socket.handshake.headers.cookie;
+    console.log(cookief);
     if (cookief) {
         let cookies = cookie.parse(cookief);
         // Check Auth
@@ -60,27 +93,33 @@ const pushUserSocket = (socket, userslist) =>{
                     let userID = await account.getUserId(email);
                     if (userID) {
                         // Store userID and socketID
-                        if (!userslist.length)
+                        if (userslist.length < 1) {
+                            console.log(4);
                             userslist.push({userID: userID, socketID: socket.id});
+                            console.log(userslist);
+                        }
                         else {
                             let find = false;
                             for (let i = 0; i < userslist.length; i++){
+                                console.log(3);
                                 if (userslist[i].userID === userID) {
                                     find = true;
                                     userslist[i].socketID = socket.id;
                                 }
                             }
                             // If userID not match, then add it to userlists
-                            if (!find)
+                            if (!find) {
                                 userslist.push({userID: userID, socketID: socket.id});
+                                console.log(2);
+                            }
                         }
                     }
                 }
             });
         }
     }
+    return userslist;
 }
-
 
 const getUserIDFromSocketEmitter = async(socket) => {
     let cookief = socket.handshake.headers.cookie;
@@ -106,18 +145,20 @@ const deleteUserSocket = async(socket, userslist) => {
             jwt.verify(cookies.token, secret, async (err, decoded) => {
                 if (!err) {
                     let email = decoded.email;
-                    // Get User ID
                     let userID = await account.getUserId(email);
                     if (userID) {
                         for (let i = 0; i < userslist.length; i++){
-                            if (userslist[i].userID === userID)
+                            if (userslist[i].userID === userID) {
                                 userslist.splice(i, 1);
+                            }
                         }
+                        return userslist;
                     }
                 }
             });
         }
     }
+    return userslist;
 }
 
 
@@ -149,4 +190,5 @@ exports.findSocketID = findSocketID;
 exports.deleteUserSocket = deleteUserSocket;
 exports.getUserIDFromSocketEmitter = getUserIDFromSocketEmitter;
 exports.pushUserSocket = pushUserSocket;
+exports.pushUserSocketLogin = pushUserSocketLogin;
 exports.pushnotifications = pushnotifications;

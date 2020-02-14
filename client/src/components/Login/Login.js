@@ -38,8 +38,10 @@ class Login extends React.Component {
         if (cookies.get('token'))
             await API.withAuth()
                 .then(res => {
-                    if (res.status === 200)
+                    if (res.status === 200) {
+                        this.props.s_userlogin();
                         this.props.history.push('/profile');
+                    }
                 })
                 .catch(() => cookies.remove('token'));
         this._mounted = true;
@@ -113,9 +115,8 @@ class Login extends React.Component {
                         await API.login(email, password)
                             .then((response) => {
                                 if (typeof response.data !== 'undefined' && typeof response.data.connect !== 'undefined')
-                                    this.props.s_userlogin();
                                     this.props.handleConnected(true);
-                                    this.props.history.push('/profile');
+                                        window.location.href = "/profile";
                             })
                             .catch(error => {
                                 if (typeof error.response !== 'undefined' && typeof error.response.data !== 'undefined') {

@@ -13,7 +13,6 @@ const notifications = require('./controllers/account/notifications');
 const io = require('socket.io')();
 const port = 5000;
 const portio = 8000;
-let userslist = [];
 
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
@@ -27,6 +26,8 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use('/public', express.static('public'));
 
+app.get('/faker', faker.matchAppFaker);
+app.get('/checkToken', withAuth, function(req, res) {res.sendStatus(200);});
 app.post('/reportuserhide', withAuth, account.reportuserhide);
 app.post('/reportuserfake', withAuth, account.reportuserfake);
 app.post('/reportuser', withAuth, account.reportuser);
@@ -54,46 +55,37 @@ app.post('/getUserIdProfile', withAuth, account.getUserIdProfile);
 app.post('/userLike', withAuth, wallActions.userLike);
 app.post('/deletenotif', withAuth, account.deletenotif);
 app.post('/sendMessage', withAuth, chat.sendMessage);
-app.get('/getMessages', withAuth, chat.getMessages);
-app.get('/deleteMessages', withAuth, chat.deleteMessages);
-app.get('/checkToken', withAuth, function(req, res) {res.sendStatus(200);});
-app.get('/getNotifications', withAuth, account.getNotifications);
-app.get('/getNotifNb', withAuth, account.getNotifNb);
-app.get('/getMatchedUsers', withAuth, account.getMatchedUsers);
-app.get('/faker', faker.matchAppFaker);
-app.get('/logout', withAuth, async(req, res) => {
+app.post('/getMessages', withAuth, chat.getMessages);
+app.post('/deleteMessages', withAuth, chat.deleteMessages);
+app.post('/getNotifications', withAuth, account.getNotifications);
+app.post('/getNotifNb', withAuth, account.getNotifNb);
+app.post('/getMatchedUsers', withAuth, account.getMatchedUsers);
+app.post('/logout', withAuth, async(req, res) => {
     const userID = await account.getUserId(res.locals.email);
     userID !== null ? account.setUserLastConnection(userID, 0) : 0;
     res.clearCookie('token');
     res.sendStatus(200);
 });
 
-// Notifications
-io.sockets.on('connection', socket => {
-    notifications.pushUserSocket(socket, userslist);
 
-    // Chat
-    socket.on('message:send', async(to_user_id, message) => {
-        let socketID =  notifications.findSocketID(to_user_id, userslist);
-        if (socketID){
-            let userIDemitter = await notifications.getUserIDFromSocketEmitter(socket, userslist);
-            if (userIDemitter && await notifications.usercansendnotif(userIDemitter, to_user_id))
-                io.sockets.to(socketID).emit('message:receive', {message: message, timestamp: new Date().getDate()});
-        }
-    });
-    // ___________________________
-    socket.on("userlogin", async() => {
-        let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
+let userslist = [];
+
+// Notifications
+io.sockets.on('connection', async(socket) => {
+    userslist = await notifications.pushUserSocket(socket, userslist);
+
+    socket.on("userlogin", async(token) => {
+        let userIDemitter = await notifications.getUserIDFromSocketEmitter(socket, userslist);
         userIDemitter && await account.setUserLastConnection(userIDemitter, 1);
-        notifications.pushUserSocket(socket, userslist);});
-    socket.on('disconnectuser', async() => {
+        userslist = await notifications.pushUserSocketLogin(token, userslist, socket);
+    });
+    socket.on('disconnect', async() => {
         // Verify cookies
         if (typeof socket.handshake !== "undefined" && typeof socket.handshake.headers !== "undefined" && typeof socket.handshake.headers.cookie !== "undefined"){
-            // Delete user from userlist;
-            notifications.deleteUserSocket(socket, userslist);
-            // Set user offline in DBB
-            let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
+            let userIDemitter = await notifications.getUserIDFromSocketEmitter(socket, userslist);
             userIDemitter && await account.setUserLastConnection(userIDemitter, 0);
+            userslist = await notifications.deleteUserSocket(socket, userslist);
+            console.log('disconnect');
         }
     });
     socket.on('like', async(userID) => {
@@ -145,7 +137,17 @@ io.sockets.on('connection', socket => {
                 io.sockets.to(socketID).emit('like:likedbackreturn', {useremitter: name, userIDemitter: userIDemitter});
             }
         }
-    })
+    });
+
+    socket.on('message:send', async(to_user_id, message) => {
+        let socketID = notifications.findSocketID(to_user_id, userslist);
+        if (socketID){
+            let userIDemitter = await notifications.getUserIDFromSocketEmitter(socket, userslist);
+            if (userIDemitter && await notifications.usercansendnotif(userIDemitter, to_user_id))
+                io.sockets.to(socketID).emit('message:receive', {message: message, user_id_emitter: userIDemitter, user_id_receiver: to_user_id});
+        }
+    });
+
 
 });
 

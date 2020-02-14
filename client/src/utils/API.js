@@ -271,8 +271,9 @@ export default {
         )
     },
     getNotifications: () => {
-        return axios.get(
+        return axios.post(
             `${burl}/getNotifications`,
+            {},
             {
                 withCredentials: 'true',
                 headers: headers
@@ -280,8 +281,9 @@ export default {
         )
     },
     getNotifNb: () => {
-        return axios.get(
+        return axios.post(
             `${burl}/getNotifNb`,
+            {},
             {
                 withCredentials: 'true',
                 headers: headers
@@ -289,8 +291,9 @@ export default {
         )
     },
     logout: () => {
-        return axios.get(
+        return axios.post(
             `${burl}/logout`,
+            {},
             {
                 withCredentials: 'true',
                 headers: headers
@@ -298,8 +301,9 @@ export default {
         )
     },
     getMatchedUsers: () => {
-        return axios.get(
+        return axios.post(
             `${burl}/getMatchedUsers`,
+            {},
             {
                 withCredentials: 'true',
                 headers: headers
@@ -317,18 +321,8 @@ export default {
         )
     },
     getMessages: (user_id_2) => {
-        return axios.get(
+        return axios.post(
             `${burl}/getMessages`,
-            {user_id_2},
-            {
-                withCredentials: 'true',
-                headers: headers
-            }
-        )
-    },
-    deleteMessages: (user_id_2) => {
-        return axios.get(
-            `${burl}/deleteMessages`,
             {user_id_2},
             {
                 withCredentials: 'true',

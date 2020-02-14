@@ -922,7 +922,8 @@ async function getUserIdProfile(req, res) {
             text = 'SELECT * FROM user_likes WHERE user_id_like = $1 AND user_id_liked = $2';
             values = [userID, userIDprofile];
             let responselike = await pool.query(text, values);
-            await notifications.pushnotifications(userIDprofile, userID, 1);
+            if (await notifications.usercansendnotif(userID, userIDprofile))
+                await notifications.pushnotifications(userIDprofile, userID, 1);
             if (typeof responselike !== 'undefined' && typeof responselike.rows !== 'undefined' && responselike.rows.length)
                 liked = true;
             let user = response.rows[0];
