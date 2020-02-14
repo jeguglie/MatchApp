@@ -344,18 +344,5 @@ module.exports =  {
     validateFirstName: function (name) {
         let re = /^(?=.{1,20}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
         return re.test(name);
-    },
-    sleepLoader: function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    },
-    checkWarnings: function (warnings) {
-        let valid = true;
-        console.log(1);
-        if (Object.entries(warnings).forEach(([key, value]) => {
-            if (value.length > 0) {
-                return valid = false;
-            }
-        }))
-            return valid;
     }
 };

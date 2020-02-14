@@ -7,7 +7,7 @@ import Login from "./components/Login/Login";
 import EditProfile from "./components/EditProfil/EditProfil";
 import withAuth from "./utils/withAuth";
 import './App.scss';
-import BootstrapMenu from './components/Menu/BootstrapMenu';
+import Menu from './components/Menu/Menu';
 import Notifications from "./components/Notifications/Notifications";
 import NotificationsHistory from "./components/Notifications/NotificationsHistory/NotificationsHistory";
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
@@ -62,7 +62,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                <BootstrapMenu
+                <Menu
                     ref={this.innerRef}
                     logout={this.s_logout}
                 />
