@@ -1,4 +1,4 @@
-![MatchApp](https://i.ibb.co/vzkHp2g/Match-App-Logo.png)  
+![MatchApp](https://i.imgur.com/R33gl92.png)  
 42 Project | MatchApp Web |  Node.js/Express/React/PostgreSQL
 
 ## Demo
