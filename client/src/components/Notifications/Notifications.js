@@ -9,6 +9,7 @@ class Notifications extends React.Component {
      super(props);
         this.state = { userID: null };
         this.socket = io('http://localhost:8000');
+        this._mounted = false;
     };
 
     // Sockets chat
@@ -22,8 +23,30 @@ class Notifications extends React.Component {
     s_userlogin = (token) => {this.socket.connected && this.socket.emit("userlogin", token)};
     s_logout = () => {this.socket.connected && this.socket.emit("disconnect")};
 
+    componentWillUnmount() {
+        this._mounted = false;
+    }
+
     componentDidMount() {
-        this.socket.on("message:receive", (data) => { this.props.s_message_receive(data.message, data.user_id_emitter, data.user_id_receiver) });
+        this._mounted = true;
+            this.socket.on("message:receive", (data) => {
+                if (window.location.pathname !== '/chat') {
+                    this.props.updateNotifs();
+                    store.addNotification({
+                        message: data.useremitter + " send you a message",
+                        type: "success",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 5000,
+                            onScreen: true
+                        }
+                    });
+                }
+            this.props.s_message_receive(data.message, data.user_id_emitter, data.user_id_receiver)
+        });
         this.socket.on("like:receive like", (data) => {
             this.props.updateNotifs();
             store.addNotification({
@@ -109,7 +132,7 @@ class Notifications extends React.Component {
             <div className="Notifications">
                 <ReactNotification />
             </div>
-        );
+        )
     }
 }
 

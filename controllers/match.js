@@ -19,7 +19,7 @@ async function getUsers(req, res){
         if (response && response.rows.length) {
             const {gender, interested} = response.rows[0];
             // First filter on BDD with AGE - POPULARITY
-            text = 'SELECT * FROM profile P INNER JOIN pictures IMG ON P.user_id = IMG.user_id WHERE IMG.img_order = 0 ' +
+            text = 'SELECT * FROM profile P INNER JOIN pictures IMG ON P.user_id = IMG.user_id WHERE IMG.img_order >= 0 AND IMG.img_order <= 5' +
                 'AND P.interested = $1 AND P.gender = $2 AND P.age >= $3 AND P.age <= $4 AND P.likes >= $5 AND P.likes <= $6 AND P.user_id <> $7';
             values = [gender, interested, ageRange.min, ageRange.max, popularityRange.min, popularityRange.max, userID];
             response = await pool.query(text, values);

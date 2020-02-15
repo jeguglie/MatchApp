@@ -91,15 +91,11 @@ const pushUserSocket = (socket, userslist) =>{
                     let userID = await account.getUserId(email);
                     if (userID) {
                         // Store userID and socketID
-                        if (userslist.length < 1) {
-                            console.log(4);
+                        if (userslist.length < 1)
                             userslist.push({userID: userID, socketID: socket.id});
-                            console.log(userslist);
-                        }
                         else {
                             let find = false;
                             for (let i = 0; i < userslist.length; i++){
-                                console.log(3);
                                 if (userslist[i].userID === userID) {
                                     find = true;
                                     userslist[i].socketID = socket.id;
@@ -108,7 +104,6 @@ const pushUserSocket = (socket, userslist) =>{
                             // If userID not match, then add it to userlists
                             if (!find) {
                                 userslist.push({userID: userID, socketID: socket.id});
-                                console.log(2);
                             }
                         }
                     }

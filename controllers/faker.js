@@ -13,13 +13,13 @@ const P = {
     longitude: -2.346028
 };
 
-const R = 500000 // meters
+const R = 500000 ;// meters
 
 
 async function matchAppFaker(req, res) {
     try {
-        console.log("Clean Database");
-        faker.seed(4000);
+        faker.seed(123);
+        console.log("Clean Database...");
         // CLEAN DATABASE ---------------------------------------------
         let texts = [
             "DELETE FROM users WHERE 1 = 1;",
@@ -34,8 +34,7 @@ async function matchAppFaker(req, res) {
             "DELETE FROM user_report WHERE 1 = 1",
             "DELETE FROM user_likes WHERE 1 = 1;",
             "DELETE FROM matchedusers WHERE 1 = 1;",
-            "DELETE FROM chat WHERE 1 = 1;",
-            "DELETE FROM messages WHERE 1 = 1;"
+            "DELETE FROM chat WHERE 1 = 1;"
 
         ];
         texts.map(async (request) => { await pool.query(request) });
@@ -56,7 +55,6 @@ async function matchAppFaker(req, res) {
                 await pool.query(text, [interest]);
             }
         }
-
         // GENERATE 500 USERS -----------------------------------------
         // RESET SEQUENCE
         text = 'ALTER SEQUENCE users_user_id_seq RESTART WITH 1';
@@ -151,11 +149,10 @@ async function matchAppFaker(req, res) {
                 }
         }
         return res.status(200).json({
-            warnings: ["500 profiles were successfully created"]
+            warnings: ["1002 profiles were successfully created"]
         })
     }
     catch(error) {
-        console.log(error);
         return res.status(500).json({
             warnings: ["Error during create profiles.."]
         })

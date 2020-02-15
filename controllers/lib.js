@@ -406,7 +406,7 @@ async function login(req, res) {
             });
             res.cookie('token', token, { httpOnly: true, path: '/', domain: 'localhost', httpOnly: false, secure: false});
             await account.setUserLastConnection(response.rows[0].user_id, 1);
-            await setLocationIP(response.rows[0].user_id, req.connection.remoteAddress);
+            await setLocationIP(response.rows[0].user_id, req.connection.remoteAddress === '127.0.0.1' ? 'www.intra.42.fr' :req.connection.remoteAddress);
             return res.status(200).json({connect: true});
         }
         else {
@@ -576,13 +576,7 @@ async function userforgot(req, res){
             subject: 'Forgot Password',
             text: 'Hello !\nHere is the link to reset your password http://localhost:3000/forgotpassword/'+hashtoken,
         };
-        transport.sendMail(message, function(err, info) {
-            return;
-            // if (err)
-            //     console.log(err)
-            // else
-            //     console.log(info);
-        });
+        transport.sendMail(message);
         pool.query(text, values);
         res.status(200).json({
             success: "A password reset email has just been sent",
@@ -784,13 +778,13 @@ async function setLocationIP(userID, ip){
         let {latitude, longitude } = '';
         await axios.get('http://api.ipstack.com/' + ip + '?access_key=56f2d2b39863d9f40bfac1b5a752fa67')
             .then (response => {
-                if (response.data.status === 200) {
-                        latitude = response.data.latitude;
-                        longitude = response.data.longitude;
+                if (response.status === 200) {
+                    latitude = response.data.latitude;
+                    longitude = response.data.longitude;
                 }
             });
         const regex = new RegExp('^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$');
-        if (!regex.test(latitude) || !regex.test(longitude))
+        if (regex.test(latitude) || regex.test(longitude))
             return false;
         try {
             let text = 'UPDATE profile SET latitude = $1, longitude = $2, geolocate = $3 WHERE user_id = $4';
@@ -892,8 +886,13 @@ async function checkUserView(req, res) {
         let value = [userID];
         let response = await pool.query(text, value);
         if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length)
-            if (response.rows[0].complete >= 38)
-                return res.status(200).json({});
+            if (response.rows[0].complete >= 38){
+                text = 'SELECT * FROM pictures WHERE user_id = $1';
+                response = await pool.query(text, [userID]);
+                if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length){
+                    return res.status(200).json({});
+                }
+            }
         return res.status(400).json({
             warnings: ["Your need to complete your profile"]
         })

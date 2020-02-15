@@ -10,8 +10,8 @@ class ModalChat extends React.Component {
             showModal: false,
             user: [],
             messages: [],
+            message: ''
         };
-        this.innerRef = React.createRef();
         this.innerRefScroll = React.createRef();
     }
 
@@ -39,15 +39,17 @@ class ModalChat extends React.Component {
     };
     handleClose = () => {this._mounted && this.setState({showModal: false, user: [], messages: []})};
     handleSend = async() => {
-        const message = this.innerRef && this.innerRef.current && this.innerRef.current.inputRef.current.value.toString();
+        const message = this.state.message;
         const user_id = this.state.user.user_id;
-        await API.sendMessage(user_id, message)
-            .then(res => {
-                if (res.status === 200) {
-                    this.addMessage(message, true);
-                    this._mounted && this.props.s_message_send(user_id, message);
-                }
-            })
+        // Clear value in input
+        if (message && message.length)
+            await API.sendMessage(user_id, message)
+                .then(res => {
+                    if (res.status === 200) {
+                        this.addMessage(message, true);
+                        this._mounted && this.props.s_message_send(user_id, message);
+                    }
+                })
     };
 
     addMessage = (message, user_id_emitter, user_id_receiver) => {
@@ -58,7 +60,7 @@ class ModalChat extends React.Component {
             timestamp: new Date().getDate(),
             message: message
         });
-        this._mounted && this.setState({messages: messages}, () => {
+        this._mounted && this.setState({messages: messages, message: ''}, () => {
             this.innerRefScroll && this.innerRefScroll.current && this.innerRefScroll.current.scrollIntoView({
                 behavior: 'smooth',
                 block: 'end',
@@ -67,8 +69,10 @@ class ModalChat extends React.Component {
         });
     };
 
+    handleChange = (e, { value}) => { this._mounted && this.setState({message: value}); };
+
     render(){
-        const { showModal, user, messages } = this.state;
+        const { showModal, user, messages, message } = this.state;
         function userOnline() {
             if (user.online)
                 return <span className={'OnlineChat'}> <Icon name={'circle'}/> </span>;
@@ -114,7 +118,8 @@ class ModalChat extends React.Component {
                                     size='large'
                                     action={{ icon: 'send' }}
                                     fluid
-                                    ref={this.innerRef}
+                                    value={message}
+                                    onChange={this.handleChange}
                                     placeholder='Type a message...'
                                 />
                             </Form>

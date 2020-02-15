@@ -1,5 +1,8 @@
 const pool = require('./../utils/queries');
 const lib = require('./lib.js');
+const notifications = require('./notifications');
+
+
 
 async function sendMessage(req, res){
     const userID = await lib.getUserId(res.locals.email);
@@ -9,11 +12,26 @@ async function sendMessage(req, res){
         }));
     try {
         const { user_id, message } = req.body;
-        let text = 'INSERT INTO chat(user_id, user_id_dest, timestamp, message) VALUES ($1, $2, $3, $4)';
-        let values = [userID, user_id, new Date(), message.toString()];
-        await pool.query(text, values);
-        return res.status(200).json({
-            response: "Send"
+        // Check if user can send message to user
+        let text = 'SELECT * FROM matchedusers WHERE user_id2 = $1';
+        let text2 = 'SELECT * FROM matchedusers WHERE user_id = $1';
+        let response = await pool.query(text, [userID]);
+        let response2 = await pool.query(text2, [userID]);
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows
+            || typeof response2 !== 'undefined' && typeof response2.rows !== 'undefined' && response2.rows) {
+            if (message && message.length > 0) {
+                let text = 'INSERT INTO chat(user_id, user_id_dest, timestamp, message) VALUES ($1, $2, $3, $4)';
+                let values = [userID, user_id, new Date(), message.toString()];
+                await pool.query(text, values);
+                if (await notifications.usercansendnotif(userID, user_id))
+                    await notifications.pushnotifications(user_id, userID, 2);
+                return res.status(200).json({
+                    response: "Send"
+                })
+            }
+        }
+        return res.status(400).json({
+            response: "Bad request"
         })
     } catch (e) {
         console.log(e);

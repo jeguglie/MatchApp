@@ -26,8 +26,8 @@ io.sockets.on('connection', async(socket) => {
     socket.on('like', async(userID) => {
         let socketID =  notifications.findSocketID(userID, userslist);
         if (socketID){
-            let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
-            if (userIDemitter && await  notifications.usercansendnotif(userIDemitter, userID)) {
+            let userIDemitter = await notifications.getUserIDFromSocketEmitter(socket, userslist);
+            if (userIDemitter && await notifications.usercansendnotif(userIDemitter, userID)) {
                 let name = await lib.getNameUserId(userIDemitter, userslist);
                 io.sockets.to(socketID).emit('like:receive like', {useremitter: name});
             }
@@ -36,8 +36,8 @@ io.sockets.on('connection', async(socket) => {
     socket.on('wall:visit', async(userID) => {
         let socketID =  notifications.findSocketID(userID, userslist);
         if (socketID) {
-            let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
-            if (userIDemitter && await  notifications.usercansendnotif(userIDemitter, userID)) {
+            let userIDemitter = await notifications.getUserIDFromSocketEmitter(socket, userslist);
+            if (userIDemitter && await notifications.usercansendnotif(userIDemitter, userID)) {
                 let name = await lib.getNameUserId(userIDemitter, userslist);
                 io.sockets.to(socketID).emit('wall:visit', {useremitter: name});
             }
@@ -46,8 +46,8 @@ io.sockets.on('connection', async(socket) => {
     socket.on('like:unlike', async(userID) => {
         let socketID = notifications.findSocketID(userID, userslist);
         if (socketID) {
-            let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
-            if (userIDemitter && await  notifications.usercansendnotif(userIDemitter, userID)) {
+            let userIDemitter = await notifications.getUserIDFromSocketEmitter(socket, userslist);
+            if (userIDemitter && await notifications.usercansendnotif(userIDemitter, userID)) {
                 let name = await lib.getNameUserId(userIDemitter, userslist);
                 io.sockets.to(socketID).emit('like:unlike', {useremitter: name});
             }
@@ -56,8 +56,8 @@ io.sockets.on('connection', async(socket) => {
     socket.on('like:likedback', async(userID) => {
         let socketID =  notifications.findSocketID(userID, userslist);
         if (socketID) {
-            let userIDemitter = await  notifications.getUserIDFromSocketEmitter(socket, userslist);
-            if (userIDemitter && await  notifications.usercansendnotif(userIDemitter, userID)) {
+            let userIDemitter = await notifications.getUserIDFromSocketEmitter(socket, userslist);
+            if (userIDemitter && await notifications.usercansendnotif(userIDemitter, userID)) {
                 let name = await lib.getNameUserId(userIDemitter, userslist);
                 io.sockets.to(socketID).emit('like:likedback', {useremitter: name, userIDemitter: userIDemitter});
             }
@@ -78,8 +78,15 @@ io.sockets.on('connection', async(socket) => {
         let socketID = notifications.findSocketID(to_user_id, userslist);
         if (socketID){
             let userIDemitter = await notifications.getUserIDFromSocketEmitter(socket, userslist);
-            if (userIDemitter && await notifications.usercansendnotif(userIDemitter, to_user_id))
-                io.sockets.to(socketID).emit('message:receive', {message: message, user_id_emitter: userIDemitter, user_id_receiver: to_user_id});
+            if (userIDemitter && await notifications.usercansendnotif(userIDemitter, to_user_id)) {
+                let name = await lib.getNameUserId(userIDemitter, userslist);
+                io.sockets.to(socketID).emit('message:receive', {
+                    useremitter: name,
+                    message: message,
+                    user_id_emitter: userIDemitter,
+                    user_id_receiver: to_user_id
+                });
+            }
         }
     });
 });
