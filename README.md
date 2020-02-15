@@ -1,6 +1,6 @@
 ![MatchApp](https://i.imgur.com/R33gl92.png)  
 42 Project | MatchApp Web Application  
-Node.js/Express/React/PostgreSQL
+Node.js | Express| React | PostgreSQL
 
 ## Demo
 You can use two pre-filled profiles :  
