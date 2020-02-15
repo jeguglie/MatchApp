@@ -50,7 +50,7 @@ async function updatetotalimage(userID){
 async function uploadPhoto(req, res) {
     const user_id = await account.getUserId(res.locals.email);
     if (user_id === null)
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["User ID not found, please logout and login."]
         });
     try {
@@ -82,7 +82,7 @@ async function uploadPhoto(req, res) {
             save: true
         });
     } catch (error) {
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Error during file upload"]
         });
     }
@@ -91,7 +91,7 @@ async function uploadPhoto(req, res) {
 async function getPhotos(req, res) {
     const user_id = await account.getUserId(res.locals.email);
     if (user_id === null)
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["User ID not found, please logout and login."]
         });
     try {
@@ -108,7 +108,7 @@ async function getPhotos(req, res) {
         })
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Error"]
         });
     }
@@ -117,7 +117,7 @@ async function getPhotos(req, res) {
 async function deleteImage(req, res) {
     const user_id = await account.getUserId(res.locals.email);
     if (user_id === null)
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["User ID not found, please logout and login."]
         });
     try {
@@ -137,7 +137,7 @@ async function deleteImage(req, res) {
         });
         await updatetotalimage(user_id);
     } catch (error) {
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Error"]
         });
     }

@@ -20,7 +20,7 @@ async function updatetotallike(userIDLiked){
 async function userLike(req, res) {
     const userID = await lib.getUserId(res.locals.email);
     if (userID === null)
-        return (res.status(500).json({
+        return (res.status(400).json({
             warnings: ["Can't get user ID, please logout and login"]
         }));
     const { userLikedID } = req.body;
@@ -90,7 +90,7 @@ async function userLike(req, res) {
             });
     } catch(error) {
         console.log(error);
-        return res.status(500).json({
+        return res.status(400).json({
             warnings: ["Server error"]
         })
     }

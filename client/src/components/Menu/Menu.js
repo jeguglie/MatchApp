@@ -160,11 +160,15 @@ class Menu extends React.Component {
                         <NavDropdown.Divider />
                         <NavDropdown.Item
                             onClick={() => this.handleItemClick(null, "/changepassword")}>
-                            Edit my password
+                            Change my password
                         </NavDropdown.Item>
                         <NavDropdown.Item
                             onClick={() => this.handleItemClick(null, "/changemail")}>
-                            Edit my mail
+                            Change my mail
+                        </NavDropdown.Item>
+                        <NavDropdown.Item
+                            onClick={() => this.handleItemClick(null, "/changelocation")}>
+                            Change my location
                         </NavDropdown.Item>
 
                     </NavDropdown>

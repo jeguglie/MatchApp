@@ -7,12 +7,12 @@ const countries = VALIDATE.countries;
 const age = VALIDATE.age;
 const genderOptions = [
     { key: 'male', value: 'male', text: 'Male' },
-    { key: 'female', value: 'female', text: 'Female' }
+    { key: 'female', value: 'female', text: 'Female' },
 ];
 const interestedOptions = [
-    { key: 'male', value: 'male', text: 'Male' },
-    { key: 'female', value: 'female', text: 'Female' },
-    { key: 'other', value: 'other', text: 'Other' },
+    { key: 'homosexual', value: 'homosexual', text: 'Homosexual' },
+    { key: 'heterosexual', value: 'heterosexual', text: 'Heterosexual' },
+    { key: 'bisexual', value: 'bisexual', text: 'Bisexual' },
 ];
 
 const DEFAULT_STATE = {
@@ -75,7 +75,7 @@ class BasicsInformations extends React.Component {
     }
 
     componentDidMount = async() => {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
         this._mounted = true;
         this._mounted && this.setState({complete: this.props.complete});
         await API.getEditProfilValues()
@@ -119,9 +119,9 @@ class BasicsInformations extends React.Component {
                 this.warnings.w_lastname = "Only characters are allowed for your lastname. Must contain between 3 and 13 characters";
             if (!VALIDATE.validateFirstName(this.state.firstname))
                 this.warnings.w_firstname = "Only characters are allowed for your first name. Must contain between 3 and 13 characters";
-            if (this.state.interested !== "male" && this.state.interested !== "female" && this.state.interested !== "other")
+            if (this.state.interested !== "homosexual" && this.state.interested !== "heterosexual" && this.state.interested !== "bisexual")
                 this.warnings.w_interested = "Please select a valid interest option";
-            if (this.state.gender !== "male" && this.state.gender !== "female" && this.state.interested !== "other")
+            if (this.state.gender !== "male" && this.state.gender !== "female")
                 this.warnings.w_gender = "Please select a valid gender option";
             if (this.state.bio && this.state.bio.length > 90)
                 this.warnings.w_bio = "Your bio is too long, please use 90 maximum characters. You have " + this.state.bio.length;
@@ -222,8 +222,8 @@ class BasicsInformations extends React.Component {
                                         control={Select}
                                         value={this.state.interested}
                                         options={interestedOptions}
-                                        label="Interested by "
-                                        placeholder='Interested by'
+                                        label="Orientation "
+                                        placeholder='Orientation'
                                         onChange={this.handleChange}
                                     />
                                 </Form.Group>

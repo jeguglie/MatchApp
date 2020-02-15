@@ -210,6 +210,35 @@ export default {
             }
         )
     },
+    withAuthAdmin: () => {
+        return axios.get(
+            `${burl}/checkTokenAdmin`,
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
+    admin: () => {
+        return axios.post(
+            `${burl}/admin`,
+            {},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
+    kickuser: (user_id) => {
+        return axios.post(
+            `${burl}/kickuser`,
+            {user_id},
+            {
+                withCredentials: 'true',
+                headers: headers
+            }
+        )
+    },
     deleteInterest: (data) => {
         return axios.post(
             `${burl}/deleteInterest`,

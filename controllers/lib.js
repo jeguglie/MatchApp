@@ -606,7 +606,9 @@ async function updateEditProfilValues(req, res) {
     let total = 25;
     if (!validate.validateFirstName(lastname) || !validate.validateFirstName(firstname))
         valid = false;
-    if (interested !== 'male' && interested !== 'female' && interested !== 'other')
+    if (interested !== 'homosexual' && interested !== 'heterosexual' && interested !== 'bisexual')
+        valid = false;
+    if (gender !== 'male' && gender !== 'female')
         valid = false;
     validate.countries.map((data) => {
         if (data.value === country)

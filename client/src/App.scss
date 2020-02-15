@@ -1,10 +1,9 @@
 body {
-  background-color: #e9e9e9;
+  background-color: #ebebeb;
   font-family: "Open Sans" ,sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 
 // Login - Signup
 @import './components/Login/Login';
@@ -28,6 +27,9 @@ body {
 @import './components/UserMiniCard/UserMiniCard';
 @import './components/ModalUser/ModalUser';
 @import './containers/Wall/SearchTags/SearchTags';
+@import './../node_modules/react-input-range/lib/css/index.css';
+@import './components/EditProfil/ChangeLocation/ChangeLocation';
+
 
 // Chat
 @import './containers/Chat/Chat';
@@ -38,3 +40,4 @@ body {
 
 // Notifications
 @import './components/Notifications/NotificationsHistory/NotificationsHistory';
+@import './../node_modules/react-notifications-component/dist/theme.css';

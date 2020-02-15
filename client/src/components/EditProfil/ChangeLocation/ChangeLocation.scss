@@ -1,0 +1,18 @@
+.inputSearchGoogle {
+  & input, .selection , textarea{
+    border-radius: 15px !important;
+    border: none !important;
+    font-family: "Open Sans", sans-serif !important;
+    font-size: 1.3em !important;
+    width: 100% !important;
+    height: 50px;
+    color: #4f384f !important;
+    padding: 10px;
+    font-weight: 700;
+    background: linear-gradient(-150deg, white, #eaeaea) !important;
+    box-shadow: 4px 4px 1px rgba(0,0,0,0.1) !important;
+  }
+  & input::placeholder {
+    color: #a2a2a2 !important;
+  }
+}

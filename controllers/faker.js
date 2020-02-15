@@ -18,7 +18,6 @@ const R = 500000 ;// meters
 
 async function matchAppFaker(req, res) {
     try {
-        faker.seed(123);
         console.log("Clean Database...");
         // CLEAN DATABASE ---------------------------------------------
         let texts = [
@@ -91,7 +90,8 @@ async function matchAppFaker(req, res) {
             await pool.query(text, values);
         }
         // GENERATE USERS PROFILE -------------------------------------
-        let gender = ["male", "female", "other"];
+        let gender = ["male", "female"];
+        let interested = ["homosexual", "homosexual", "heterosexual", "bisexual"];
         let online = [0, 1];
         for (let i = 0; i < 1000; i++){
             console.log("Generate user profile " + i + " of 1000");
@@ -102,7 +102,7 @@ async function matchAppFaker(req, res) {
                 faker.name.lastName(),
                 faker.name.firstName(),
                 gender[Math.round(Math.random())],
-                gender[Math.round(Math.random())],
+                interested[Math.floor(Math.random() * 3) + 1 ],
                 faker.address.country(),
                 calcAge(faker.date.between('1970-01-01T11:25:19.644Z', '2000-01-01T11:25:19.644Z')),
                 faker.random.words(),
@@ -132,6 +132,7 @@ async function matchAppFaker(req, res) {
         // GENERATE LIKES
         console.log("Generate likes...");
         for (let i = 0; i < 20000; i++) {
+            console.log([i, " of 20000..."]);
             let text = 'INSERT INTO user_likes(user_id_like, user_id_liked) VALUES ($1, $2)';
             let user_id_like = Math.floor(Math.random() * 1000) + 1;
             let user_id_liked = Math.floor(Math.random() * 1000) + 1;
@@ -146,14 +147,65 @@ async function matchAppFaker(req, res) {
                 text = 'UPDATE profile SET likes = likes + 1 WHERE user_id = $1;'
                 values = [user_id_liked]
                 await pool.query(text, values);
-                }
+            }
         }
+        // Insert user --- USER 1
+        text = 'INSERT INTO users(user_id, username, email, password, active, complete) VALUES ($1, $2, $3, $4, $5, $6)';
+        await pool.query(text, [1001, "user1", "user1@gmail.com", "sha1$f198d198$1$ed7ef79a0d7a58dc5e6350d215338cc3dd62ac0f", 1, 39]);
+        // Generate profile
+        text = 'INSERT INTO profile(user_id, lastname, firstname, gender, interested, country, bio, likes, age, usecustomaddress, last_date_online, online, geolocate, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)';
+        await pool.query(text, [1001, 'Dupont', 'Patrick', 'male', 'heterosexual', 'France', 'Hi, my name is Patrick !', 1, 18, 0, '2020-02-15 12:53:23.109+01', 0, 0, null, null]);
+        // Interests USER 1
+        text = 'INSERT INTO user_interests(user_id, interest_id) VALUES ($1, $2), ($3, $4), ($5, $6), ($7, $8)';
+        await pool.query(text, [1001, 800, 1001, 850, 1001, 830, 1001, 802]);
+        // Insert in matched user
+        text = 'INSERT INTO matchedusers(user_id, user_id2) VALUES ($1, $2)';
+        await pool.query(text, [1002, 1001]);
+        // Insert Imgs
+        text = 'INSERT INTO pictures(img_link, user_id, img_order) VALUES ($1, $2, $3)';
+        await pool.query(text, ['http://localhost:3000/img/patrick-dupont.png', 1001, 0]);
+        // Insert complete
+        text = 'INSERT INTO user_complete(complete_basics, complete_photos, complete_interets, user_id, complete_location) VALUES ($1, $2, $3, $4, $5)';
+        await pool.query(text, [30, 5, 4, 1001, null]);
+        // Insert likes
+        text = 'INSERT INTO user_likes(user_id_like, user_id_liked) VALUES ($1, $2), ($3, $4)';
+        await pool.query(text, [1002, 1001, 1001, 1002]);
+        // Insert user --- USER 2
+        text = 'INSERT INTO users(user_id, username, email, password, active, complete, tokenmail) VALUES ($1, $2, $3, $4, $5, $6, $7)';
+        await pool.query(text, [1002, "user2", "user2@gmail.com", "sha1$f198d198$1$ed7ef79a0d7a58dc5e6350d215338cc3dd62ac0f", 1, 39, null]);
+        // Generate profile
+        text = 'INSERT INTO profile(user_id, lastname, firstname, gender, interested, country, bio, likes, age, usecustomaddress, last_date_online, online, geolocate, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)';
+        await pool.query(text,[1002, 'Pontdu', 'Marine', 'female', 'heterosexual', 'France', 'Hi, my name is Marine !', 1, 18, 0, '2020-02-15 12:53:23.109+01', 0, 0, null, null]);
+        // Interests USER 2
+        text = 'INSERT INTO user_interests(user_id, interest_id) VALUES ($1, $2), ($3, $4), ($5, $6), ($7, $8)';
+        await pool.query(text, [1002, 890, 1002, 850, 1002, 830, 1002, 802]);
+        // Insert Imgs
+        text = 'INSERT INTO pictures(img_link, user_id, img_order) VALUES ($1, $2, $3)';
+        await pool.query(text, ["http://localhost:3000/img/marine-dupont.png", 1002, 0]);
+        // Insert complete
+        text = 'INSERT INTO user_complete(complete_basics, complete_photos, complete_interets, user_id, complete_location) VALUES ($1, $2, $3, $4, $5)';
+        await pool.query(text, [30, 5, 4, 1002, null]);
+
+        // Insert Admin
+        // Insert user --- USER 2
+        text = 'INSERT INTO users(user_id, username, email, password, active, complete, tokenmail, admin) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
+        await pool.query(text, [1003, "admin", "admin@gmail.com", "sha1$678115e2$1$1e55f85a4c5c1c15d43787868eb147528a270a5f", 1, 150, null, 1]);
+        // Generate profile
+        text = 'INSERT INTO profile(user_id, lastname, firstname, gender, interested, country, bio, likes, age, usecustomaddress, last_date_online, online, geolocate, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)';
+        await pool.query(text,[1003, 'Admin', 'Admin', 'special', 'special', 'France', 'Hi, my name is JV !', 1, 18, 0, '2020-02-15 12:53:23.109+01', 0, 0, null, null]);
+        // Insert Imgs
+        text = 'INSERT INTO pictures(img_link, user_id, img_order) VALUES ($1, $2, $3)';
+        await pool.query(text, ["http://localhost:3000/img/white-image.png", 1003, 0]);
+        // Insert complete
+        text = 'INSERT INTO user_complete(complete_basics, complete_photos, complete_interets, user_id, complete_location) VALUES ($1, $2, $3, $4, $5)';
+        await pool.query(text, [50, 50, 50, 1003, null]);
         return res.status(200).json({
             warnings: ["1002 profiles were successfully created"]
         })
     }
     catch(error) {
-        return res.status(500).json({
+        console.log(error);
+        return res.status(400).json({
             warnings: ["Error during create profiles.."]
         })
     }

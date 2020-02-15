@@ -1,0 +1,48 @@
+import React from 'react';
+import { Redirect } from 'react-router-dom';
+import API from '../utils/API';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+
+function withAuth(ComponentToProtect) {
+    return class extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                loading: true,
+                redirect: false,
+            };
+            this._mounted = false;
+        }
+        componentDidMount= async() => {
+            this._mounted = true;
+            if (cookies.get('token'))
+                await API.withAuthAdmin()
+                    .then(res => {
+                        if (res.status === 200) {
+                            this._mounted && this.setState({loading: false});
+                        }
+                        else
+                            throw new Error(res.error);
+                    })
+                    .catch(() => {this._mounted && this.setState({loading: false, redirect: true})});
+            else
+                this._mounted && this.setState({loading: false, redirect: true});
+        }
+
+        componentWillUnmount() {
+            this._mounted = false;
+        }
+
+        render () {
+            const { loading, redirect } = this.state;
+            if (loading)
+                return null;
+            if (redirect)
+                return <Redirect to="/" />;
+            return <ComponentToProtect {...this.props} />
+        }
+    }
+}
+
+export default withAuth;

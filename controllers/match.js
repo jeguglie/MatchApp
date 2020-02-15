@@ -18,10 +18,25 @@ async function getUsers(req, res){
         let response = await pool.query(text, values);
         if (response && response.rows.length) {
             const {gender, interested} = response.rows[0];
-            // First filter on BDD with AGE - POPULARITY
-            text = 'SELECT * FROM profile P INNER JOIN pictures IMG ON P.user_id = IMG.user_id WHERE IMG.img_order >= 0 AND IMG.img_order <= 5' +
-                'AND P.interested = $1 AND P.gender = $2 AND P.age >= $3 AND P.age <= $4 AND P.likes >= $5 AND P.likes <= $6 AND P.user_id <> $7';
-            values = [gender, interested, ageRange.min, ageRange.max, popularityRange.min, popularityRange.max, userID];
+            if (interested === 'heterosexual') {
+                text = 'SELECT * FROM profile P INNER JOIN pictures IMG ON P.user_id = IMG.user_id WHERE IMG.img_order = 0' +
+                    'AND (P.interested = $1 OR P.interested = $2) AND P.gender = $3 AND P.age >= $4 AND P.age <= $5 AND P.likes >= $6 AND P.likes <= $7 AND P.user_id <> $8 ';
+                values = [interested, 'bisexual', gender === 'female' ? 'male' : 'female', ageRange.min, ageRange.max, popularityRange.min, popularityRange.max, userID];
+            }
+            else if (interested === 'bisexual') {
+                text = 'SELECT * FROM profile P JOIN pictures IMG ON P.user_id = IMG.user_id WHERE IMG.img_order = 0' +
+                    'AND P.age >= $1 AND P.age <= $2 AND P.likes >= $3 AND P.likes <= $4 AND P.user_id <> $5 ';
+                values = [ageRange.min, ageRange.max, popularityRange.min, popularityRange.max, userID];
+            }
+            else if (interested === 'homosexual') {
+                text = 'SELECT * FROM profile P INNER JOIN pictures IMG ON P.user_id = IMG.user_id WHERE IMG.img_order = 0' +
+                    'AND (P.interested = $1 OR P.interested = $2) AND P.gender = $3 AND P.age >= $4 AND P.age <= $5 AND P.likes >= $6 AND P.likes <= $7 AND P.user_id <> $8';
+                values = [interested, 'bisexual', gender, ageRange.min, ageRange.max, popularityRange.min, popularityRange.max, userID];
+            }
+
+            // text = 'SELECT * FROM profile P JOIN pictures IMG ON P.user_id = IMG.user_id WHERE (IMG.img_order >= 0 AND IMG.img_order <= 5' +
+            //     'AND P.age >= $1 AND P.age <= $2 AND P.likes >= $3 AND P.likes <= $4 AND P.user_id <> $5) ';
+
             response = await pool.query(text, values);
             let users = response.rows;
             // Get hided users and remove them
@@ -51,7 +66,7 @@ async function getUsers(req, res){
                 response = await pool.query(text, values);
                 return Object.assign(user, {interests: response.rows});
             });
-            Promise.all(users).catch(() => { return res.status(500).json({}) })
+            Promise.all(users).catch(() => { return res.status(400).json({}) })
                 .then((users) = async(users) => {
                     let userLocation = {
                         longitude: 0,

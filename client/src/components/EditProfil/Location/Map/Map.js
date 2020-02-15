@@ -25,13 +25,15 @@ const DEFAULT_POSITION = {
 }
 class SimpleMap extends Component {
 
-    state = DEFAULT_POSITION;
     constructor(props){
         super(props);
+        this.state = DEFAULT_POSITION;
+        this._mounted = false;
         this.updatePosition = this.updatePosition.bind(this);
     }
+
     componentDidMount() {
-        this.setState({...DEFAULT_POSITION});
+        this._mounted = true;
     }
 
     componentDidUpdate(prevProps) {
@@ -42,7 +44,7 @@ class SimpleMap extends Component {
 
     updatePosition = () => {
         if (this.props.innerRef && this.props.innerRef.state && this.props.innerRef.state.coords) {
-            this.setState({
+            this._mounted && this.setState({
                 lat: this.props.innerRef.state.coords.latitude,
                 lng: this.props.innerRef.state.coords.longitude,
             }, () => {
@@ -62,7 +64,7 @@ class SimpleMap extends Component {
             <div style={{ height: '100%', width: '100%' }}>
                 <div id="mapContent">
                     <GoogleMapReact
-                        bootstrapURLKeys={{ key: 'AIzaSyDMyRL-0tVdDqmG-aCpDaSsI0IbZqb7FQg' }}
+                        // bootstrapURLKeys={{ key: 'AIzaSyDMyRL-0tVdDqmG-aCpDaSsI0IbZqb7FQg' }}
                         defaultCenter={defaultCenter}
                         center={center}
                         defaultZoom={zoom}

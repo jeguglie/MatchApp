@@ -2,7 +2,6 @@ import React from 'react';
 import {Button, Checkbox, Divider, Grid, Segment} from "semantic-ui-react";
 import InputRange from "react-input-range";
 import SearchTags from "../SearchTags/SearchTags";
-import 'react-input-range/lib/css/index.css';
 import Aux from "../../../hoc/Aux";
 
 const DEFAULT_STATE = {

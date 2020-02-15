@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const secret = 'mysecretsshhh';
-const pool = require('./../utils/queries');
 const lib = require('../controllers/lib.js');
 
 const withAuth = function(req, res, next) {

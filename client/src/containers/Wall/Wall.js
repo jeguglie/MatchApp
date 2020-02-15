@@ -165,6 +165,7 @@ class Wall extends React.Component {
                 </Grid.Row>
                 <Divider hidden/>
                 <Grid stackable >
+                    {!this.state.users.length && !this.state.loading ? <h1> No users found</h1> : null}
                     <UserMiniCard
                         userIdFocus={userIdFocusLoad}
                         inner

@@ -48,7 +48,7 @@ class EditProfil extends React.Component {
     }
 
 
-    useCustomAddress = () => { this.props.history.push('/usecustomaddress') };
+    setCustomLocation = () => { this.props.history.push('/changelocation') };
 
     render(){
         const {section} = this.state;
@@ -91,7 +91,7 @@ class EditProfil extends React.Component {
                         prevsection={this.handlePrev}
                         complete={this.state.complete}
                         getcomplete={this.getComplete}
-                        useCustomAddress={this.useCustomAddress}
+                        setCustomLocation={this.setCustomLocation}
                         />
                 </div>
             );

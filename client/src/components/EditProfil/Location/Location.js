@@ -6,7 +6,6 @@ import SimpleMap from "./Map/Map";
 import API from '../../../utils/API';
 import { store } from 'react-notifications-component';
 
-// import PlacesWithStandaloneSearchBox from "./SearchBoxGoogleMap/SearchBoxGoogleMap";
 
 const DEFAULT_STATE = {
     loading: false,
@@ -123,10 +122,10 @@ class Location extends React.Component {
                             content='Geolocate my position' />
                         <Divider horizontal id={"ordivider"}>Or</Divider>
                         <Button
-                            onClick={this.props.useCustomAddress}
+                            onClick={this.props.setCustomLocation}
                             className="buttonLastStep"
                             size="big"
-                            content='Use a custom address' />
+                            content='Set a custom location' />
                     </Segment>
                     <Grid>
                         <Divider hidden />

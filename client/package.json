@@ -16,7 +16,7 @@
     "react-bootstrap": "^1.0.0-beta.16",
     "react-dom": "^16.11.0",
     "react-geolocated": "^3.0.1",
-    "react-google-maps": "^9.4.5",
+    "react-google-autocomplete": "^1.1.2",
     "react-infinite-scroller": "^1.2.4",
     "react-input-range": "^1.3.0",
     "react-notifications-component": "^2.3.0",
@@ -50,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "prop-types": "^15.7.2",
     "react-router-dom": "^5.1.2",
     "style-loader": "^1.1.3"
