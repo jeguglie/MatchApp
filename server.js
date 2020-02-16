@@ -69,4 +69,4 @@ app.post('/logout', withAuth, async(req, res) => {
     res.sendStatus(200);
 });
 
-app.listen(port, 'localhost', () => console.log(`Server listening on port ${port}`));
+app.listen(process.env.PORT || 5000, 'localhost', () => console.log(`Server listening on port 5000}`));
