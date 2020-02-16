@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "3.0.0",
-  "description": "Matchapp 42 project web application dating",
+  "description": "Matchapp 42 project web application dating:",
   "engines": {
     "node": "10.x"
   },
