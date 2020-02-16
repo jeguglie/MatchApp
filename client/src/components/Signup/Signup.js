@@ -79,21 +79,23 @@ class Signup extends React.Component {
             await validate.sleepLoader(1200)
                 .then(async () => {
                     await API.signup(lastname, firstname, email, username, password, cpassword)
-                        .then(() => {
-                            this.props.history.push('/login');
-                            store.addNotification({
-                                title: 'Confirm your account',
-                                message: "Use the link sent by mail to activate your account",
-                                type: "success",
-                                insert: "top",
-                                container: "top-right",
-                                animationIn: ["animated", "fadeIn"],
-                                animationOut: ["animated", "fadeOut"],
-                                dismiss: {
-                                    duration: 10000,
-                                    onScreen: true
-                                }
-                            });
+                        .then((res) => {
+                            if (res.status === 200) {
+                                this.props.history.push('/login');
+                                store.addNotification({
+                                    title: 'Confirm your account',
+                                    message: "Use the link sent by mail to activate your account",
+                                    type: "success",
+                                    insert: "top",
+                                    container: "top-right",
+                                    animationIn: ["animated", "fadeIn"],
+                                    animationOut: ["animated", "fadeOut"],
+                                    dismiss: {
+                                        duration: 10000,
+                                        onScreen: true
+                                    }
+                                });
+                            }
                         })
                         .catch(error => {
                             if (typeof error.response.data !== 'undefined' && typeof error.response.data.warnings !== 'undefined')
