@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 require('./controllers/sockets');
+const path = require('path');
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const withAuth = require('./utils/middleware');
