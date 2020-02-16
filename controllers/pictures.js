@@ -47,6 +47,27 @@ async function updatetotalimage(userID){
     }
 }
 
+async function reorganizeImg(userID){
+    try {
+        let text = 'SELECT * FROM pictures WHERE user_id = $1 ORDER BY img_order ASC';
+        let response = await pool.query(text, [userID]);
+        let nbr = 0;
+        if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length) {
+            nbr = response.rows.length;
+            for (let i = 0; i < nbr; i++) {
+                await pool.query('UPDATE pictures SET img_order = $1 WHERE img_id = $2', [i, response.rows[i].img_id]);
+            }
+        }
+
+        return true;
+    } catch (e){
+        console.log(e);
+        return false;
+    }
+
+    return false;
+}
+
 async function uploadPhoto(req, res) {
     const user_id = await account.getUserId(res.locals.email);
     if (user_id === null)
@@ -77,6 +98,7 @@ async function uploadPhoto(req, res) {
         values = [user_id, 'http://localhost:5000/' + pathImg, img_order];
         await pool.query(text, values);
         await updatetotalimage(user_id);
+        await reorganizeImg(user_id);
         return res.status(200).json({
             warnings: ["Image successfully uploaded"],
             save: true
@@ -132,10 +154,11 @@ async function deleteImage(req, res) {
         text = 'DELETE FROM pictures WHERE img_id = $1 AND user_id = $2';
         values = [img_id, user_id];
         await pool.query(text, values);
+        await updatetotalimage(user_id);
+        await reorganizeImg(user_id);
         return res.status(200).json({
             warnings: ["Your images was successfully deleted"]
         });
-        await updatetotalimage(user_id);
     } catch (error) {
         return res.status(400).json({
             warnings: ["Error"]

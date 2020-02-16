@@ -1,3 +1,4 @@
+import './App.scss';
 import React, { Component } from "react";
 import { Route, Switch, Redirect} from "react-router-dom";
 import Signup from "./components/Signup/Signup.js";
@@ -8,7 +9,6 @@ import Login from "./components/Login/Login";
 import EditProfile from "./components/EditProfil/EditProfil";
 import withAuth from "./utils/withAuth";
 import withAuthAdmin from "./utils/withAuthAdmin";
-import './App.scss';
 import Menu from './components/Menu/Menu';
 import Notifications from "./components/Notifications/Notifications";
 import NotificationsHistory from "./components/Notifications/NotificationsHistory/NotificationsHistory";
@@ -63,7 +63,7 @@ class App extends Component {
 
     render() {
         return (
-            <div>
+            <div className={'Content'}>
                 <Menu
                     ref={this.innerRef}
                     logout={this.s_logout}
