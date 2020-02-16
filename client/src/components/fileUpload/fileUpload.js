@@ -22,7 +22,7 @@ export default class FileUpload extends React.Component {
         else {
             const formData = new FormData();
             formData.append('file', file);
-            const {data} = await axios.post(process.env.PORT ? "https://matchappli.heroku.com/api/user-profile" : "http://localhost:5000/api/user-profile", formData, {withCredentials: 'true'});
+            const {data} = await axios.post(process.env === "production" ? "https://matchappli.heroku.com/api/user-profile" : "http://localhost:5000/api/user-profile", formData, {withCredentials: 'true'});
             if (data.warnings)
                 this.props.setWarnings(data.warnings);
         }
