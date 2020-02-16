@@ -3,14 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c16ee8f9-abb0-4aa0-aae7-867162795261" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/App.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/EditProfil/BasicInformations/BasicInformations.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/EditProfil/BasicInformations/BasicInformations.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/containers/Footer/Footer.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Footer/Footer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/containers/Footer/Footer.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/pictures.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/pictures.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/lib.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/lib.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,20 +21,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controllers/lib.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="476">
-              <caret line="921" column="110" lean-forward="true" selection-start-line="921" selection-start-column="7" selection-end-line="921" selection-end-column="110" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/controllers/pictures.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="56" selection-start-line="56" selection-end-line="56" />
+              <caret line="921" selection-start-line="921" selection-end-line="921" />
             </state>
           </provider>
         </entry>
@@ -85,8 +69,8 @@
       <find>Block</find>
       <find>ReactNotificationComponent</find>
       <find>img_order</find>
-      <find>withAuth</find>
       <find>for</find>
+      <find>withAuth</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$</dir>
@@ -121,7 +105,6 @@
         <option value="$PROJECT_DIR$/client/src/components/ModalChat/ModalChat.js" />
         <option value="$PROJECT_DIR$/controllers/chat.js" />
         <option value="$PROJECT_DIR$/controllers/sockets.js" />
-        <option value="$PROJECT_DIR$/controllers/lib.js" />
         <option value="$PROJECT_DIR$/client/src/components/EditProfil/BasicInformations/BasicsInformations.js" />
         <option value="$PROJECT_DIR$/client/src/components/Menu/Menu.js" />
         <option value="$PROJECT_DIR$/client/src/components/EditProfil/EditProfil.js" />
@@ -154,6 +137,7 @@
         <option value="$PROJECT_DIR$/client/public/index.html" />
         <option value="$PROJECT_DIR$/client/src/App.scss" />
         <option value="$PROJECT_DIR$/controllers/pictures.js" />
+        <option value="$PROJECT_DIR$/controllers/lib.js" />
       </list>
     </option>
   </component>
@@ -293,12 +277,12 @@
       <workItem from="1581024349349" duration="2232000" />
       <workItem from="1581546909628" duration="36842000" />
       <workItem from="1581705516673" duration="12035000" />
-      <workItem from="1581767047203" duration="33075000" />
+      <workItem from="1581767047203" duration="33579000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="295140000" />
+    <option name="totallyTimeSpent" value="295644000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -312,7 +296,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49905482" visible="true" weight="0.26251787" />
       <window_info id="Structure" order="1" sideWeight="0.50094515" side_tool="true" weight="0.29685265" />
@@ -327,7 +310,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.4866242" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.3133758" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="bottom" id="TypeScript" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -787,17 +770,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/lib.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="921" column="110" lean-forward="true" selection-start-line="921" selection-start-column="7" selection-end-line="921" selection-end-column="110" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/controllers/pictures.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="115">
           <caret line="56" selection-start-line="56" selection-end-line="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/lib.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="921" selection-start-line="921" selection-end-line="921" />
         </state>
       </provider>
     </entry>
