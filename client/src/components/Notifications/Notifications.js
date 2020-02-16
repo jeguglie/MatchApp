@@ -7,7 +7,7 @@ class Notifications extends React.Component {
     constructor(props){
      super(props);
         this.state = { userID: null };
-        this.socket = io('http://localhost:8000');
+        this.socket = io('https://matchappli.herokuapp.com:8000');
         this._mounted = false;
     };
 
