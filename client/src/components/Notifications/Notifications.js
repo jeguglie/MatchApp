@@ -2,7 +2,7 @@ import React from 'react';
 import ReactNotification from 'react-notifications-component';
 import { store } from 'react-notifications-component';
 import io from 'socket.io-client';
-const url = process.env === "production" ? 'https://matchappli.herokuapp.com:8000' : 'http://localhost:8000/';
+const url = process.env.NODE_ENV === "production" ? 'https://matchappli.herokuapp.com:8000' : 'http://localhost:8000/';
 class Notifications extends React.Component {
 
     constructor(props){
@@ -10,8 +10,6 @@ class Notifications extends React.Component {
         this.state = { userID: null };
         this.socket = io(url);
         this._mounted = false;
-        console.log(process.env);
-
     };
     // Sockets chat
     s_message_send(to_user_id, message){this.socket.connected && this.socket.emit("message:send", to_user_id, message)};
