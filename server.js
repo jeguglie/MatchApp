@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-const port = 5000;
 require('./controllers/sockets');
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
@@ -68,5 +67,5 @@ app.post('/logout', withAuth, async(req, res) => {
     res.clearCookie('token');
     res.sendStatus(200);
 });
-
+console.log(process.env.PORT);
 app.listen(process.env.PORT || 5000, 'localhost', () => console.log(`Server listening on port 5000}`));
