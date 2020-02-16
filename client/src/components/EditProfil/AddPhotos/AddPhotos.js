@@ -20,7 +20,7 @@ class AddPhotos extends React.Component {
         super(props);
         this.state = ({...DEFAULT_STATE});
         this.state.complete = this.props.complete;
-        this.state.coverImage = "http://localhost:3000/img/white-image.png";
+        this.state.coverImage = "https://react.semantic-ui.com/images/wireframe/white-image.png";
         this.handleImageUpload = this.handleImageUpload.bind(this);
     }
 
@@ -58,7 +58,7 @@ class AddPhotos extends React.Component {
         if(this.state.profileImg.length > 0)
             this.setState({coverImage: this.state.profileImg[0].img_link});
         else
-            this.setState({coverImage : "http://localhost:3000/img/white-image.png"});
+            this.setState({coverImage : "https://react.semantic-ui.com/images/wireframe/white-image.png"});
 
     }
     async handleImageUpload () {

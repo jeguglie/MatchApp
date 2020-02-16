@@ -163,7 +163,7 @@ async function matchAppFaker(req, res) {
         await pool.query(text, [1002, 1001]);
         // Insert Imgs
         text = 'INSERT INTO pictures(img_link, user_id, img_order) VALUES ($1, $2, $3)';
-        await pool.query(text, ['http://localhost:3000/img/patrick-dupont.png', 1001, 0]);
+        await pool.query(text, [process.env.PORT ? 'http://matchappli.heroku.com/img/patrick-dupont.png' : 'http://localhost:3000/img/patrick-dupont.png', 1001, 0]);
         // Insert complete
         text = 'INSERT INTO user_complete(complete_basics, complete_photos, complete_interets, user_id, complete_location) VALUES ($1, $2, $3, $4, $5)';
         await pool.query(text, [30, 5, 4, 1001, null]);
@@ -181,7 +181,7 @@ async function matchAppFaker(req, res) {
         await pool.query(text, [1002, 890, 1002, 850, 1002, 830, 1002, 802]);
         // Insert Imgs
         text = 'INSERT INTO pictures(img_link, user_id, img_order) VALUES ($1, $2, $3)';
-        await pool.query(text, ["http://localhost:3000/img/marine-dupont.png", 1002, 0]);
+        await pool.query(text, [process.env.PORT ? 'http://matchappli.heroku.com/img/marine-dupont.png' : 'http://localhost:3000/img/marine-dupont.png', 1002, 0]);
         // Insert complete
         text = 'INSERT INTO user_complete(complete_basics, complete_photos, complete_interets, user_id, complete_location) VALUES ($1, $2, $3, $4, $5)';
         await pool.query(text, [30, 5, 4, 1002, null]);
@@ -195,7 +195,7 @@ async function matchAppFaker(req, res) {
         await pool.query(text,[1003, 'Admin', 'Admin', 'special', 'special', 'France', 'Hi, my name is JV !', 1, 18, 0, '2020-02-15 12:53:23.109+01', 0, 0, null, null]);
         // Insert Imgs
         text = 'INSERT INTO pictures(img_link, user_id, img_order) VALUES ($1, $2, $3)';
-        await pool.query(text, ["http://localhost:3000/img/white-image.png", 1003, 0]);
+        await pool.query(text, ["https://react.semantic-ui.com/images/wireframe/white-image.png", 1003, 0]);
         // Insert complete
         text = 'INSERT INTO user_complete(complete_basics, complete_photos, complete_interets, user_id, complete_location) VALUES ($1, $2, $3, $4, $5)';
         await pool.query(text, [50, 50, 50, 1003, null]);
