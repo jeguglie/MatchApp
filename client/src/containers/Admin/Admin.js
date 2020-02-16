@@ -10,7 +10,6 @@ class Admin extends React.Component{
            users: []
         };
         this._mounted = false;
-
     }
 
     componentDidMount = async() => {
