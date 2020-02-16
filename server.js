@@ -12,6 +12,8 @@ const admin = require('./controllers/admin.js');
 const chat = require('./controllers/chat.js');
 const wall = require('./controllers/wall.js');
 const pictures = require('./controllers/pictures.js');
+const host = '0.0.0.0';
+const port = process.env.PORT || 5000;
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Credentials', true);
@@ -67,5 +69,4 @@ app.post('/logout', withAuth, async(req, res) => {
     res.clearCookie('token');
     res.sendStatus(200);
 });
-console.log(process.env.PORT);
-app.listen(process.env.PORT || 5000, 'localhost', () => console.log(`Server listening on port 5000}`));
+app.listen(process.env.PORT || 5000, host, () => console.log(`Server listening on port ${process.env.PORT || 5000}`));
