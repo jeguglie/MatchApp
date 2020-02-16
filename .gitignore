@@ -1,6 +1,0 @@
-/node_modules
-./client/node_modules
-./.idea
-./package-lock.json
-./client/src/package-lock.json
-./client/.DS_Store
