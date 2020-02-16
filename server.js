@@ -8,6 +8,7 @@ const router = require('./utils/router');
 
 // Priority serve any static files.
 app.use(express.static(path.resolve(__dirname, './client/build/')));
+app.use('/api/public', express.static('public'));
 app.use('/api', router);
 // All remaining requests return the React app, so it can handle routing.
 app.get('*', function(request, response) {

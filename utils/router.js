@@ -9,7 +9,7 @@ const admin = require('./../controllers/admin.js');
 const chat = require('./../controllers/chat.js');
 const wall = require('./../controllers/wall.js');
 const pictures = require('./../controllers/pictures.js');
-const { Router } = require('express');
+const { Router, express } = require('express');
 const router = Router();
 
 router.use((req, res, next) => {
@@ -22,7 +22,6 @@ router.use((req, res, next) => {
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 router.use(cookieParser());
-router.use('/public', express.static('public'));
 router.get('/faker', faker.matchAppFaker);
 router.get('/checkToken', withAuth, (req, res) => {res.sendStatus(200)});
 router.get('/checkTokenAdmin', withAuthAdmin, (req, res) => {res.sendStatus(200)});
