@@ -1,7 +1,10 @@
 {
-  "name": "matchapp",
-  "version": "1.0.0",
-  "main": "server.js",
+  "name": "server",
+  "version": "3.0.0",
+  "description": "Matchapp 42 project web application dating",
+  "engines": {
+    "node": "10.x"
+  },
   "scripts": {
     "start": "node server.js",
     "build": "cd client/ && npm install && npm run build",
