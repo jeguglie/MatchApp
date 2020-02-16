@@ -2,7 +2,7 @@ import axios from "axios";
 const headers = {
     "Content-Type": "application/json"
 };
-const burl = "http://localhost:5000";
+const burl = `http://localhost:${process.env.PORT || 5000}`;
 
 export default {
     reportuser: function(user_id_reported){
