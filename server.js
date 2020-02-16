@@ -15,6 +15,9 @@ const pictures = require('./controllers/pictures.js');
 const host = '0.0.0.0';
 const port = process.env.PORT || 5000;
 
+// Priority serve any static files.
+app.use(express.static(path.resolve(__dirname, './client/build')));
+
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -69,4 +72,9 @@ app.post('/logout', withAuth, async(req, res) => {
     res.clearCookie('token');
     res.sendStatus(200);
 });
-app.listen(process.env.PORT || 5000, host, () => console.log(`Server listening on port ${process.env.PORT || 5000}`));
+
+// All remaining requests return the React app, so it can handle routing.
+app.get('*', function(request, response) {
+    response.sendFile(path.resolve(__dirname, '/client/build', 'index.html'));
+});
+app.listen(process.env.PORT || 5000, host, () => console.log(`Server listening on port ${port}`));
