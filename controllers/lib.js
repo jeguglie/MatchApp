@@ -404,7 +404,7 @@ async function login(req, res) {
             const token = jwt.sign(payload, secret, {
                 expiresIn: '1h',
             });
-            res.cookie('token', token, { httpOnly: true, path: '/', domain: process.env.NODE_ENV ? 'matchappli.heroku.com' : 'localhost', httpOnly: false, secure: false});
+            res.cookie('token', token, { path: '/', domain: process.env.NODE_ENV ? '0.0.0.0' : 'localhost', httpOnly: false, secure: false});
             await account.setUserLastConnection(response.rows[0].user_id, 1);
             await setLocationIP(response.rows[0].user_id, req.connection.remoteAddress === '127.0.0.1' ? 'www.intra.42.fr' :req.connection.remoteAddress);
             return res.status(200).json({connect: true});
