@@ -9,3 +9,5 @@
 /client/build
 **/DS_Store
 .idea
+.env
+/client/.env
