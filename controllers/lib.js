@@ -940,7 +940,8 @@ async function getUserIdProfile(req, res) {
                     text = 'SELECT interest FROM interests WHERE id = $1';
                     values = [interestsIDtab[i].interest_id];
                     response = await pool.query(text, values);
-                    intereststab.push(response.rows[0].interest);
+                    if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length)
+                        intereststab.push(response.rows[0].interest);
                 }
                 // Add interests tab to user
                 Object.assign(user, {interests: intereststab});
