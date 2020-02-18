@@ -6,5 +6,5 @@ Node.js | Express| React | PostgreSQL
 You can use two pre-filled profiles :  
 user1@gmail.com - user2@gmail.com with password 345102.jJ
 ## Generate with Faker
-`http://localhost:5000/faker`  
+`http://localhost:5000/faker` (waiting time ~ 1min30)
 will generate 1002 faked profiles (include user1 & user2)
