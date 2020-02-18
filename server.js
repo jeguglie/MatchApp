@@ -5,7 +5,7 @@ const host = process.env.PORT ? '0.0.0.0' : 'localhost';
 const port = process.env.PORT || 5000;
 const router = require('./utils/router');
 const server = app.listen(process.env.PORT || 5000, host, () => console.log(`Server listening on port ${port}`));
-var io = require('socket.io')();
+var io = require('socket.io').listen(server);
 require('./controllers/sockets');
 
 
