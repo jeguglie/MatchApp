@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-require('./controllers/sockets');
 const path = require('path');
 const host = process.env.PORT ? '0.0.0.0' : 'localhost';
 const port = process.env.PORT || 5000;
@@ -16,4 +15,6 @@ app.get('*', function(request, response) {
     response.sendFile(path.resolve(__dirname, './client/build/', 'index.html'));
 });
 
-app.listen(process.env.PORT || 5000, host, () => console.log(`Server listening on port ${port}`));
+const server = app.listen(process.env.PORT || 5000, host, () => console.log(`Server listening on port ${port}`));
+const io = require('socket.io')(server);
+require('./controllers/sockets');

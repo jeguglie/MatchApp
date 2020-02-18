@@ -3,8 +3,7 @@ const notifications = require('./notifications');
 const lib = require('./lib.js');
 let userslist = [];
 
-io.listen(8000);
-console.log('Sockets listening on port', 8000);
+console.log('Sockets listening on port');
 
 // Notifications
 io.sockets.on('connection', async(socket) => {
