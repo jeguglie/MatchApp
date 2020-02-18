@@ -19,6 +19,10 @@ router.use((req, res, next) => {
     res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
     next();
 });
+router.get('/sockets', (req, res, next) => {
+    var io = req.app.get('socketio');
+    require('../controllers/sockets');
+})
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 router.use(cookieParser());

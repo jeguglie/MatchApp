@@ -325,7 +325,7 @@ export default {
             {},
             {
                 withCredentials: 'true',
-                headers: headers
+                headers: headers,
             }
         )
     },

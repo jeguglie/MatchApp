@@ -405,8 +405,8 @@ async function login(req, res) {
                 expiresIn: '1h',
             });
             process.env.NODE_ENV === 'production' ?
-                res.cookie('token', token, { path: '/', domain: 'matchappli.herokuapp.com' , SameSite: 'strict', httpOnly: false, secure: true}) :
-                res.cookie('token', token, { path: '/', domain: 'localhost' , httpOnly: false, secure: false});
+                res.cookie('token', token, { path: '/', domain: 'matchappli.herokuapp.com' , sameSite: 'strict', httpOnly: false, secure: true}) :
+                res.cookie('token', token, { path: '/', domain: 'localhost' , sameSite: 'strict',  httpOnly: false, secure: false});
             await account.setUserLastConnection(response.rows[0].user_id, 1);
             await setLocationIP(response.rows[0].user_id, req.connection.remoteAddress === '127.0.0.1' ? 'www.intra.42.fr' :req.connection.remoteAddress);
             return res.status(200).json({connect: true});
