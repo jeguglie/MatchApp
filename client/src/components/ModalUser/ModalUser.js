@@ -103,7 +103,8 @@ class ModalUser extends React.Component {
                     size={'tiny'}
                     open={showModal}
                     onClose={this.handleClose}
-                    className="ModalCard">
+                    className="ModalCard"
+                    closeIcon>
                     <Modal.Header className="CardHeader"><h1
                         className="CardHeaderTile"> {user.firstname} {user.lastname}, <strong>{user.age}</strong></h1>
                     </Modal.Header>

@@ -8,24 +8,26 @@
   "scripts": {
     "start": "node server.js",
     "build": "cd client/ && npm install && npm rebuild node-sass && npm run build",
+    "buildlocal": "cd client/ && npm run build",
     "dev": "nodemon server.js"
   },
   "dependencies": {
+    "@types/express": "^4.17.2",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "cookie": "^0.4.0",
     "cookie-parser": "^1.4.4",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.2",
     "nodemailer": "^6.4.2",
     "password-hash": "^1.2.2",
     "pg": "^7.18.1",
     "random-location": "^1.1.2",
     "socket.io": "^2.3.0",
-    "uuid": "latest",
-    "@types/express": "^4.17.2",
-    "multer": "^1.4.2"
+    "uuid": "latest"
   },
   "repository": {
     "type": "git",

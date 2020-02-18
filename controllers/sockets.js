@@ -1,11 +1,10 @@
 const io = require('socket.io')();
 const notifications = require('./notifications');
 const lib = require('./lib.js');
-const portio = 8000;
 let userslist = [];
 
-io.listen(portio);
-console.log('Sockets listening on port', portio);
+io.listen(process.env.PORT || 8000);
+console.log('Sockets listening on port', process.env.PORT || 8000);
 
 // Notifications
 io.sockets.on('connection', async(socket) => {
@@ -90,5 +89,3 @@ io.sockets.on('connection', async(socket) => {
         }
     });
 });
-
-

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactNotification from 'react-notifications-component';
 import { store } from 'react-notifications-component';
 import io from 'socket.io-client';
-const url = process.env.NODE_ENV === "production" ? 'https://matchappli.herokuapp.com/api/sockets' : 'http://localhost/api/sockets';
+const url = !process.env.REACT_APP_LOCALHOST ? 'https://matchappli.herokuapp.com/' : 'http://localhost:8000/';
 class Notifications extends React.Component {
 
     constructor(props){

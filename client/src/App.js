@@ -17,6 +17,7 @@ import ChangePassword from './components/ForgotPassword/ChangePassword';
 import ChangeMyEmail from "./components/EditProfil/ChangeMyMail/ChangeMyMail";
 import ChangeLocation from "./components/EditProfil/ChangeLocation/ChangeLocation";
 import Cookies from "universal-cookie";
+
 const cookies = new Cookies();
 
 class App extends Component {

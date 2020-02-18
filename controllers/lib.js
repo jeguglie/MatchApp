@@ -8,6 +8,9 @@ const secret = 'mysecretsshhh';
 const notifications = require('./../controllers/notifications');
 const account = require('./../controllers/lib');
 const axios = require("axios");
+require('dotenv').config();
+
+
 
 let transport = nodemailer.createTransport({
     host: 'smtp.mailtrap.io',
@@ -332,7 +335,7 @@ async function signup(req, res) {
             from: 'matcha@app.com',
             to: email,
             subject: 'Activate your account',
-            text: `Hello !\nHere is the link to confirm your account ${process.env.PORT ?'https://matchappli.herokuapp.com/login/' : 'http://localhost:3000/login/'}`+hashtoken,
+            text: `Hello !\nHere is the link to confirm your account ${ !process.env.LOCALHOST ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:3000/login/'}`+hashtoken,
         };
         transport.sendMail(message, function(err, info) {
             if (err) console.log(err)
@@ -370,7 +373,6 @@ async function login(req, res) {
     const { password, email } = req.body;
     if (!email || !password)
         return res.status(400).json({ warnings: "Invalid request" });
-
     try {
         const text = 'SELECT * FROM users WHERE email = $1';
         const values = [email];
@@ -385,7 +387,7 @@ async function login(req, res) {
                     from: 'matcha@app.com',
                     to: email,
                     subject: 'Activate your account',
-                    text: `Hello !\nHere is the link to confirm your account ${process.env.PORT ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:3000/login/'}`+hashtoken,
+                    text: `Hello !\nHere is the link to confirm your account ${!process.env.LOCALHOST ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:3000/login/'}`+hashtoken,
                 };
                 transport.sendMail(message, function(err, info) {
                     if (err) console.log(err)
@@ -404,9 +406,9 @@ async function login(req, res) {
             const token = jwt.sign(payload, secret, {
                 expiresIn: '1h',
             });
-            process.env.NODE_ENV === 'production' ?
-                res.cookie('token', token, { path: '/', domain: 'matchappli.herokuapp.com' , sameSite: 'strict', httpOnly: false, secure: true}) :
-                res.cookie('token', token, { path: '/', domain: 'localhost' , sameSite: 'strict',  httpOnly: false, secure: false});
+            !process.env.LOCALHOST ?
+                res.cookie('token', token, { path: '/', domain: 'matchappli.herokuapp.com', httpOnly: false, secure: true}) :
+                res.cookie('token', token, { path: '/', domain: 'localhost' , httpOnly: false, secure: false});
             await account.setUserLastConnection(response.rows[0].user_id, 1);
             await setLocationIP(response.rows[0].user_id, req.connection.remoteAddress === '127.0.0.1' ? 'www.intra.42.fr' :req.connection.remoteAddress);
             return res.status(200).json({connect: true});
@@ -576,7 +578,7 @@ async function userforgot(req, res){
             from: 'matcha@app.com',
             to: email,
             subject: 'Forgot Password',
-            text: `Hello !\nHere is the link to reset your password ${ process.env.PORT ? 'https://matchappli.herokuapp.com/forgotpassword/' : 'http://localhost:3000/forgotpassword/'}`+hashtoken,
+            text: `Hello !\nHere is the link to reset your password ${ !process.env.LOCALHOST ? 'https://matchappli.herokuapp.com/forgotpassword/' : 'http://localhost:3000/forgotpassword/'}`+hashtoken,
         };
         transport.sendMail(message);
         pool.query(text, values);

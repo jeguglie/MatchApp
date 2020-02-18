@@ -3,6 +3,7 @@ const pool = require('./../utils/queries');
 const multer = require('multer');
 const DIR = './public/';
 const uuid = require('uuid/v4');
+require('dotenv').config();
 
 
 const storage = multer.diskStorage({
@@ -96,7 +97,7 @@ async function uploadPhoto(req, res) {
         let img_order = response.rows.length < 1 ? 0 : response.rows.length + 1;
         // Add image row and image order
         text = 'INSERT INTO pictures(user_id, img_link, img_order) VALUES ($1, $2, $3)';
-        values = [user_id, process.env.PORT ? 'https://matchappli.herokuapp.com/api/' + pathImg : 'http://localhost:5000/api/' + pathImg, img_order];
+        values = [user_id, !process.env.LOCALHOST ? 'https://matchappli.herokuapp.com/api/' + pathImg : 'http://localhost:5000/api/' + pathImg, img_order];
         await pool.query(text, values);
         await updatetotalimage(user_id);
         await reorganizeImg(user_id);
