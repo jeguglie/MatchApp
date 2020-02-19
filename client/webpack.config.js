@@ -76,6 +76,10 @@ module.exports = {
           use: ['babel-loader']
         },
         {
+          test: /\.(png|jpg)$/,
+          loader: 'url-loader'
+        },
+        {
           test: /\.css$/,
           exclude: /node_modules/,
           use: [
