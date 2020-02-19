@@ -10,7 +10,7 @@ require('dotenv').config({path: __dirname + '/.env'});
 
 
 module.exports = env => {
-  const localhost = env.REACT_APP_LOCALHOST ? "0" : "1";
+  const localhost = env.REACT_APP_LOCALHOST === undefined ? "0" : "1";
   return {
     resolve: {
       extensions: ['.js', '.scss', '.css', '.png'],
