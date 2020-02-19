@@ -1,7 +1,11 @@
-const express = require('express');
-const app = require('express')();
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+// const express = require('express');
+// const app = require('express')();
+// const server = require('http').createServer(app);
+// const io = require('socket.io')(server);
+var express = require('express'),
+    app = express(),
+    server = require('http').createServer(app),
+    io = require('socket.io').listen(server)
 const path = require('path');
 const host = process.env.PORT ? '0.0.0.0' : 'localhost';
 const port = process.env.PORT || 5000;
@@ -17,7 +21,7 @@ app.use('/api', router);
 // Notifications
 let userslist = [];
 io.sockets.on('connection', async(socket) => {
-    console.log(1);
+    console.log(userslist);
     userslist = await notifications.pushUserSocket(socket, userslist);
     socket.on("userlogin", async(token) => {
         let userIDemitter = await notifications.getUserIDFromSocketEmitter(socket, userslist);
