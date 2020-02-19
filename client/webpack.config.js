@@ -47,7 +47,7 @@ module.exports = {
       }),
         new HtmlWebPackPlugin({
           template: "./public/index.html",
-          filename: "./index.html"
+          filename: "./index.html",
         }),
         new CompressionPlugin({
         algorithm: "gzip",
@@ -90,7 +90,8 @@ module.exports = {
                 {
                     loader: 'css-loader',
                     options: {
-                        modules: true
+                        modules: true,
+                        url: false
                     }
                 },
                 {loader: 'sass-loader'}

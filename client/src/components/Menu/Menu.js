@@ -1,7 +1,5 @@
 import React from 'react';
 import { ButtonToolbar, Navbar, Button, Nav, ButtonGroup, NavDropdown} from 'react-bootstrap';
-// import '../../assets/global-styles/bootstrap-iso.css';
-import css from '../../assets/global-styles/bootstrap-iso.css';
 import { Icon } from "semantic-ui-react";
 import classnames from 'classnames';
 import { withRouter } from 'react-router';
