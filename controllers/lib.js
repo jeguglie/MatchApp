@@ -788,9 +788,9 @@ async function setLocationIP(userID, ip){
                     longitude = response.data.longitude;
                 }
             });
-        const regex = new RegExp('^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$');
-        if (regex.test(latitude) || regex.test(longitude))
-            return false;
+        // const regex = new RegExp('^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$');
+        // if (regex.test(latitude) || regex.test(longitude))
+        //     return false;
         try {
             let text = 'UPDATE profile SET latitude = $1, longitude = $2, geolocate = $3 WHERE user_id = $4';
             let values = [latitude, longitude, 1, userID];
