@@ -403,12 +403,11 @@ async function login(req, res) {
                     w_email: "Wrong email or password"
                 });
             const payload = { email };
-            const token = jwt.sign(payload, secret, {
-                expiresIn: '1h',
-            });
-            !process.env.LOCALHOST ?
-                res.cookie('token', token, { path: '/', domain: '.matchappli.herokuapp.com'}) :
-                res.cookie('token', token, { path: '/', domain: 'localhost'});
+            const token = jwt.sign(payload, secret);
+            if (process.env.LOCALHOST)
+                res.cookie('token', token, { maxAge: 2 * 60 * 60 * 1000, path: '/', domain: 'localhost'});
+            else
+                res.cookie('token', token, { maxAge: 2 * 60 * 60 * 1000, path: '/', domain: '.matchappli.herokuapp.com'});
             await account.setUserLastConnection(response.rows[0].user_id, 1);
             await setLocationIP(response.rows[0].user_id, req.connection.remoteAddress === '127.0.0.1' ? 'www.intra.42.fr' :req.connection.remoteAddress);
             return res.status(200).json({connect: true});
