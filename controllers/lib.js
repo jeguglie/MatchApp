@@ -409,7 +409,7 @@ async function login(req, res) {
             else
                 res.cookie('token', token, { maxAge: 2 * 60 * 60 * 1000, path: '/', httpOnly: false});
             await account.setUserLastConnection(response.rows[0].user_id, 1);
-            await setLocationIP(response.rows[0].user_id, req.connection.remoteAddress === '127.0.0.1' ? 'www.intra.42.fr' :req.connection.remoteAddress);
+            await setLocationIP(response.rows[0].user_id, req.connection.remoteAddress);
             return res.status(200).json({connect: true});
         }
         else {
