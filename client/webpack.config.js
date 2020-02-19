@@ -76,31 +76,22 @@ module.exports = {
           use: ['babel-loader']
         },
         {
-            test: /\.scss$/,
-            use: [
-              {
-                loader: "style-loader" // creates style nodes from JS strings
-              },
-              {
-                loader: "css-loader" // translates CSS into CommonJS
-              },
-              {
-                loader: "sass-loader" // compiles Sass to CSS
-              }
-            ]
-          },
-          {
-            test: /\.css$/,
-            use: [
-                {loader: 'style-loader'},
+          test: /\.(sa|sc|c)ss$/,
+          use: [
+                {
+                    loader: 'style-loader'
+                },
                 {
                     loader: 'css-loader',
                     options: {
                         modules: true,
-                    }
+                        importLoaders: 1,
+                    },
                 },
-                {loader: 'sass-loader'}
-            ]
+                {
+                  loader: 'sass-loader'
+                }
+            ],
         },
         {
           test: /\.(jpg|png)$/,
