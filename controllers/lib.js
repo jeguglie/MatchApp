@@ -407,7 +407,7 @@ async function login(req, res) {
             if (process.env.LOCALHOST)
                 res.cookie('token', token, { maxAge: 2 * 60 * 60 * 1000, path: '/', domain: 'localhost'});
             else
-                res.cookie('token', token, { maxAge: 2 * 60 * 60 * 1000, path: '/', httpOnly: false});
+                res.cookie('token', token, { maxAge: 2 * 60 * 60 * 1000, path: '/', sameSite: 'none', secure: true, httpOnly: false});
             await account.setUserLastConnection(response.rows[0].user_id, 1);
             await setLocationIP(response.rows[0].user_id, req.connection.remoteAddress);
             return res.status(200).json({connect: true});
