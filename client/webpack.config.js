@@ -9,6 +9,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
 module.exports = env => {
+  const localhost = typeof env.REACT_APP_LOCALHOST !== 'undefined' ? env.REACT_APP_LOCALHOST : '';
   return {
     resolve: {
       extensions: ['.js', '.scss', '.css', '.png'],
@@ -68,7 +69,7 @@ module.exports = env => {
           minRatio: 0.8
       }),
       new webpack.EnvironmentPlugin({
-        REACT_APP_LOCALHOST: env.REACT_APP_LOCALHOST ? env.REACT_APP_LOCALHOST : '',
+        REACT_APP_LOCALHOST: localhost,
       }),
       new CleanWebpackPlugin(),
 
