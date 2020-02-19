@@ -5,21 +5,21 @@
 }
 
 input[type="range"]::-webkit-slider-thumb {
-   -webkit-appearance: none;
-   background: rgb(219, 54, 110);
-   border-radius: 50rem;
-   height: 1.5em;
-   width: 1.5em;
+   -webkit-appearance: none !important;
+   background: rgb(219, 54, 110) !important;
+   border-radius: 50rem !important;
+   height: 1.5em !important;
+   width: 1.5em !important;
  }
 
 input[type="range"] {
-  -webkit-appearance: none;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 50rem;
-  border-color: rgba(0, 0, 0, 0.1);
-  padding: 3px 5px;
-  width: 100%;
+  -webkit-appearance: none !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-radius: 50rem !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  padding: 3px 5px !important;
+  width: 100% !important;
 }
 
 .searchButton {
@@ -96,37 +96,37 @@ input[type="range"] {
 }
 
 .input-range__track {
-  height: 1.2rem;
+  height: 1.2rem !important;
 }
 
 .input-range__slider {
 
-  height: 1.5rem;
-  width: 1.5rem;
-  margin-top: -1.35rem;
-  background: #db366e;
-  border: none;
-  box-shadow: -1px 0px 3px #0000003d;
+  height: 1.5rem !important;
+  width: 1.5rem !important;
+  margin-top: -1.35rem !important;
+  background: #db366e !important;
+  border: none !important;
+  box-shadow: -1px 0px 3px #0000003d!important;
 }
 .input-range__label--value {
-  top: -2.6rem;
-  font-family: "Open Sans", sans-serif ;
-  display: none;
+  top: -2.6rem !important;
+  font-family: "Open Sans", sans-serif  !important;
+  display: none !important;
 }
 
 .input-range__label--min, .input-range__label--max {
-  bottom: -1.8rem;
-  font-family: "Open Sans", sans-serif ;
+  bottom: -1.8rem !important;
+  font-family: "Open Sans", sans-serif !important;
 }
 
 .input-range__label--max {
-  right: 1rem;
-  display: none;
+  right: 1rem !important;
+  display: none !important;
 }
 
 .input-range__label--min {
-  left: 0.8rem;
-  display: none;
+  left: 0.8rem !important;
+  display: none !important;
 }
 
 .RowImages {
@@ -217,7 +217,7 @@ input[type="range"] {
   border: none !important;
 }
 
-.CardUserActions {;
+.CardUserActions {
   & .segments {
     border: none !important;
     box-shadow: none !important;

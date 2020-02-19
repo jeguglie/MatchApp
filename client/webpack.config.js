@@ -46,8 +46,8 @@ module.exports = {
     },
     plugins: [
       new CopyWebpackPlugin([
-        {from:'src/assets/images',to:'img'} 
-    ]), 
+        {from:'src/assets/images',to:'img'},
+        'src/manifest.json']), 
       new OptimizeCssAssetsPlugin({
         cssProcessorOptions: {
           map: {
