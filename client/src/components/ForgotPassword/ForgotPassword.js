@@ -4,6 +4,7 @@ import VALIDATE from '../../utils/validation';
 import API from "../../utils/API";
 import { store } from 'react-notifications-component';
 import {Container, Image, Form, Button, Dimmer, Loader, Divider} from 'semantic-ui-react';
+import MatchApp from './../../assets/images/MatchApp-Logo.png';
 
 const DEFAULT_STATE = {
     email: "",
@@ -95,7 +96,7 @@ class ForgotPassword extends React.Component {
                 </Dimmer>
                 <Divider hidden />
                 <Image className="img-fluid"
-                       src="/img/MatchApp-Logo.png"
+                       src={MatchApp}
                        alt="Responsive image"
                        size="medium"
                        centered />

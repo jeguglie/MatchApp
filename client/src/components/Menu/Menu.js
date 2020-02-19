@@ -1,12 +1,15 @@
 import React from 'react';
 import { ButtonToolbar, Navbar, Button, Nav, ButtonGroup, NavDropdown} from 'react-bootstrap';
-import '../../Assets/global-styles/bootstrap-iso.css';
+// import '../../assets/global-styles/bootstrap-iso.css';
+import css from '../../assets/global-styles/bootstrap-iso.css';
 import { Icon } from "semantic-ui-react";
 import classnames from 'classnames';
 import { withRouter } from 'react-router';
 import Aux from "../../hoc/Aux";
 import API from '../../utils/API';
 import Cookies from 'universal-cookie';
+import MatchApp from './../../assets/images/MatchApp-Logo.png';
+
 const cookies = new Cookies();
 
 const withRouterAndRef = (WrappedComponent) => {
@@ -204,7 +207,7 @@ class Menu extends React.Component {
                             id='/'>
                             <a href='# ' onClick={() => this.props.history.push('/')}>
                                 <img
-                                    src='./../../img/MatchApp-Logo.png'
+                                    src={MatchApp}
                                     height="50"
                                     alt="MatchApp Logo"
                                 />

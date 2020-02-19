@@ -3,6 +3,7 @@ import {Container, Image, Divider} from 'semantic-ui-react';
 import Autocomplete from 'react-google-autocomplete';
 import API from "../../../utils/API";
 import {store} from "react-notifications-component";
+import MatchApp from './../../../assets/images/MatchApp-Logo.png';
 
 class ChangeLocation extends React.Component {
 
@@ -61,7 +62,7 @@ class ChangeLocation extends React.Component {
             <Container className="loginModal">
                 <Divider hidden />
                 <Image className="img-fluid"
-                       src="/img/MatchApp-Logo.png"
+                       src={MatchApp}
                        alt="Responsive image"
                        size="medium"
                        centered />

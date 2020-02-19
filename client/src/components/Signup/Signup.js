@@ -5,6 +5,8 @@ import Warnings from "../Warnings/Warnings";
 import validate from '../../utils/validation';
 import {store} from "react-notifications-component";
 import Cookies from 'universal-cookie';
+import MatchApp from './../../assets/images/MatchApp-Logo.png';
+
 const cookies = new Cookies();
 
 const DEFAULT_STATE = {
@@ -128,7 +130,7 @@ class Signup extends React.Component {
             </Dimmer>
             <Divider hidden />
             <Image className="img-fluid"
-                   src="/img/MatchApp-Logo.png"
+                   src={MatchApp}
                    alt="Responsive image"
                    size="medium"
                    centered/>

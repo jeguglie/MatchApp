@@ -35,7 +35,7 @@ class App extends Component {
     componentDidMount() { this._mounted = true }
 
     // Notifications update
-    updateNotifs = () => {
+    updateNotifs() {
         this.innerRefNotifHistory && this.innerRefNotifHistory.current && this.innerRefNotifHistory.current.updateNotifs();
         this.innerRef && this.innerRef.current && this.innerRef.current.updateNotifNb();
     };
