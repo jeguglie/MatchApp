@@ -6,11 +6,9 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
-require('dotenv').config({path: __dirname + '/.env'});
-
 
 module.exports = env => {
-  const localhost = env.REACT_APP_LOCALHOST === undefined ? "0" : "1";
+  const localhost = env && env.REACT_APP_LOCALHOST === undefined ? "0" : "1";
   return {
     resolve: {
       extensions: ['.js', '.scss', '.css', '.png'],
