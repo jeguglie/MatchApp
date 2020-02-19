@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Modal, Input, Icon } from 'semantic-ui-react'
-import API from '../../utils/API';
+import API from 'Src/utils/API';
 
 class ModalChat extends React.Component {
     constructor(props){

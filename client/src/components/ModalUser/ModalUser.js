@@ -3,7 +3,7 @@ import Button from "semantic-ui-react/dist/commonjs/elements/Button";
 import React from "react";
 import classnames from 'classnames';
 import ModalUserActions from "./ModalUserActions";
-import API from "../../utils/API";
+import API from "Src/utils/API";
 const moment = require('moment');
 
 

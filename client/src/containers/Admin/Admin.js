@@ -1,6 +1,6 @@
 import React from 'react';
 import {List, Button, Transition, Grid, Divider} from 'semantic-ui-react';
-import API from '../../utils/API';
+import API from 'Src/utils/API';
 
 class Admin extends React.Component{
 

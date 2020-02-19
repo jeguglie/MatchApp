@@ -1,9 +1,9 @@
 import React from "react";
-import VALIDATE from '../../utils/validation';
-import API from "../../utils/API";
+import VALIDATE from 'Src/utils/validation';
+import API from "Src/utils/API";
 import { store } from 'react-notifications-component';
 import {Container, Image, Form, Button, Dimmer, Loader, Divider} from 'semantic-ui-react';
-import MatchApp from './../../assets/images/MatchApp-Logo.png';
+import MatchApp from 'Src/assets/images/MatchApp-Logo.png';
 
 const DEFAULT_STATE = {
     password: "",

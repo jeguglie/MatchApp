@@ -1,9 +1,9 @@
 import React from 'react';
 import {Grid, Progress, Image, Divider, Icon, Container, Dimmer, Loader} from 'semantic-ui-react';
-import FileUpload from "../../fileUpload/fileUpload";
-import Warnings from '../../../components/Warnings/Warnings';
-import ProfileImgPreview from '../../../components/EditProfil/AddPhotos/Preview/loadCurrentPictures/loadPreviewImages';
-import API from "../../../utils/API";
+import FileUpload from "Src/components/fileUpload/fileUpload";
+import Warnings from 'Src/components/Warnings/Warnings';
+import ProfileImgPreview from 'Src/components/EditProfil/AddPhotos/Preview/loadCurrentPictures/loadPreviewImages';
+import API from "Src/utils/API";
 
 const DEFAULT_STATE = {
     profileImg: [],

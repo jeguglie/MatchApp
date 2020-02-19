@@ -22,36 +22,36 @@ footer {
 }
 
 // Login - Signup
-@import './components/Login/Login';
-@import './components/Signup/Signup';
+@import 'Src/components/Login/Login';
+@import 'Src/components/Signup/Signup';
 
 // EditProfil
-@import './components/EditProfil/EditProfil';
-@import './components/EditProfil/AddPhotos/AddPhotos';
-@import './components/EditProfil/BasicInformations/BasicInformations';
-@import './components/EditProfil/AddPhotos/Preview/loadPreview/loadPreview';
-@import './components/fileUpload/fileUpload';
-@import './components/EditProfil/AddInterests/AddInterests';
-@import './components/EditProfil/AddInterests/Interests/Interests';
-@import './components/EditProfil/Location/Location';
+@import 'Src/components/EditProfil/EditProfil';
+@import 'Src/components/EditProfil/AddPhotos/AddPhotos';
+@import 'Src/components/EditProfil/BasicInformations/BasicInformations';
+@import 'Src/components/EditProfil/AddPhotos/Preview/loadPreview/loadPreview';
+@import 'Src/components/fileUpload/fileUpload';
+@import 'Src/components/EditProfil/AddInterests/AddInterests';
+@import 'Src/components/EditProfil/AddInterests/Interests/Interests';
+@import 'Src/components/EditProfil/Location/Location';
 
 // Menu
-@import './components/Menu/Menu';
+@import 'Src/components/Menu/Menu';
 @import './assets/global-styles/bootstrap-iso.css';
 
 
 // Wall
-@import './containers/Wall/Wall';
-@import './components/UserMiniCard/UserMiniCard';
-@import './components/ModalUser/ModalUser';
-@import './containers/Wall/SearchTags/SearchTags';
-@import './../node_modules/react-input-range/lib/css/index.css';
-@import './components/EditProfil/ChangeLocation/ChangeLocation';
+@import 'Src/containers/Wall/Wall';
+@import 'Src/components/UserMiniCard/UserMiniCard';
+@import 'Src/components/ModalUser/ModalUser';
+@import 'Src/containers/Wall/SearchTags/SearchTags';
+@import '/client/node_modules/react-input-range/lib/css/index.css';
+@import 'Src/components/EditProfil/ChangeLocation/ChangeLocation';
 
 // Chat
-@import './containers/Chat/Chat';
-@import './components/ModalChat/ModalChat';
+@import 'Src/containers/Chat/Chat';
+@import 'Src/components/ModalChat/ModalChat';
 
 // Notifications
-@import './components/Notifications/NotificationsHistory/NotificationsHistory';
-@import './../node_modules/react-notifications-component/dist/theme.css';
+@import 'Src/components/Notifications/NotificationsHistory/NotificationsHistory';
+@import '/client/node_modules/react-notifications-component/dist/theme.css';

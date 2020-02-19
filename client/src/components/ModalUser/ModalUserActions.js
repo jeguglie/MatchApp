@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'semantic-ui-react';
-import API from './../../utils/API';
+import API from 'Src/utils/API';
 import { store } from 'react-notifications-component';
 
 class ModalUserActions extends React.Component{

@@ -1,5 +1,5 @@
 import React from 'react';
-import LoadImages from "./loadImages/loadImages";
+import LoadImages from "Src/components/EditProfil/AddPhotos/Preview/loadCurrentPictures/loadImages/loadImages";
 import {Container, Divider, Grid} from "semantic-ui-react";
 
 const LoadPreviewImages = (props) => {

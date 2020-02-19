@@ -1,12 +1,12 @@
 import React from 'react';
 import { withRouter } from "react-router";
-import UserMiniCard from "../../components/UserMiniCard/UserMiniCard";
-import API from './../../utils/API';
+import UserMiniCard from "Src/components/UserMiniCard/UserMiniCard";
+import API from 'Src/utils/API';
 import InfiniteScroll from 'react-infinite-scroller';
 import { Button, Grid, Divider, Icon } from "semantic-ui-react";
-import ModalUser from '../../components/ModalUser/ModalUser';
+import ModalUser from 'Src/components/ModalUser/ModalUser';
 import { store } from "react-notifications-component";
-import Filter from './Filter/Filter';
+import Filter from 'Src/containers/Wall/Filter/Filter';
 
 const DEFAULT_STATE = {
     loadingModal: '',

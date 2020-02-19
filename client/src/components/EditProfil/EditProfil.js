@@ -1,9 +1,9 @@
 import React from 'react';
-import BasicsInformations from "./BasicInformations/BasicsInformations";
-import AddPhotos from "./AddPhotos/AddPhotos";
-import API from "../../utils/API";
-import AddInterests from "./AddInterests/AddInterests";
-import Location from "./Location/Location";
+import BasicsInformations from "Src/components/EditProfil/BasicInformations/BasicsInformations";
+import AddPhotos from "Src/components/EditProfil/AddPhotos/AddPhotos";
+import API from "Src/utils/API";
+import AddInterests from "Src/components/EditProfil/AddInterests/AddInterests";
+import Location from "Src/components/EditProfil/Location/Location";
 
 
 const DEFAULT_STATE = {

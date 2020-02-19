@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import API from '../utils/API';
+import API from 'Src/utils/API';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 

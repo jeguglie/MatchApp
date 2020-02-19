@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Fuse from 'fuse.js'
 import styled, { createGlobalStyle } from 'styled-components'
-import InputBox from './components/input-box/index';
-import DropDown from './components/drop-down/index';
+import InputBox from '/components/input-box/index';
+import DropDown from '/components/drop-down/index';
 
 const GlobalStyle = createGlobalStyle`
   * {

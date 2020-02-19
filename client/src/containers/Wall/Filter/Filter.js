@@ -1,8 +1,8 @@
 import React from 'react';
 import {Button, Checkbox, Divider, Grid, Segment} from "semantic-ui-react";
 import InputRange from "react-input-range";
-import SearchTags from "../SearchTags/SearchTags";
-import Aux from "../../../hoc/Aux";
+import SearchTags from "Src/containers/Wall/SearchTags/SearchTags";
+import Aux from "Src/hoc/Aux";
 
 const DEFAULT_STATE = {
     distanceRange: 250,

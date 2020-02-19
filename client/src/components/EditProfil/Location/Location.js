@@ -1,9 +1,9 @@
 import React from 'react';
 import {Button, Segment, Grid, Progress, Icon, Loader, Dimmer, Divider} from 'semantic-ui-react';
-import VALIDATE from "../../../utils/validation";
-import LocationComponent from "./LocationComponent/LocationComponent";
-import SimpleMap from "./Map/Map";
-import API from '../../../utils/API';
+import VALIDATE from "Src/utils/validation";
+import LocationComponent from "Src/components/EditProfil/Location/LocationComponent/LocationComponent";
+import SimpleMap from "Src/components/EditProfil/Location/Map/Map";
+import API from 'Src/utils/API';
 import { store } from 'react-notifications-component';
 
 

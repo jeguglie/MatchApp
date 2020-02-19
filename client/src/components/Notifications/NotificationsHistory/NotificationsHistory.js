@@ -1,7 +1,7 @@
 import React from 'react';
 import {List, Image, Button, Transition, Grid, Divider} from 'semantic-ui-react';
-import API from '../../../utils/API';
-import ModalUser from "../../ModalUser/ModalUser";
+import API from 'Src/utils/API';
+import ModalUser from "Src/components/ModalUser/ModalUser";
 const moment = require('moment');
 
 

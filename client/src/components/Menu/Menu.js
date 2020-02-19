@@ -3,10 +3,10 @@ import { ButtonToolbar, Navbar, Button, Nav, ButtonGroup, NavDropdown} from 'rea
 import { Icon } from "semantic-ui-react";
 import classnames from 'classnames';
 import { withRouter } from 'react-router';
-import Aux from "../../hoc/Aux";
-import API from '../../utils/API';
+import Aux from "Src/hoc/Aux";
+import API from 'Src/utils/API';
 import Cookies from 'universal-cookie';
-import MatchApp from './../../assets/images/MatchApp-Logo.png';
+import MatchApp from 'Src/assets/images/MatchApp-Logo.png';
 
 const cookies = new Cookies();
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Divider, Form, TextArea, Grid, Progress, Icon, Select} from 'semantic-ui-react';
-import API from "../../../utils/API";
-import VALIDATE from "../../../utils/validation";
+import API from "Src/utils/API";
+import VALIDATE from "Src/utils/validation";
 import _ from "lodash";
 const countries = VALIDATE.countries;
 const age = VALIDATE.age;

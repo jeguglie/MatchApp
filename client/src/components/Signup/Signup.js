@@ -1,11 +1,11 @@
 import React from "react";
-import API from "../../utils/API";
+import API from "Src/utils/API";
 import {Button, Container, Form, Image, Grid, Divider, Dimmer,Loader} from "semantic-ui-react";
-import Warnings from "../Warnings/Warnings";
-import validate from '../../utils/validation';
+import Warnings from "Src/components/Warnings/Warnings";
+import validate from 'Src/utils/validation';
 import {store} from "react-notifications-component";
 import Cookies from 'universal-cookie';
-import MatchApp from './../../assets/images/MatchApp-Logo.png';
+import MatchApp from 'Src/assets/images/MatchApp-Logo.png';
 
 const cookies = new Cookies();
 

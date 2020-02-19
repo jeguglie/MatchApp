@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Dropdown } from 'semantic-ui-react'
-import API from "../../../utils/API";
+import API from "Src/utils/API";
 
 const DEFAULT_STATE = {
         isFetching: false,

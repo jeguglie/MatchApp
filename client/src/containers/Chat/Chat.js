@@ -1,8 +1,8 @@
 import React from 'react';
 import {List, Image, Button, Transition, Grid, Divider, Icon} from 'semantic-ui-react';
-import API from './../../utils/API';
-import ModalUser from "../../components/ModalUser/ModalUser";
-import ModalChat from '../../components/ModalChat/ModalChat';
+import API from 'Src/utils/API';
+import ModalUser from "Src/components/ModalUser/ModalUser";
+import ModalChat from 'Src/components/ModalChat/ModalChat';
 const moment = require('moment');
 
 class Chat extends React.Component{

@@ -8,6 +8,14 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 
 module.exports = {
+  resolve: {
+    extensions: ['.js', '.scss', '.css'],
+    alias: {
+        Src:  __dirname + '/src',
+        Current:  __dirname + './',
+        Modules:  __dirname + '/node_modules/'
+    },
+},
   entry: ["@babel/polyfill", "./src/index.js"],
     optimization: {
       minimize: true,
@@ -113,9 +121,6 @@ module.exports = {
       ]
     },
     mode: 'production',
-    resolve: {
-      extensions: ['*', '.js']
-    },
     output: {
       path: __dirname + '/build',
       publicPath: '/',

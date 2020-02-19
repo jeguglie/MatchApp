@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
-import API from "../../../utils/API";
+import API from "Src/utils/API";
 import {Grid, Progress, Icon, Divider, Search, Dimmer, Loader} from "semantic-ui-react";
-import Interests from "./Interests/Interests";
-import Warnings from '../../../components/Warnings/Warnings';
+import Interests from "Src/components/EditProfil/AddInterests/Interests/Interests";
+import Warnings from 'Src/components/Warnings/Warnings';
 
 const DEFAULT_STATE = {
     interests: [],
