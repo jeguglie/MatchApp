@@ -53,7 +53,7 @@ module.exports = {
         },
       }),
         new HtmlWebPackPlugin({
-          template: "./public/index.html",
+          // template: "./public/index.html",
           filename: "./index.html",
         }),
         new CompressionPlugin({
@@ -86,8 +86,7 @@ module.exports = {
               },
               {
                 loader: "sass-loader" // compiles Sass to CSS
-              },
-              { loader: 'sass-loader'}
+              }
             ]
           },
           {
