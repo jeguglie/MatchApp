@@ -37,15 +37,12 @@ footer {
 
 // Menu
 @import 'Src/components/Menu/Menu';
-@import './assets/global-styles/bootstrap-iso.css';
-
 
 // Wall
 @import 'Src/containers/Wall/Wall';
 @import 'Src/components/UserMiniCard/UserMiniCard';
 @import 'Src/components/ModalUser/ModalUser';
 @import 'Src/containers/Wall/SearchTags/SearchTags';
-@import './assets/global-styles/react-input-range.css';
 @import 'Src/components/EditProfil/ChangeLocation/ChangeLocation';
 
 // Chat
@@ -54,4 +51,3 @@ footer {
 
 // Notifications
 @import 'Src/components/Notifications/NotificationsHistory/NotificationsHistory';
-@import './assets/global-styles/react-notifications-component.css';

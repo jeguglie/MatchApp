@@ -2,6 +2,7 @@ import React from 'react';
 import { ButtonToolbar, Navbar, Button, Nav, ButtonGroup, NavDropdown} from 'react-bootstrap';
 import { Icon } from "semantic-ui-react";
 import classnames from 'classnames';
+import 'Src/assets/global-styles/bootstrap-iso.css';
 import { withRouter } from 'react-router';
 import Aux from "Src/hoc/Aux";
 import API from 'Src/utils/API';

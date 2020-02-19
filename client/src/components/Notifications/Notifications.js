@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactNotification from 'react-notifications-component';
 import { store } from 'react-notifications-component';
+import 'Src/assets/global-styles/react-notifications-component.css';
 import io from 'socket.io-client';
 
 const url = !process.env.REACT_APP_LOCALHOST ? `https://matchappli.herokuapp.com/` : 'http://localhost:5000';
