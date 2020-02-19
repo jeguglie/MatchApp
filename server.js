@@ -14,11 +14,6 @@ app.use(express.static(path.resolve(__dirname, './client/build/')));
 app.use('/api/public', express.static('public'));
 app.use('/api', router);
 
-// All remaining requests return the React app, so it can handle routing.
-app.get('*', function(request, response) {
-    response.sendFile(path.resolve(__dirname, './client/build/', 'index.html'));
-});
-
 // Notifications
 let userslist = [];
 io.sockets.on('connection', async(socket) => {
@@ -103,6 +98,11 @@ io.sockets.on('connection', async(socket) => {
             }
         }
     });
+});
+
+// All remaining requests return the React app, so it can handle routing.
+app.get('*', function(request, response) {
+    response.sendFile(path.resolve(__dirname, './client/build/', 'index.html'));
 });
 
 server.listen(process.env.PORT || 5000, host, () => console.log(`Server listening on port ${port}`));
