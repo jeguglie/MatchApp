@@ -61,7 +61,7 @@ class ChangeLocation extends React.Component {
             <Container className="loginModal">
                 <Divider hidden />
                 <Image className="img-fluid"
-                       src={'assets/img/MatchApp-Logo.png'}
+                       src={'/assets/img/MatchApp-Logo.png'}
                        alt="Responsive image"
                        size="medium"
                        centered />

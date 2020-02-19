@@ -129,7 +129,7 @@ class Signup extends React.Component {
             </Dimmer>
             <Divider hidden />
             <Image className="img-fluid"
-                   src={'assets/img/MatchApp-Logo.png'}
+                   src={'/assets/img/MatchApp-Logo.png'}
                    alt="Responsive image"
                    size="medium"
                    centered/>
