@@ -76,19 +76,49 @@ module.exports = {
           use: ['babel-loader']
         },
         {
-          test: /\.(sa|sc|c)ss$/,
+          test: /\.css$/,
+          exclude: /node_modules/,
           use: [
-                {
-                    loader: 'style-loader'
-                },
-                {
-                    loader: 'css-loader',
-                },
-                {
-                  loader: 'sass-loader'
-                }
-            ],
-        },
+              {
+                  loader: 'style-loader',
+              },
+              {
+                  loader: 'css-loader',
+                  options: {
+                      sourceMap: true,
+                      importLoaders: 2,
+                  },
+              },
+              {
+                  loader: 'resolve-url-loader',
+              }
+          ],
+      },
+      {
+          test: /\.scss$/,
+          exclude: /node_modules/,
+          use: [
+              {
+                  loader: 'style-loader',
+              },
+              {
+                  loader: 'css-loader',
+                  options: {
+                      sourceMap: true,
+                      importLoaders: 3,
+                  },
+              },
+              {
+                  loader: 'resolve-url-loader',
+              },
+              {
+                  loader: 'sass-loader',
+                  options: {
+                      sourceMap: true,
+                  },
+              }
+          ],
+      },
         {
           test: /\.(jpg|png)$/,
           use: {
