@@ -5,6 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
 module.exports = {
@@ -44,6 +45,9 @@ module.exports = {
       ],
     },
     plugins: [
+      new CopyWebpackPlugin([
+        {from:'src/assets/images',to:'img'} 
+    ]), 
       new OptimizeCssAssetsPlugin({
         cssProcessorOptions: {
           map: {

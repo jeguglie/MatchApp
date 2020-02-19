@@ -5,7 +5,6 @@ import API from "Src/utils/API";
 import {Container, Image, Form, Button, Dimmer, Loader, Divider} from 'semantic-ui-react';
 import { store } from 'react-notifications-component';
 import Cookies from 'universal-cookie';
-import MatchApp from './../../assets/images/MatchApp-Logo.png';
 
 const cookies = new Cookies();
 
@@ -167,7 +166,7 @@ class Login extends React.Component {
                 </Dimmer>
                 <Divider hidden />
                      <Image className="img-fluid"
-                            src={MatchApp}
+                            src={'/img/MatchApp-Logo.png'}
                             alt="Responsive image"
                             size="medium"
                             centered />

@@ -7,7 +7,6 @@ import { withRouter } from 'react-router';
 import Aux from "Src/hoc/Aux";
 import API from 'Src/utils/API';
 import Cookies from 'universal-cookie';
-import MatchApp from './../../assets/images/MatchApp-Logo.png';
 
 const cookies = new Cookies();
 
@@ -206,7 +205,7 @@ class Menu extends React.Component {
                             id='/'>
                             <a href='# ' onClick={() => this.props.history.push('/')}>
                                 <img
-                                    src={MatchApp}
+                                    src={'/img/MatchApp-Logo.png'}
                                     height="50"
                                     alt="MatchApp Logo"
                                 />

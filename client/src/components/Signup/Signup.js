@@ -5,7 +5,6 @@ import Warnings from "Src/components/Warnings/Warnings";
 import validate from 'Src/utils/validation';
 import {store} from "react-notifications-component";
 import Cookies from 'universal-cookie';
-import MatchApp from './../../assets/images/MatchApp-Logo.png';
 
 const cookies = new Cookies();
 
@@ -130,7 +129,7 @@ class Signup extends React.Component {
             </Dimmer>
             <Divider hidden />
             <Image className="img-fluid"
-                   src={MatchApp}
+                   src={'/img/MatchApp-Logo.png'}
                    alt="Responsive image"
                    size="medium"
                    centered/>
