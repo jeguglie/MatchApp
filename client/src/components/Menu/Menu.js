@@ -205,7 +205,7 @@ class Menu extends React.Component {
                             id='/'>
                             <a href='# ' onClick={() => this.props.history.push('/')}>
                                 <img
-                                    src={'/img/MatchApp-Logo.png'}
+                                    src={'assets/img/MatchApp-Logo.png'}
                                     height="50"
                                     alt="MatchApp Logo"
                                 />

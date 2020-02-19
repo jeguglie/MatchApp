@@ -4,7 +4,7 @@ const pool = new Pool(
         user: 'jeguglie',
         host: 'localhost',
         database: 'api',
-        password: '06245547Jv345102.',
+        password: process.env.DATABASE_LOCALHOST_PASSWORD,
         port: 5432,
     } : { connectionString: process.env.DATABASE_URL }
 

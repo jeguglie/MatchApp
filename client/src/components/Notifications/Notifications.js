@@ -4,7 +4,7 @@ import { store } from 'react-notifications-component';
 import './react-notifications-component.css';
 import io from 'socket.io-client';
 
-const url = process.env.REACT_APP_LOCALHOST === 'true' ? 'http://localhost:5000' : `https://matchappli.herokuapp.com`;
+const url = process.env.REACT_APP_LOCALHOST === 1 ? 'http://localhost:5000' : `https://matchappli.herokuapp.com`;
 
 class Notifications extends React.Component {
 

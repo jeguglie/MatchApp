@@ -46,7 +46,7 @@ module.exports = {
     },
     plugins: [
       new CopyWebpackPlugin([
-        {from:'src/assets/images',to:'img'},
+        {from:'src/assets',to:'assets/'},
         'src/manifest.json']), 
       new OptimizeCssAssetsPlugin({
         cssProcessorOptions: {
@@ -67,7 +67,7 @@ module.exports = {
         minRatio: 0.8
     }),
     new webpack.EnvironmentPlugin({
-      REACT_APP_LOCALHOST: true
+      REACT_APP_LOCALHOST: process.env.REACT_APP_LOCALHOST
     }),
     new CleanWebpackPlugin(),
 
@@ -113,8 +113,7 @@ module.exports = {
     mode: 'production',
     output: {
       path: __dirname + '/build',
-      publicPath: '/assets',
-      filename: 'index.js'
+      filename: 'index.js',
     },
     devtool: 'source-map',
     devServer: {    

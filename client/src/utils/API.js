@@ -2,7 +2,7 @@ import axios from "axios";
 const headers = {
     "Content-Type": "application/json"
 };
-const burl = process.env.REACT_APP_LOCALHOST === 'true' ? `http://localhost:5000/api`: `https://matchappli.herokuapp.com/api`;
+const burl = process.env.REACT_APP_LOCALHOST === 1 ? `http://localhost:5000/api`: `https://matchappli.herokuapp.com/api`;
 
 export default {
     reportuser: function(user_id_reported){
