@@ -1,6 +1,6 @@
 const Pool = require('pg').Pool;
 const pool = new Pool(
-    !process.env.DATABASE_URL ? {
+    !process.env.SERVER_LOCALHOST === 1 ? {
         user: 'jeguglie',
         host: 'localhost',
         database: 'api',
