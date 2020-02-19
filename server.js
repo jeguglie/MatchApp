@@ -13,6 +13,8 @@ const router = require('./utils/router');
 const notifications = require('./controllers/notifications');
 const lib = require('./controllers/lib.js');
 const cors = require('cors');
+let userslist = [];
+
 
 app.use(cors());
 // Priority serve any static files.
@@ -20,10 +22,7 @@ app.use(express.static(path.resolve(__dirname, './client/build/')));
 app.use('/api/public', express.static('public'));
 app.use('/api', router);
 
-server.listen(process.env.PORT || 5000, host, () => console.log(`Server listening on port ${port}`));
-
 // Notifications
-let userslist = [];
 io.sockets.on('connection', async(socket) => {
     console.log(userslist);
     userslist = await notifications.pushUserSocket(socket, userslist);
@@ -112,3 +111,5 @@ io.sockets.on('connection', async(socket) => {
 app.get('*', function(request, response) {
     response.sendFile(path.resolve(__dirname, './client/build/', 'index.html'));
 });
+
+server.listen(process.env.PORT || 5000, host, () => console.log(`Server listening on port ${port}`));
