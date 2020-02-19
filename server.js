@@ -12,7 +12,9 @@ const port = process.env.PORT || 5000;
 const router = require('./utils/router');
 const notifications = require('./controllers/notifications');
 const lib = require('./controllers/lib.js');
+const cors = require('cors');
 
+app.use(cors());
 // Priority serve any static files.
 app.use(express.static(path.resolve(__dirname, './client/build/')));
 app.use('/api/public', express.static('public'));
