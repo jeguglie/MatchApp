@@ -9,11 +9,10 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
   resolve: {
-    extensions: ['.js', '.scss', '.css'],
+    extensions: ['.js', '.scss', '.css', '.png'],
     alias: {
         Src:  __dirname + '/src',
-        Current:  __dirname + './',
-        Modules:  __dirname + '/node_modules/'
+        Modules:  __dirname + '/node_modules'
     },
 },
   entry: ["@babel/polyfill", "./src/index.js"],
