@@ -24,7 +24,6 @@ app.use('/api', router);
 
 // Notifications
 io.sockets.on('connection', async(socket) => {
-    console.log(userslist);
     userslist = await notifications.pushUserSocket(socket, userslist);
     socket.on("userlogin", async(token) => {
         let userIDemitter = await notifications.getUserIDFromSocketEmitter(socket, userslist);
