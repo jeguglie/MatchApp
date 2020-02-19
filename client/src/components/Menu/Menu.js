@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 import Aux from "Src/hoc/Aux";
 import API from 'Src/utils/API';
 import Cookies from 'universal-cookie';
-import MatchApp from 'Src/assets/images/MatchApp-Logo.png';
+import MatchApp from './../../assets/images/MatchApp-Logo.png';
 
 const cookies = new Cookies();
 
