@@ -30,14 +30,6 @@
   display: inline-block;
   vertical-align: baseline;
 }
-.bootstrap-iso audio:not([controls]) {
-  display: none;
-  height: 0;
-}
-.bootstrap-iso [hidden],
-.bootstrap-iso template {
-  display: none;
-}
 .bootstrap-iso a {
   background-color: transparent;
 }
@@ -128,10 +120,6 @@
 .bootstrap-iso input[type="submit"] {
   -webkit-appearance: button;
   cursor: pointer;
-}
-.bootstrap-iso button[disabled],
-.bootstrap-iso input[disabled] {
-  cursor: default;
 }
 .bootstrap-iso button::-moz-focus-inner,
 .bootstrap-iso input::-moz-focus-inner {
