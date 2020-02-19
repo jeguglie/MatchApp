@@ -17,6 +17,13 @@ let userslist = [];
 
 
 app.use(cors());
+// Deserve gzip
+app.get('*.js', (req, res, next) => {
+    req.url = req.url + '.gz';
+    res.set('Content-Encoding', 'gzip');
+    res.set('Content-Type', 'text/javascript');
+    next();
+});
 // Priority serve any static files.
 app.use(express.static(path.resolve(__dirname, './client/build/')));
 app.use('/api/public', express.static('public'));
@@ -105,12 +112,6 @@ io.sockets.on('connection', async(socket) => {
         }
     });
 });
-
-// app.get('*', function (req, res, next) {
-//     req.url = req.url + '.gz';
-//     res.set('Content-Encoding', 'gzip');
-//     next();
-//   });
 
 // All remaining requests return the React app, so it can handle routing.
 app.get('*', function(request, response) {
