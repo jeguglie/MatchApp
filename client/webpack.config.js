@@ -8,116 +8,118 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
-module.exports = {
-  resolve: {
-    extensions: ['.js', '.scss', '.css', '.png'],
-    alias: {
-        Src:  __dirname + '/src',
-        Modules:  __dirname + '/node_modules'
-    },
-},
-  entry: ["@babel/polyfill", "./src/index.js"],
-    optimization: {
-      minimize: true,
-      minimizer: [
-        new TerserPlugin({
-          terserOptions: {
-            parse: {
-              ecma: 8,
+module.exports = env => {
+  return {
+    resolve: {
+      extensions: ['.js', '.scss', '.css', '.png'],
+      alias: {
+          Src:  __dirname + '/src',
+          Modules:  __dirname + '/node_modules'
+      },
+  },
+    entry: ["@babel/polyfill", "./src/index.js"],
+      optimization: {
+        minimize: true,
+        minimizer: [
+          new TerserPlugin({
+            terserOptions: {
+              parse: {
+                ecma: 8,
+              },
+              compress: {
+                ecma: 5,
+                warnings: false,
+                inline: 2,
+              },
+              mangle: {
+                safari10: true,
+              },
+              output: {
+                ecma: 5,
+                comments: false,
+                ascii_only: true
+              },
             },
-            compress: {
-              ecma: 5,
-              warnings: false,
-              inline: 2,
-            },
-            mangle: {
-              safari10: true,
-            },
-            output: {
-              ecma: 5,
-              comments: false,
-              ascii_only: true
+            parallel: true,
+            cache: true,
+          })
+        ],
+      },
+      plugins: [
+        new CopyWebpackPlugin([
+          {from:'src/assets',to:'assets/'},
+          'src/manifest.json']), 
+        new OptimizeCssAssetsPlugin({
+          cssProcessorOptions: {
+            map: {
+              inline: false,
+              annotation: true,
             },
           },
-          parallel: true,
-          cache: true,
-        })
-      ],
-    },
-    plugins: [
-      new CopyWebpackPlugin([
-        {from:'src/assets',to:'assets/'},
-        'src/manifest.json']), 
-      new OptimizeCssAssetsPlugin({
-        cssProcessorOptions: {
-          map: {
-            inline: false,
-            annotation: true,
-          },
-        },
-      }),
-        new HtmlWebPackPlugin({
-          template: "./public/index.html",
-          filename: "./index.html",
         }),
-        new CompressionPlugin({
-        algorithm: "gzip",
-        test: /\.js$|\.css$|\.html$/,
-        threshold: 10240,
-        minRatio: 0.8
-    }),
-    new webpack.EnvironmentPlugin({
-      REACT_APP_LOCALHOST: process.env.REACT_APP_LOCALHOST
-    }),
-    new CleanWebpackPlugin(),
+          new HtmlWebPackPlugin({
+            template: "./public/index.html",
+            filename: "./index.html",
+          }),
+          new CompressionPlugin({
+          algorithm: "gzip",
+          test: /\.js$|\.css$|\.html$/,
+          threshold: 10240,
+          minRatio: 0.8
+      }),
+      new webpack.EnvironmentPlugin({
+        REACT_APP_LOCALHOST: env.REACT_APP_LOCALHOST
+      }),
+      new CleanWebpackPlugin(),
 
-],
-    module: {
-      rules: [
-        {
-          test: /\.css$/i,
-          use: ['style-loader', 'css-loader'],
-        },
-        {
-          test: /\.s[ac]ss$/i,
-          use: [
-            // Creates `style` nodes from JS strings
-            'style-loader',
-            // Translates CSS into CommonJS
-            'css-loader',
-            // Compiles Sass to CSS
-            'sass-loader',
-          ],
-        },
-        {
-          test: /\.(js)$/,
-          exclude: /node_modules/,
-          use: ['babel-loader']
-        },
-        {
-          test: /\.(png|svg|jpg|gif)$/,
-          use: [
-            'file-loader',
-          ],
-        },
-        {
-          test: /\.html$/,
-          use: [
-            {
-              loader: "html-loader"
-            }
-          ]
-        }
-      ]
-    },
-    mode: 'production',
-    output: {
-      path: __dirname + '/build',
-      filename: 'index.js',
-    },
-    devtool: 'source-map',
-    devServer: {    
-      historyApiFallback: true,
-      contentBase: './'
+  ],
+      module: {
+        rules: [
+          {
+            test: /\.css$/i,
+            use: ['style-loader', 'css-loader'],
+          },
+          {
+            test: /\.s[ac]ss$/i,
+            use: [
+              // Creates `style` nodes from JS strings
+              'style-loader',
+              // Translates CSS into CommonJS
+              'css-loader',
+              // Compiles Sass to CSS
+              'sass-loader',
+            ],
+          },
+          {
+            test: /\.(js)$/,
+            exclude: /node_modules/,
+            use: ['babel-loader']
+          },
+          {
+            test: /\.(png|svg|jpg|gif)$/,
+            use: [
+              'file-loader',
+            ],
+          },
+          {
+            test: /\.html$/,
+            use: [
+              {
+                loader: "html-loader"
+              }
+            ]
+          }
+        ]
+      },
+      mode: 'production',
+      output: {
+        path: __dirname + '/build',
+        filename: 'index.js',
+      },
+      devtool: 'source-map',
+      devServer: {    
+        historyApiFallback: true,
+        contentBase: './'
+      }
     }
   };
