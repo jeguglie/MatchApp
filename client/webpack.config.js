@@ -71,63 +71,30 @@ module.exports = {
     module: {
       rules: [
         {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader'],
+        },
+        {
+          test: /\.s[ac]ss$/i,
+          use: [
+            // Creates `style` nodes from JS strings
+            'style-loader',
+            // Translates CSS into CommonJS
+            'css-loader',
+            // Compiles Sass to CSS
+            'sass-loader',
+          ],
+        },
+        {
           test: /\.(js)$/,
           exclude: /node_modules/,
           use: ['babel-loader']
         },
         {
-          test: /\.(png|jpg)$/,
-          loader: 'url-loader'
-        },
-        {
-          test: /\.css$/,
-          exclude: /node_modules/,
+          test: /\.(png|svg|jpg|gif)$/,
           use: [
-              {
-                  loader: 'style-loader',
-              },
-              {
-                  loader: 'css-loader',
-                  options: {
-                      sourceMap: true,
-                      importLoaders: 2,
-                  },
-              },
-              {
-                  loader: 'resolve-url-loader',
-              }
+            'file-loader',
           ],
-      },
-      {
-          test: /\.scss$/,
-          exclude: /node_modules/,
-          use: [
-              {
-                  loader: 'style-loader',
-              },
-              {
-                  loader: 'css-loader',
-                  options: {
-                      sourceMap: true,
-                      importLoaders: 3,
-                  },
-              },
-              {
-                  loader: 'resolve-url-loader',
-              },
-              {
-                  loader: 'sass-loader',
-                  options: {
-                      sourceMap: true,
-                  },
-              }
-          ],
-      },
-        {
-          test: /\.(jpg|png)$/,
-          use: {
-            loader: 'url-loader',
-          },
         },
         {
           test: /\.html$/,
