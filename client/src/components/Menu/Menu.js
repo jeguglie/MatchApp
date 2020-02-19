@@ -2,12 +2,12 @@ import React from 'react';
 import { ButtonToolbar, Navbar, Button, Nav, ButtonGroup, NavDropdown} from 'react-bootstrap';
 import { Icon } from "semantic-ui-react";
 import classnames from 'classnames';
-import 'Src/assets/global-styles/bootstrap-iso.css';
+import './bootstrap-iso.css';
 import { withRouter } from 'react-router';
 import Aux from "Src/hoc/Aux";
 import API from 'Src/utils/API';
 import Cookies from 'universal-cookie';
-import MatchApp from './src/assets/images/MatchApp-Logo.png';
+import MatchApp from 'Src/assets/images/MatchApp-Logo.png';
 
 const cookies = new Cookies();
 
