@@ -5,7 +5,7 @@ import Warnings from "Src/components/Warnings/Warnings";
 import validate from 'Src/utils/validation';
 import {store} from "react-notifications-component";
 import Cookies from 'universal-cookie';
-import MatchApp from 'Src/assets/images/MatchApp-Logo.png';
+import MatchApp from 'Src/assets/images/MatchApp-Logo';
 
 const cookies = new Cookies();
 

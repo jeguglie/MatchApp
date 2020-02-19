@@ -3,7 +3,7 @@ import VALIDATE from 'Src/utils/validation';
 import API from "Src/utils/API";
 import { store } from 'react-notifications-component';
 import {Container, Image, Form, Button, Dimmer, Loader, Divider} from 'semantic-ui-react';
-import MatchApp from 'Src/assets/images/MatchApp-Logo.png';
+import MatchApp from 'Src/assets/images/MatchApp-Logo';
 
 const DEFAULT_STATE = {
     email: "",

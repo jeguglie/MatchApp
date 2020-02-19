@@ -45,7 +45,7 @@ footer {
 @import 'Src/components/UserMiniCard/UserMiniCard';
 @import 'Src/components/ModalUser/ModalUser';
 @import 'Src/containers/Wall/SearchTags/SearchTags';
-@import 'Src/assets/global-styles/react-input-range';
+@import './assets/global-styles/react-input-range.css';
 @import 'Src/components/EditProfil/ChangeLocation/ChangeLocation';
 
 // Chat
@@ -54,4 +54,4 @@ footer {
 
 // Notifications
 @import 'Src/components/Notifications/NotificationsHistory/NotificationsHistory';
-@import 'Src/assets/global-styles/react-notifications-component';
+@import './assets/global-styles/react-notifications-component.css';

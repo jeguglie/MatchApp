@@ -3,7 +3,7 @@ import {Container, Image, Divider} from 'semantic-ui-react';
 import Autocomplete from 'react-google-autocomplete';
 import API from "Src/utils/API";
 import {store} from "react-notifications-component";
-import MatchApp from 'Src/assets/images/MatchApp-Logo.png';
+import MatchApp from 'Src/assets/images/MatchApp-Logo';
 
 class ChangeLocation extends React.Component {
 
