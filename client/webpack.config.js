@@ -113,7 +113,7 @@ module.exports = {
     mode: 'production',
     output: {
       path: __dirname + '/build',
-      publicPath: '/',
+      publicPath: '/assets',
       filename: 'index.js'
     },
     devtool: 'source-map',
