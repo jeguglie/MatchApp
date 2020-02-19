@@ -2,7 +2,7 @@
 // const app = require('express')();
 // const server = require('http').createServer(app);
 // const io = require('socket.io')(server);
-var express = require('express'),
+const express = require('express'),
     app = express(),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server)
@@ -19,6 +19,8 @@ app.use(cors());
 app.use(express.static(path.resolve(__dirname, './client/build/')));
 app.use('/api/public', express.static('public'));
 app.use('/api', router);
+
+server.listen(process.env.PORT || 5000, host, () => console.log(`Server listening on port ${port}`));
 
 // Notifications
 let userslist = [];
@@ -110,5 +112,3 @@ io.sockets.on('connection', async(socket) => {
 app.get('*', function(request, response) {
     response.sendFile(path.resolve(__dirname, './client/build/', 'index.html'));
 });
-
-server.listen(process.env.PORT || 5000, host, () => console.log(`Server listening on port ${port}`));
