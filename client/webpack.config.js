@@ -1,4 +1,3 @@
-var path = require('path');
 var webpack = require('webpack');
 var CompressionPlugin = require('compression-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -47,7 +46,7 @@ module.exports = env => {
       },
       plugins: [
         new CopyWebpackPlugin([
-          {from:'src/assets',to:'assets/'},
+          {from:'src/Assets',to:'assets/'},
           'src/manifest.json']), 
         new OptimizeCssAssetsPlugin({
           cssProcessorOptions: {
@@ -115,6 +114,7 @@ module.exports = env => {
       output: {
         path: __dirname + '/build',
         filename: 'index.js',
+        publicPath: '/'
       },
       devtool: 'source-map',
       devServer: {    
