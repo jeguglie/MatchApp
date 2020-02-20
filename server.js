@@ -13,6 +13,7 @@ const cors = require('cors');
 let userslist = [];
 
 app.use(cors());
+
 // Deserve gzip
 app.get('*.js', (req, res, next) => {
     req.url = req.url + '.gz';

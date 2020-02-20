@@ -2,8 +2,10 @@ import axios from "axios";
 const headers = {
     "Content-Type": "application/json"
 };
-const burl = process.env.SERVER_LOCALHOST === true ? `http://localhost:5000/api`: `https://matchappli.herokuapp.com/api`;
-
+const burl = process.env.SERVER_LOCALHOST === JSON.stringify(true) ? `http://localhost:5000/api`: `https://matchappli.herokuapp.com/api`;
+console.log(process.env.SERVER_LOCALHOST);
+console.log(process.env.SERVER_LOCALHOST === JSON.stringify(true));
+console.log(process.env.SERVER_LOCALHOST === JSON.stringify("true"));
 export default {
     reportuser: function(user_id_reported){
         return axios.post(

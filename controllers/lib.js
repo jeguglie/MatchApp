@@ -334,7 +334,7 @@ async function signup(req, res) {
             from: 'matcha@app.com',
             to: email,
             subject: 'Activate your account',
-            text: `Hello !\nHere is the link to confirm your account ${process.env.SERVER_LOCALHOST === false ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:3000/login/'}`+hashtoken,
+            text: `Hello !\nHere is the link to confirm your account ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:3000/login/'}`+hashtoken,
         };
         transport.sendMail(message, function(err, info) {
             if (err) console.log(err)
@@ -386,7 +386,7 @@ async function login(req, res) {
                     from: 'matcha@app.com',
                     to: email,
                     subject: 'Activate your account',
-                    text: `Hello !\nHere is the link to confirm your account ${process.env.SERVER_LOCALHOST === false ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:3000/login/'}`+hashtoken,
+                    text: `Hello !\nHere is the link to confirm your account ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:3000/login/'}`+hashtoken,
                 };
                 transport.sendMail(message, function(err, info) {
                     if (err) console.log(err)
@@ -403,7 +403,7 @@ async function login(req, res) {
                 });
             const payload = { email };
             const token = jwt.sign(payload, secret);
-            if (process.env.SERVER_LOCALHOST === true)
+            if (process.env.SERVER_LOCALHOST === JSON.stringify(true))
                 res.cookie('token', token, { maxAge: 2 * 60 * 60 * 1000, domain:'localhost', secure: false, sameSite: true, httpOnly: false});
             else
                 res.cookie('token', token, { maxAge: 2 * 60 * 60 * 1000, sameSite: 'none', secure: true, httpOnly: false});
@@ -576,7 +576,7 @@ async function userforgot(req, res){
             from: 'matcha@app.com',
             to: email,
             subject: 'Forgot Password',
-            text: `Hello !\nHere is the link to reset your password ${process.env.SERVER_LOCALHOST === false ? 'https://matchappli.herokuapp.com/forgotpassword/' : 'http://localhost:3000/forgotpassword/'}`+hashtoken,
+            text: `Hello !\nHere is the link to reset your password ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/forgotpassword/' : 'http://localhost:3000/forgotpassword/'}`+hashtoken,
         };
         transport.sendMail(message);
         pool.query(text, values);
