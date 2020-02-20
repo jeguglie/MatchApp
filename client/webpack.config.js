@@ -66,7 +66,7 @@ module.exports = env => {
           minRatio: 0.8
       }),
       new webpack.DefinePlugin(
-        env.REACT_APP_LOCALHOST !== undefined ? {'process.env.REACT_APP_LOCALHOST': env.REACT_APP_LOCALHOST} : {}
+        env.REACT_APP_LOCALHOST === undefined ? {} : {'process.env.REACT_APP_LOCALHOST': env.REACT_APP_LOCALHOST}
       ),
       new CleanWebpackPlugin(),
 
