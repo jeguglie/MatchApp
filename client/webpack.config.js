@@ -7,7 +7,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = env => {
-  const localhost = env && env.REACT_APP_LOCALHOST === undefined ? "0" : "1";
+  const localhost = env && env.REACT_APP_LOCALHOST === "0" ? "0" : "1";
   return {
     resolve: {
       extensions: ['.js', '.scss', '.css', '.png'],

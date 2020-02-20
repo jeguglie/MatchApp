@@ -73,7 +73,8 @@
   top: 50%; }
 
 .input-range__track--active {
-  background: #3f51b5; }
+  background: #2085d0 !important
+}
 
 .input-range {
   height: 1rem;
