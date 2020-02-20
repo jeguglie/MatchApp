@@ -1,6 +1,6 @@
 const Pool = require('pg').Pool;
 const pool = new Pool(
-    process.env.SERVER_LOCALHOST === "1" ? {
+    JSON.stringify(process.env.SERVER_LOCALHOST) === JSON.stringify("1") ? {
         user: 'jeguglie',
         host: 'localhost',
         database: 'api',
