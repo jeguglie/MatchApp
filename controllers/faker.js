@@ -163,7 +163,7 @@ async function matchAppFaker(req, res) {
         await pool.query(text, [1002, 1001]);
         // Insert Imgs
         text = 'INSERT INTO pictures(img_link, user_id, img_order) VALUES ($1, $2, $3)';
-        await pool.query(text, [JSON.stringify(process.env.SERVER_LOCALHOST) !== JSON.stringify("1") ? 'https://matchappli.herokuapp.com/assets/img/patrick-dupont.png' : 'http://localhost:5000/assets/img/patrick-dupont.png', 1001, 0]);
+        await pool.query(text, [JSON.stringify(process.env.SERVER_LOCALHOST) !== JSON.stringify(1) ? 'https://matchappli.herokuapp.com/assets/img/patrick-dupont.png' : 'http://localhost:5000/assets/img/patrick-dupont.png', 1001, 0]);
         // Insert complete
         text = 'INSERT INTO user_complete(complete_basics, complete_photos, complete_interets, user_id, complete_location) VALUES ($1, $2, $3, $4, $5)';
         await pool.query(text, [30, 5, 4, 1001, null]);
@@ -181,7 +181,7 @@ async function matchAppFaker(req, res) {
         await pool.query(text, [1002, 890, 1002, 850, 1002, 830, 1002, 802]);
         // Insert Imgs
         text = 'INSERT INTO pictures(img_link, user_id, img_order) VALUES ($1, $2, $3)';
-        await pool.query(text, [JSON.stringify(process.env.SERVER_LOCALHOST) !== JSON.stringify("1") ? 'https://matchappli.herokuapp.com/assets/img/marine-dupont.png' : 'http://localhost:5000/assets/img/marine-dupont.png', 1002, 0]);
+        await pool.query(text, [JSON.stringify(process.env.SERVER_LOCALHOST) !== JSON.stringify(1) ? 'https://matchappli.herokuapp.com/assets/img/marine-dupont.png' : 'http://localhost:5000/assets/img/marine-dupont.png', 1002, 0]);
         // Insert complete
         text = 'INSERT INTO user_complete(complete_basics, complete_photos, complete_interets, user_id, complete_location) VALUES ($1, $2, $3, $4, $5)';
         await pool.query(text, [30, 5, 4, 1002, null]);
