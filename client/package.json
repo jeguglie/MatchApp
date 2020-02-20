@@ -35,7 +35,7 @@
   "scripts": {
     "start": "webpack-dev-server --open --mode development",
     "buildlocal": "npm install && npm install --only=dev && webpack --env.REACT_APP_LOCALHOST=1 --progress --config ./webpack.config.js",
-    "buildheroku": "npm install && npm install --only=dev && webpack  --env.REACT_APP_LOCALHOST=0 --progress --config ./webpack.config.js",
+    "buildheroku": "npm install && npm install --only=dev && webpack --progress --config ./webpack.config.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

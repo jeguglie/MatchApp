@@ -1,5 +1,5 @@
 const Pool = require('pg').Pool;
-const pool = process.env.SERVER_LOCALHOST === JSON.stringify(1) ? 
+const pool = process.env.DATABASE_LOCALHOST_PASSWORD !== undefined ? 
                 new Pool({
                             user: 'jeguglie',
                             host: 'localhost',
