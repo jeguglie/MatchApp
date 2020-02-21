@@ -2,21 +2,15 @@ const jwt = require("jsonwebtoken");
 const passwordHash = require("password-hash");
 const pool = require('./../utils/queries');
 const validate = require('../utils/validation');
-const nodemailer = require('nodemailer');
+const mailgun = require("mailgun-js");
+const DOMAIN = 'matchappli.herokuapp.com';
+const mg = mailgun({apiKey: process.env.MAIL_API, domain: DOMAIN});
 const crypto = require('crypto');
 const secret = process.env.SECRET_KEY;
 const notifications = require('./../controllers/notifications');
 const account = require('./../controllers/lib');
 const axios = require("axios");
 require('dotenv').config({path: __dirname + '/.env'});
-
-let transport = nodemailer.createTransport( {
-    service:  'Mailgun',
-    auth: {
-        user: process.env.MAIL_SMTP_USER,
-        pass: process.env.MAIL_SMTP_PASSWORD
-    }
-});
 
 async function getNameUserId(userID){
     try {
@@ -334,9 +328,9 @@ async function signup(req, res) {
             subject: 'Activate your account',
             text: `Hello !\nHere is the link to confirm your account ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:5000/login/'}`+hashtoken,
         };
-        transport.sendMail(message, function(err, info) {
-            if (err) console.log(err)
-            else console.log(info);
+        mg.messages().send(message, function (error, body) {
+            if (error) console.log(error);
+            else console.log(body);
         });
         return res.status(200).json({});
 
@@ -386,9 +380,9 @@ async function login(req, res) {
                     subject: 'Activate your account',
                     text: `Hello !\nHere is the link to confirm your account ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:3000/login/'}`+hashtoken,
                 };
-                transport.sendMail(message, function(err, info) {
-                    if (err) console.log(err)
-                    else console.log(info);
+                mg.messages().send(message, function (error, body) {
+                    if (error) console.log(error);
+                    else console.log(body);
                 });
                 pool.query(text, values);
                 return res.status(400).json({
@@ -576,7 +570,10 @@ async function userforgot(req, res){
             subject: 'Forgot Password',
             text: `Hello !\nHere is the link to reset your password ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/forgotpassword/' : 'http://localhost:5000/forgotpassword/'}`+hashtoken,
         };
-        transport.sendMail(message);
+        mg.messages().send(message, function (error, body) {
+            if (error) console.log(error);
+            else console.log(body);
+        });
         pool.query(text, values);
         res.status(200).json({
             success: "A password reset email has just been sent",
