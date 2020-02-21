@@ -564,8 +564,8 @@ async function changepassword(req, res){
 
 async function userforgot(req, res){
     const { email } = req.body;
-    let text = 'SELECT * FROM users WHERE email = $1 AND active = $2';
-    let value = [email, 1];
+    let text = 'SELECT * FROM users WHERE email = $1 AND active = $2 OR active = $3';
+    let value = [email, 1, 0];
     let response = await pool.query(text, value);
     if (typeof response !== 'undefined' && typeof response.rows !== 'undefined' && response.rows.length){
         let text = 'UPDATE users SET tokenmail = $1 WHERE email = $2';
