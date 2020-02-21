@@ -35,6 +35,7 @@ class Menu extends React.Component {
             notifNb: 0,
         };
         this._mounted = false;
+        this.innerRefToggle = React.createRef();
     }
 
     componentDidMount = async() => {
@@ -85,7 +86,10 @@ class Menu extends React.Component {
         return null;
     }
 
-    handleItemClick = (e, redirect) => { this.setState({ activeItem: redirect}, () => this.redirect(redirect)) };
+    handleItemClick = (e, redirect) => { 
+        this.simulateClick();
+        this.setState({ activeItem: redirect}, () => this.redirect(redirect)) 
+    };
     redirect = (redirect) => { this.props.history.push(redirect) };
     disconnect = () => {
         API.logout()
@@ -98,6 +102,7 @@ class Menu extends React.Component {
             });
     };
 
+    simulateClick(){ this.innerRefToggle && this.innerRefToggle.current && this.innerRefToggle.current.click() }
     isConnected = () => {
         const { activeItem } = this.state;
         if (this.state.connected === false)
@@ -211,7 +216,7 @@ class Menu extends React.Component {
                                 />
                             </a>
                         </Navbar.Brand>
-                        <Navbar.Toggle/>
+                        <Navbar.Toggle ref={this.innerRefToggle}/>
                         <Navbar.Collapse>
                             {this.showMenu()}
                             <Nav>
