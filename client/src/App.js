@@ -1,3 +1,4 @@
+import './../node_modules/semantic-ui-css/semantic.min.css';
 import 'Src/App.scss';
 import React, { Component } from "react";
 import { Route, Switch, Redirect} from "react-router-dom";
@@ -17,6 +18,7 @@ import ChangePassword from 'Src/components/ForgotPassword/ChangePassword';
 import ChangeMyEmail from "Src/components/EditProfil/ChangeMyMail/ChangeMyMail";
 import ChangeLocation from "Src/components/EditProfil/ChangeLocation/ChangeLocation";
 import Cookies from "universal-cookie";
+
 
 const cookies = new Cookies();
 

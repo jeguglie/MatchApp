@@ -25,8 +25,8 @@ async function getUsers(req, res){
             }
             else if (interested === 'bisexual') {
                 text = 'SELECT * FROM profile P JOIN pictures IMG ON P.user_id = IMG.user_id WHERE IMG.img_order = 0' +
-                    'AND P.age >= $1 AND P.age <= $2 AND P.likes >= $3 AND P.likes <= $4 AND P.user_id <> $5 ';
-                values = [ageRange.min, ageRange.max, popularityRange.min, popularityRange.max, userID];
+                    'AND (P.interested = $1 OR P.interested = $2) AND P.age >= $3 AND P.age <= $4 AND P.likes >= $5 AND P.likes <= $6 AND P.user_id <> $7';
+                values = [interested, 'homosexual', ageRange.min, ageRange.max, popularityRange.min, popularityRange.max, userID];
             }
             else if (interested === 'homosexual') {
                 text = 'SELECT * FROM profile P INNER JOIN pictures IMG ON P.user_id = IMG.user_id WHERE IMG.img_order = 0' +
@@ -48,7 +48,6 @@ async function getUsers(req, res){
                 response.rows.map(obj => {
                     return hidedusers.push(obj.user_id_reported);
                 });
-                console.log(hidedusers);
             }
             users = users.filter(obj =>{
                 for (var key in hidedusers) {
