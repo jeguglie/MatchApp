@@ -51,7 +51,6 @@ Be there soon
 ![MatchApp](https://imgur.com/wgcnjfa.png)<br> 
 ![MatchApp](https://imgur.com/awklGCB.png)<br>
 ![MatchApp](https://imgur.com/YX8mREk.png)<br>
-![MatchApp](https://imgur.com/DyLSv1O.png)<br>
 ![MatchApp](https://imgur.com/ev8Pg9A.png)<br>
 ![MatchApp](https://imgur.com/1jYSRCO.png)<br>
 ![MatchApp](https://imgur.com/Z1muLvi.png)<br>
