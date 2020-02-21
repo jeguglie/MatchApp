@@ -6,7 +6,6 @@ const mailgun = require("mailgun-js");
 const DOMAIN = 'matchappli.herokuapp.com';
 const mg = mailgun({apiKey: process.env.MAIL_API, domain: DOMAIN});
 const crypto = require('crypto');
-const secret = process.env.SECRET_KEY;
 const notifications = require('./../controllers/notifications');
 const account = require('./../controllers/lib');
 const axios = require("axios");
