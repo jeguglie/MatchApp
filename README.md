@@ -20,8 +20,11 @@ You can use three pre-filled profiles `user1@gmail.com` `user2@gmail.com` with p
 - 10000 interests are filled in database
 
 ## Generate with Faker
-`http://localhost:5000/api/faker`   (waiting time ~ 1min30, you can view progress in terminal)
-will generate 1002 faked profiles (include user1 & user2) 
+`http://localhost:5000/api/faker` <br> 
+(waiting time ~ 1min30, you can view progress in terminal) will generate 1002 faked profiles (include user1 & user2) 
+
+## Install on localhost
+Be there soon
 
 ### Features
 
@@ -41,4 +44,6 @@ will generate 1002 faked profiles (include user1 & user2)
 - PostgreSQL : https://www.postgresql.org/
 - Socket.io : https://socket.io/
 - Faker.js : https://github.com/marak/Faker.js/
+
+### Views
 
