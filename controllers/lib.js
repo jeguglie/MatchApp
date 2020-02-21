@@ -4,7 +4,7 @@ const pool = require('./../utils/queries');
 const validate = require('../utils/validation');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const secret = 'mysecretsshhh';
+const secret = process.env.SECRET_KEY;
 const notifications = require('./../controllers/notifications');
 const account = require('./../controllers/lib');
 const axios = require("axios");
@@ -12,11 +12,11 @@ require('dotenv').config({path: __dirname + '/.env'});
 
 
 let transport = nodemailer.createTransport({
-    host: 'smtp.mailtrap.io',
+    host: 'smtp.sendgrid.net',
     port: 465,
     auth: {
-        user: 'apikey',
-        pass: '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'
+        user: process.env.SENDGRID_USERNAME,
+        pass: process.env.SENDGRID_PASSWORD
     }
 });
 

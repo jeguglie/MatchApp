@@ -1,6 +1,6 @@
 const pool = require('../utils/queries');
 const jwt = require('jsonwebtoken');
-const secret = 'mysecretsshhh';
+const secret = process.env.SECRET_KEY;
 const cookie = require('cookie');
 const account = require('../controllers/lib.js');
 

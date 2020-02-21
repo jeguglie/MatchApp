@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const secret = 'mysecretsshhh';
+const secret = process.env.SECRET_KEY;
 const lib = require('../controllers/lib.js');
 
 const withAuth = function(req, res, next) {
