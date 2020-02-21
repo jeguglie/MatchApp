@@ -334,7 +334,7 @@ async function signup(req, res) {
             from: 'matcha@app.com',
             to: email,
             subject: 'Activate your account',
-            text: `Hello !\nHere is the link to confirm your account ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:3000/login/'}`+hashtoken,
+            text: `Hello !\nHere is the link to confirm your account ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:5000/login/'}`+hashtoken,
         };
         transport.sendMail(message, function(err, info) {
             if (err) console.log(err)
@@ -576,7 +576,7 @@ async function userforgot(req, res){
             from: 'matcha@app.com',
             to: email,
             subject: 'Forgot Password',
-            text: `Hello !\nHere is the link to reset your password ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/forgotpassword/' : 'http://localhost:3000/forgotpassword/'}`+hashtoken,
+            text: `Hello !\nHere is the link to reset your password ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/forgotpassword/' : 'http://localhost:5000/forgotpassword/'}`+hashtoken,
         };
         transport.sendMail(message);
         pool.query(text, values);
