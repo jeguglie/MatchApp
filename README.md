@@ -4,6 +4,9 @@
 Node.js - Express - React - PostgreSQL - Semantic UI
 
 ## Demo
+You can test the app [here](https://matchappli.herokuapp.com)
+You can use three pre-filled profiles :  
+user1@gmail.com - user2@gmail.com with password 345102.jJ . 
 500 random profiles are generated with Faker.js
 - Avatar
 - Username
@@ -16,9 +19,6 @@ Node.js - Express - React - PostgreSQL - Semantic UI
 - Age
 - Online
 - 10000 interests are filled in database
-You can test the app [here](https://matchappli.herokuapp.com)
-You can use three pre-filled profiles :  
-user1@gmail.com - user2@gmail.com with password 345102.jJ
 
 ## Generate with Faker
 `http://localhost:5000/api/faker`   (waiting time ~ 1min30, you can view progress in terminal)
