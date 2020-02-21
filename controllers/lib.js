@@ -12,11 +12,11 @@ require('dotenv').config({path: __dirname + '/.env'});
 
 
 let transport = nodemailer.createTransport({
-    host: 'smtp.sendgrid.net',
-    port: 465,
+    host: process.env.MAIL_SMTP_HOST,
+    port: process.env.MAIL_SMTP_PORT,
     auth: {
-        user: process.env.SENDGRID_USERNAME,
-        pass: process.env.SENDGRID_PASSWORD
+        user: process.env.MAIL_SMTP_USER,
+        pass: process.env.MAIL_SMTP_PASSWORD
     }
 });
 
