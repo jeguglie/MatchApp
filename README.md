@@ -45,7 +45,7 @@ Be there soon
 - Socket.io : https://socket.io/
 - Faker.js : https://github.com/marak/Faker.js/
 
-### Views
+### Some views
 ![MatchApp](https://imgur.com/Qtbz5vH.png)<br>  
 ![MatchApp](https://imgur.com/x60tyXr.png)<br>
 ![MatchApp](https://imgur.com/wgcnjfa.png)<br> 
@@ -55,7 +55,3 @@ Be there soon
 ![MatchApp](https://imgur.com/ev8Pg9A.png)<br>
 ![MatchApp](https://imgur.com/1jYSRCO.png)<br>
 ![MatchApp](https://imgur.com/Z1muLvi.png)<br>
-![MatchApp](https://imgur.com/yigSYui.png)<br>
-![MatchApp](https://imgur.com/hPnE4jR.png)<br>
-![MatchApp](https://imgur.com/LfZSeba.png)<br>
-![MatchApp](https://imgur.com/3QaAVZb.png)<br>
