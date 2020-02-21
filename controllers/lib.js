@@ -10,10 +10,8 @@ const account = require('./../controllers/lib');
 const axios = require("axios");
 require('dotenv').config({path: __dirname + '/.env'});
 
-
-let transport = nodemailer.createTransport({
-    host: process.env.MAIL_SMTP_HOST,
-    port: process.env.MAIL_SMTP_PORT,
+let transport = nodemailer.createTransport( {
+    service:  'Mailgun',
     auth: {
         user: process.env.MAIL_SMTP_USER,
         pass: process.env.MAIL_SMTP_PASSWORD
