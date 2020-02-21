@@ -13,10 +13,10 @@ require('dotenv').config({path: __dirname + '/.env'});
 
 let transport = nodemailer.createTransport({
     host: 'smtp.mailtrap.io',
-    port: 2525,
+    port: 465,
     auth: {
-        user: 'dbbd9d0a415229',
-        pass: 'd4ef0a653fe03c'
+        user: 'apikey',
+        pass: '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'
     }
 });
 
