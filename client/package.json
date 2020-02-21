@@ -34,7 +34,7 @@
     "universal-cookie": "^4.0.3"
   },
   "scripts": {
-    "start": "webpack-dev-server --open --mode development",
+    "start": "webpack-dev-server --env.SERVER_LOCALHOST=true --open --mode development",
     "buildlocal": "npm install && npm install --only=dev && webpack --env.SERVER_LOCALHOST=true --progress --config ./webpack.config.js",
     "buildheroku": "npm install && npm install --only=dev && webpack --env.SERVER_LOCALHOST=false --progress --config ./webpack.config.js",
     "test": "react-scripts test",
