@@ -2,14 +2,13 @@ const jwt = require("jsonwebtoken");
 const passwordHash = require("password-hash");
 const pool = require('./../utils/queries');
 const validate = require('../utils/validation');
-const mailgun = require("mailgun-js");
-const DOMAIN = process.env.MAIL_DOMAIN;
-const mg = mailgun({apiKey: process.env.MAIL_API, domain: DOMAIN});
 const crypto = require('crypto');
 const notifications = require('./../controllers/notifications');
 const account = require('./../controllers/lib');
 const axios = require("axios");
+const mailjet = require ('node-mailjet').connect(process.env.MAIL_KEY, process.env.MAIL_SECRET);
 require('dotenv').config({path: __dirname + '/.env'});
+
 
 async function getNameUserId(userID){
     try {
@@ -321,16 +320,31 @@ async function signup(req, res) {
         values = [10, userID];
         await pool.query(text, values);
         // Send mail activation
-        const message = {
-            from: 'matcha@app.com',
-            to: email,
-            subject: 'Activate your account',
-            text: `Hello !\nHere is the link to confirm your account ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:5000/login/'}`+hashtoken,
-        };
-        mg.messages().send(message, function (error, body) {
-            if (error) console.log(error);
-            else console.log(body);
-        });
+        const request = mailjet
+            .post("send", {'version': 'v3.1'})
+            .request({
+                "Messages":[
+                    {
+                        "From": {
+                            "Email": "matcha@app.com",
+                            "Name": "MatchApp"
+                        },
+                        "To": [{"Email": email,}],
+                        "Subject": "Activate your account",
+                        "HTMLPart": `Hello !\nHere is the link to confirm your account ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:5000/login/'}`+hashtoken,
+                        "CustomID": "AppGettingStartedTest"
+                    }
+                ]
+            });
+        request
+            .then((result) => {
+                console.log(result.body)
+            })
+            .catch((err) => {
+                console.log(err.statusCode)
+            });
+
+
         return res.status(200).json({});
 
     } catch (error) {
@@ -373,16 +387,29 @@ async function login(req, res) {
                 let token = ((+new Date) + Math.random()* 100).toString(32);
                 let hashtoken = crypto.createHash('md5').update(token).digest("hex");
                 let values = [hashtoken, email];
-                const message = {
-                    from: 'matcha@app.com',
-                    to: email,
-                    subject: 'Activate your account',
-                    text: `Hello !\nHere is the link to confirm your account ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:3000/login/'}`+hashtoken,
-                };
-                mg.messages().send(message, function (error, body) {
-                    if (error) console.log(error);
-                    else console.log(body);
-                });
+                const request = mailjet
+                    .post("send", {'version': 'v3.1'})
+                    .request({
+                        "Messages":[
+                            {
+                                "From": {
+                                    "Email": "matcha@app.com",
+                                    "Name": "MatchApp"
+                                },
+                                "To": [{"Email": email,}],
+                                "Subject": "Activate your account",
+                                "HTMLPart": `Hello !\nHere is the link to confirm your account ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:3000/login/'}`+hashtoken,
+                                "CustomID": "AppGettingStartedTest"
+                            }
+                        ]
+                    });
+                request
+                    .then((result) => {
+                        console.log(result.body)
+                    })
+                    .catch((err) => {
+                        console.log(err.statusCode)
+                    });
                 pool.query(text, values);
                 return res.status(400).json({
                     w_emailconfirm: true,
@@ -563,16 +590,29 @@ async function userforgot(req, res){
         let token = ((+new Date) + Math.random()* 100).toString(32);
         let hashtoken = crypto.createHash('md5').update(token).digest("hex");
         let values = [hashtoken, email];
-        const message = {
-            from: 'matcha@app.com',
-            to: email,
-            subject: 'Forgot Password',
-            text: `Hello !\nHere is the link to reset your password ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/forgotpassword/' : 'http://localhost:5000/forgotpassword/'}`+hashtoken,
-        };
-        mg.messages().send(message, function (error, body) {
-            if (error) console.log(error);
-            else console.log(body);
-        });
+        const request = mailjet
+            .post("send", {'version': 'v3.1'})
+            .request({
+                "Messages":[
+                    {
+                        "From": {
+                            "Email": "matcha@app.com",
+                            "Name": "MatchApp"
+                        },
+                        "To": [{"Email": email,}],
+                        "Subject": "Forgot Password",
+                        "HTMLPart": `Hello !\nHere is the link to reset your password ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/forgotpassword/' : 'http://localhost:5000/forgotpassword/'}`+hashtoken,
+                        "CustomID": "AppGettingStartedTest"
+                    }
+                ]
+            });
+        request
+            .then((result) => {
+                console.log(result.body)
+            })
+            .catch((err) => {
+                console.log(err.statusCode)
+            });
         pool.query(text, values);
         res.status(200).json({
             success: "A password reset email has just been sent",
