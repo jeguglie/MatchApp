@@ -326,7 +326,7 @@ async function signup(req, res) {
                 "Messages":[
                     {
                         "From": {
-                            "Email": "guglielmettijv@gmail.com",
+                            "Email": "account@matchappli.herokuapp.com",
                             "Name": "MatchApp"
                         },
                         "To": [{"Email": email,}],
@@ -393,7 +393,7 @@ async function login(req, res) {
                         "Messages":[
                             {
                                 "From": {
-                                    "Email": "guglielmettijv@gmail.com",
+                                    "Email": "account@matchappli.herokuapp.com",
                                     "Name": "MatchApp"
                                 },
                                 "To": [{"Email": email,}],
@@ -596,7 +596,7 @@ async function userforgot(req, res){
                 "Messages":[
                     {
                         "From": {
-                            "Email": "guglielmettijv@gmail.com",
+                            "Email": "account@matchappli.herokuapp.com",
                             "Name": "MatchApp"
                         },
                         "To": [{"Email": email,}],
