@@ -6,9 +6,10 @@ const crypto = require('crypto');
 const notifications = require('./../controllers/notifications');
 const account = require('./../controllers/lib');
 const axios = require("axios");
-const mailjet = require ('node-mailjet').connect(process.env.MAIL_KEY, process.env.MAIL_SECRET);
+// const mailjet = require ('node-mailjet').connect(process.env.MAIL_KEY, process.env.MAIL_SECRET);
 require('dotenv').config({path: __dirname + '/.env'});
-
+const mailjet = require ('node-mailjet')
+.connect('67218a06591063b91abadf33bb8c2c2b', '9b64a0b529f3ea0bbdeec4cba5287831');
 
 async function getNameUserId(userID){
     try {
@@ -326,7 +327,7 @@ async function signup(req, res) {
                 "Messages":[
                     {
                         "From": {
-                            "Email": "account@matchappli.herokuapp.com",
+                            "Email": "jeguglie@student.42.fr",
                             "Name": "MatchApp"
                         },
                         "To": [{"Email": email,}],
@@ -393,7 +394,7 @@ async function login(req, res) {
                         "Messages":[
                             {
                                 "From": {
-                                    "Email": "account@matchappli.herokuapp.com",
+                                    "Email": "jeguglie@student.42.fr",
                                     "Name": "MatchApp"
                                 },
                                 "To": [{"Email": email,}],
@@ -596,7 +597,7 @@ async function userforgot(req, res){
                 "Messages":[
                     {
                         "From": {
-                            "Email": "account@matchappli.herokuapp.com",
+                            "Email": "jeguglie@student.42.fr",
                             "Name": "MatchApp"
                         },
                         "To": [{"Email": email,}],

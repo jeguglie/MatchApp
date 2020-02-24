@@ -11,7 +11,6 @@ const notifications = require('./controllers/notifications');
 const lib = require('./controllers/lib.js');
 const cors = require('cors');
 let userslist = [];
-
 app.use(cors());
 
 // Deserve gzip
