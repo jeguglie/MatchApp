@@ -7,6 +7,7 @@ const notifications = require('./../controllers/notifications');
 const account = require('./../controllers/lib');
 const axios = require("axios");
 const mailjet = require ('node-mailjet').connect(process.env.MAIL_KEY, process.env.MAIL_SECRET);
+const secret = process.env.SECRET_KEY;
 require('dotenv').config({path: __dirname + '/.env'});
 
 async function getNameUserId(userID){
