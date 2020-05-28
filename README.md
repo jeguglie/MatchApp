@@ -4,7 +4,7 @@
 Node.js - Express - React - PostgreSQL - Semantic UI
 
 ## Demo
-`You can test the app` [here](https://matchappli.herokuapp.com)<br>
+`You can test the app` [here](https://matcha.jv-g.fr)<br>
 You can use three pre-filled profiles `user1@gmail.com` `user2@gmail.com` with password `345102.jJ`<br> 
 500 random profiles are generated with Faker.js
 - Avatar
