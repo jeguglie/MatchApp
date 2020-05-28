@@ -2,7 +2,7 @@ const account = require('./lib.js');
 const pool = require('./../utils/queries');
 const multer = require('multer');
 const DIR = './public/';
-const uuid = require('uuid/v4');
+const { uuid } = require('uuidv4');
 require('dotenv').config();
 
 

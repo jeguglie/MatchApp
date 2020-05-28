@@ -1,14 +1,13 @@
 {
   "name": "server.js",
   "version": "3.0.0",
-  "description": "Matchapp 42 project web application dating:",
+  "description": "Matchapp 42 project web application dating",
   "engines": {
     "node": "10.x"
   },
   "scripts": {
     "start": "node server.js",
-    "build": "cd client/ && npm install && npm install --dev && npm rebuild node-sass && npm run buildheroku",
-    "buildlocal": "cd client/ && npm run buildlocal",
+    "build": "cd client/ && npm install && npm install --dev && npm rebuild node-sass && npm run build",
     "dev": "nodemon server.js"
   },
   "dependencies": {
@@ -28,7 +27,8 @@
     "pg": "^7.18.1",
     "random-location": "^1.1.2",
     "socket.io": "^2.3.0",
-    "uuid": "latest"
+    "uuid": "latest",
+    "uuidv4": "^6.1.0"
   },
   "repository": {
     "type": "git",
