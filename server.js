@@ -4,14 +4,22 @@ const express = require('express'),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server)
 const path = require('path');
-const host = process.env.PORT ? '0.0.0.0' : 'localhost';
-const port = process.env.PORT || 5000;
-const router = require('./utils/router');
+const host = process.env.NODE_ENV !== "development" ? '0.0.0.0' : 'localhost';
+const port = process.env.PORT;
+const router = require('./controllers/router');
 const notifications = require('./controllers/notifications');
 const lib = require('./controllers/lib.js');
-const cors = require('cors');
+const helmet = require('helmet');
 let userslist = [];
-app.use(cors());
+
+app.use(helmet());
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+    next();
+});
 
 // Deserve gzip
 app.get('*.js', (req, res, next) => {
@@ -20,8 +28,11 @@ app.get('*.js', (req, res, next) => {
     res.set('Content-Type', 'text/javascript');
     next();
 });
-// Priority serve any static files.
-app.use(express.static(path.resolve(__dirname, './client/build/')));
+
+if (process.env.NODE_ENV === 'production') {
+    console.log(process.env.NODE_ENV === 'production' ? 'Server serve ../front-end/build' : 'Server dev' );
+    app.use(express.static(path.resolve(__dirname, './client/build/')));
+}
 app.use('/api/public', express.static('public'));
 app.use('/api', router);
 
@@ -110,8 +121,11 @@ io.sockets.on('connection', async(socket) => {
 });
 
 // All remaining requests return the React app, so it can handle routing.
-app.get('*', function(request, response) {
-    response.sendFile(path.resolve(__dirname, './client/build/', 'index.html'));
-});
+if (process.env.NODE_ENV === 'production') {
+    console.log(process.env.NODE_ENV === 'production' ? 'Server redirect * except /api on ../client/build/' : 'Server dev' );
+    app.get('*', function (request, response) {
+        response.sendFile(path.resolve(__dirname, './client/build/', 'index.html'));
+    })
+}
 
-server.listen(process.env.PORT || 5000, host, () => console.log(`Server listening on port ${port}`));
+server.listen(process.env.PORT, host, () => console.log(`Server listening on port ${port}`));

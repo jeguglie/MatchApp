@@ -1,10 +1,9 @@
 const Pool = require('pg').Pool;
-const pool = process.env.SERVER_LOCALHOST === JSON.stringify(true) ? 
-                new Pool({
-                            user: 'jeguglie',
-                            host: 'localhost',
-                            database: 'api',
-                            password: process.env.DATABASE_LOCALHOST_PASSWORD,
-                            port: 5432}) :
-                new Pool({  connectionString: process.env.DATABASE_URL });
+const pool = new Pool({
+                user: process.env.DB_USER,
+                host: process.env.DB_HOST,
+                database: process.env.DB_NAME,
+                password: process.env.DB_PASSWD,
+                port: process.env.DB_PORT
+})
 module.exports = pool;

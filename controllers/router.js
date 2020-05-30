@@ -1,14 +1,14 @@
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
-const withAuth = require('./middleware');
-const withAuthAdmin = require('./admin');
-const faker = require('./../controllers/faker');
-const match = require('./../controllers/match');
-const lib = require('./../controllers/lib.js');
-const admin = require('./../controllers/admin.js');
-const chat = require('./../controllers/chat.js');
-const wall = require('./../controllers/wall.js');
-const pictures = require('./../controllers/pictures.js');
+const withAuth = require('../utils/middleware');
+const withAuthAdmin = require('../utils/admin');
+const faker = require('./faker');
+const match = require('./match');
+const lib = require('./lib.js');
+const admin = require('./admin.js');
+const chat = require('./chat.js');
+const wall = require('./wall.js');
+const pictures = require('./pictures.js');
 const { Router, express } = require('express');
 const router = Router();
 

@@ -331,7 +331,7 @@ async function signup(req, res) {
                         },
                         "To": [{"Email": email,}],
                         "Subject": "Activate your account",
-                        "HTMLPart": `Hello !\nHere is the link to confirm your account ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:5000/login/'}`+hashtoken,
+                        "HTMLPart": `Hello !\nHere is the link to confirm your account ${process.env.NODE_ENV !== "development" ? 'https://matcha.jv-g.fr/login/' : 'http://localhost:5000/login/'}`+hashtoken,
                         "CustomID": "AppGettingStartedTest"
                     }
                 ]
@@ -398,7 +398,7 @@ async function login(req, res) {
                                 },
                                 "To": [{"Email": email,}],
                                 "Subject": "Activate your account",
-                                "HTMLPart": `Hello !\nHere is the link to confirm your account ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/login/' : 'http://localhost:3000/login/'}`+hashtoken,
+                                "HTMLPart": `Hello !\nHere is the link to confirm your account ${process.env.NODE_ENV !== "development" ? 'https://matcha.jv-g.fr/login/' : 'http://localhost:3000/login/'}`+hashtoken,
                                 "CustomID": "AppGettingStartedTest"
                             }
                         ]
@@ -421,7 +421,7 @@ async function login(req, res) {
                 });
             const payload = { email };
             const token = jwt.sign(payload, secret);
-            if (process.env.SERVER_LOCALHOST === JSON.stringify(true))
+            if (process.env.NODE_ENV === "development")
                 res.cookie('token', token, { maxAge: 2 * 60 * 60 * 1000, domain:'localhost', secure: false, sameSite: true, httpOnly: false});
             else
                 res.cookie('token', token, { maxAge: 2 * 60 * 60 * 1000, sameSite: 'none', secure: true, httpOnly: false});
@@ -601,7 +601,7 @@ async function userforgot(req, res){
                         },
                         "To": [{"Email": email,}],
                         "Subject": "Forgot Password",
-                        "HTMLPart": `Hello !\nHere is the link to reset your password ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matchappli.herokuapp.com/forgotpassword/' : 'http://localhost:5000/forgotpassword/'}`+hashtoken,
+                        "HTMLPart": `Hello !\nHere is the link to reset your password ${process.env.SERVER_LOCALHOST === JSON.stringify(false) ? 'https://matcha.jv-g.fr/forgotpassword/' : 'http://localhost:5000/forgotpassword/'}`+hashtoken,
                         "CustomID": "AppGettingStartedTest"
                     }
                 ]
