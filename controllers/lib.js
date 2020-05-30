@@ -424,7 +424,7 @@ async function login(req, res) {
             if (process.env.NODE_ENV === "development")
                 res.cookie('token', token, { maxAge: 2 * 60 * 60 * 1000, domain:'localhost', secure: false, sameSite: true, httpOnly: false});
             else
-                res.cookie('token', token, { maxAge: 2 * 60 * 60 * 1000, sameSite: 'none', secure: true, httpOnly: false});
+                res.cookie('token', token, { maxAge: 2 * 60 * 60 * 1000, sameSite: 'true', secure: true, httpOnly: false});
             await account.setUserLastConnection(response.rows[0].user_id, 1);
             await setLocationIP(response.rows[0].user_id, req.connection.remoteAddress);
             return res.status(200).json({connect: true});
