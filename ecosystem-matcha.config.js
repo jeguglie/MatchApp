@@ -38,7 +38,7 @@ module.exports = {
             repo: "https://github.com/jeguglie/MatchApp.git",
             path: "/home/jvg/www/matcha.jv-g.fr/",
             'post-deploy': "cd /home/jvg/www/matcha.jv-g.fr/ &&" + 
-            "cp /home/jvg/ecosystem-matcha.config.js ./ecosystem-matcha.config.js &&" + 
+            "cp /home/jvg/ecosystem-matcha.config.js ./ecosystem-matcha.config.js && " +
             "npm run build && pm2 start ecosystem-matcha.config.js --env production"
         }
     }
